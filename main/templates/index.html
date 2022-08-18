@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{ cur.username }}
+<a href="{{ url_for('logout') }}">Exit</a>
+<a href="{{ url_for('download_music') }}">Add Music</a>
+
+<div>
+    {% for music in cur.list_music %}
+        <div>
+            <p> {{ music.split('.')[0] }}</p>
+            <audio controls>
+                <source src="{{ url_for("static", filename='all_music/'+cur.username+'/'+music) }}" type="audio/mpeg">
+            </audio>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="rus">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{{ url_for("static", filename='css/style_login.css') }}">
+    <link rel="shortcut icon" href="{{ url_for("static", filename='img/favicon.ico') }}" type="image/x-icon">
+	<title>RegIn</title>
+</head>
+<body>
+	<div class="conteiner" id="main" style="opacity: 0;">
+		<div class="img_gradient"></div>
+		<div class="content">
+			<div class="main_text">
+				<p class="hello">Регистрация</p>
+				<p class="enter">Пожалуйста, введите данные для регистрации.</p>
+			</div>
+			<form method="POST" class="login_form">
+				<div class="inputs_and_text">
+					<div>
+						<label class="login" for="login">Логин 🧑</label>
+						<input type="text" name="username" id="login" value="{{ username }}" style="{{ 'border: 2px solid #FF3838;' if error[0] != '' else ' ' }}" placeholder="login..." required>
+                        <p class="error" id="input_login">{{ error[0] if error[0] != '' else ' ' }}</p>
+					</div>
+					<div>
+						<label class="password" for="password">Пароль 🔑</label>
+						<input type="password" name="password" id="password" style="{{ 'border: 2px solid #FF3838;' if error[1] != '' else ' ' }}" placeholder="password..." required>
+                        <p class="error" id="input_password">{{ error[1] if error[1] != '' else ' ' }}</p>
+					</div>
+                    <div>
+						<label class="password" for="password_repeat">Повторите пароль 🔑</label>
+						<input type="password" name="password_repeat" id="password_repeat" style="{{ 'border: 2px solid #FF3838;' if error[1] != '' else ' ' }}" placeholder="repeat password..." required>
+                        <p class="error" id="input_password">{{ error[1] if error[1] != '' else ' ' }}</p>
+					</div>
+				</div>
+				<div>
+					<button class="btn" type="submit" name="button">Зарегистрироваться</button>
+					<p class="create_ac">Уже есть акканут? <a href={{ url_for('login') }}>Войти!</a></p>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+		window.onload = function() {
+	        var block = document.getElementById('main'),
+	            i = 0;
+	        block.style.opacity = 0;
+	        var time = setInterval(function () {
+	            if (i<=1) {
+	                i+=0.06;
+	                block.style.opacity = i;
+	            }
+	        }, 70);
+    	}
+    </script>
+</body>
+</html>
