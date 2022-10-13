@@ -1,0 +1,144 @@
+@font-face {
+	font-family: 'pixel_font';
+	src: url('../font/pixel_font.ttf');
+}
+
+body {
+	background: #FFFDF5;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: 'pixel_font';
+	image-rendering: pixelated;
+}
+
+@media (min-width: 1001px) {
+	#bodyContent {
+	    width: 1000px;
+	    left: calc(50% - 500px);
+	}
+
+	.mainPlayer {
+	    width: 1000px;
+	}
+
+	.imgAlbom {
+		margin-right: 20px;
+	}
+
+	.imgBackWard, .imgPlay, .imgForWard, .imgLoop, .imgShuffle, .imgVolume {
+		width: 5%;
+		margin-right: 10px;
+	}
+}
+
+@media (max-width: 1000px) {
+	#bodyContent {
+	    width: 100%;
+	    left: 0;
+	}
+
+	.mainPlayer {
+		padding: 0;
+	    width: 100%;
+	}
+
+	.imgAlbom {
+		margin-right: 10px;
+		width: 18%;
+	}
+
+	.imgBackWard, .imgPlay, .imgForWard, .imgLoop, .imgShuffle, .imgVolume {
+		width: 6%;
+		margin-right: 5px;
+	}
+
+	.timeLine {
+		position: absolute;
+    	bottom: 90px;
+    	height: 24px !important;
+    	left: -2px;
+    	width: 100.4% !important;
+	}
+
+	.timeLine_fill {
+		height: 20px !important;
+	}
+
+	.nameAndAuthor {
+		font-size: 36px !important;
+    	flex-direction: column;
+    	align-items: center;
+	}
+}
+
+.header {
+	position: fixed;
+	top: 0;
+	height: 94px;
+	width: 1000px;
+    box-shadow: 0 -2px 0 inset #4FB8FF;
+    background: #267AE9;
+    border: 2px solid;
+}
+
+
+#bodyContent {
+	background: #FFFDF5;
+	position: absolute;
+    top: 0;
+}
+
+.mainPlayer {
+	border: 2px solid;
+	background: #267AE9;
+	box-shadow: 0 2px 0 inset #4FB8FF;
+	position: fixed;
+    bottom: 0;
+}
+
+.controlsPlayer {
+	display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.imgAlbom {
+	border-right: 2px solid;
+}
+
+.timeLine {
+    border: 2px solid;
+    width: 100%;
+    height: 10px;
+    background: #fff;
+}
+
+.timeLine_fill {
+	background: #04db00;
+}
+
+.timeLineAndName {
+	display: flex;
+	width: 100%;
+    flex-direction: column;
+}
+
+.nameAndAuthor {
+	color: #fff;
+	display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+}
+
+.blockPlayList {
+	width: 900px;
+    height: 10000px;
+    margin: 9% auto;
+    border: 2px solid;
+    background: #4394ff;
+    box-shadow: inset 2px 0 0 #76c0ff, inset -2px 0 0 #76c0ff;
+}

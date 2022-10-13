@@ -1,4 +1,4 @@
 # Project exclude paths
 /venv/
 .idea
-main/static/all_music
+main/static/all_music/*

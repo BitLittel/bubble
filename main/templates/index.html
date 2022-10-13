@@ -1,23 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{{ cur.username }}
-<a href="{{ url_for('logout') }}">Exit</a>
-<a href="{{ url_for('download_music') }}">Add Music</a>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+        <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/png">
+		<title>Music</title>
+	</head>
+	<body>
+		<div id="bodyContent">
+			<div class="header">
+				<div class="profile">Login</div>
+			</div>
+			<div class="blockPlayList">
 
-<div>
-    {% for music in cur.list_music %}
-        <div>
-            <p> {{ music.split('.')[0] }}</p>
-            <audio controls>
-                <source src="{{ url_for("static", filename='all_music/'+cur.username+'/'+music) }}" type="audio/mpeg">
-            </audio>
-        </div>
-    {% endfor %}
-</div>
-</body>
+			</div>
+			<div class="mainPlayer">
+				<div class="controlsPlayer">
+					<img src="../static/img/img_albom.png" class="imgAlbom">
+					<img src="../static/img/backward_v2.png" class="imgBackWard">
+					<img src="../static/img/play.png" class="imgPlay">
+					<img src="../static/img/forward_v2.png" class="imgForWard">
+					<div class="timeLineAndName">
+						<div class="nameAndAuthor">
+							<span>Название - Автор</span>
+							<span>1:21/3:20</span>
+						</div>
+						<div class="timeLine">
+							<div class="timeLine_fill" style="width: 45px; height: 6px;"></div>
+						</div>
+					</div>
+					<img src="../static/img/loop.png" class="imgLoop" style="margin-left: 10px;">
+					<img src="../static/img/shuffle.png" class="imgShuffle">
+					<img src="../static/img/volume_10up.png" class="imgVolume">
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
