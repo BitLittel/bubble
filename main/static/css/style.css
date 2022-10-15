@@ -58,10 +58,10 @@ body {
 
 	.timeLine {
 		position: absolute;
-    	bottom: 90px;
+    	bottom: 65px;
     	height: 24px !important;
-    	left: -2px;
-    	width: 100.4% !important;
+    	left: -1px;
+    	width: 100.68% !important;
 	}
 
 	.timeLine_fill {
@@ -69,7 +69,7 @@ body {
 	}
 
 	.nameAndAuthor {
-		font-size: 36px !important;
+		font-size: 15px !important;
     	flex-direction: column;
     	align-items: center;
 	}
@@ -135,8 +135,7 @@ body {
 }
 
 .blockPlayList {
-	width: 900px;
-    height: 1000px;
+    min-height: 1000px;
     margin: 9% auto;
     border: 2px solid;
     background: #4394ff;
