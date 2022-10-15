@@ -22,12 +22,8 @@ body {
 	    left: calc(50% - 500px);
 	}
 
-	.header {
+	.header, .mainPlayer {
 		width: 1000px;
-	}
-
-	.mainPlayer {
-	    width: 1000px;
 	}
 
 	.imgAlbom {
@@ -148,20 +144,19 @@ body {
     height: 18px;
 }
 
-.time_start {
+.time_start, .time_end {
 	position: absolute;
-	left: 4px;
 	bottom: 99%;
 	z-index: 1;
 	color: #000;
 }
 
+.time_start {
+	left: 4px;
+}
+
 .time_end {
-	position: absolute;
 	right: 4px;
-	color: #000;
-	bottom: 99%;
-	z-index: 1;
 }
 
 .timeLine_fill {
