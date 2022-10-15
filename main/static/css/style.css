@@ -21,6 +21,10 @@ body {
 	    left: calc(50% - 500px);
 	}
 
+	.header {
+		width: 1000px;
+	}
+
 	.mainPlayer {
 	    width: 1000px;
 	}
@@ -62,6 +66,10 @@ body {
     	height: 24px !important;
     	left: -1px;
     	width: 100.68% !important;
+	}
+
+	.header {
+		width: 100% !important;
 	}
 
 	.timeLine_fill {
