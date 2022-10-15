@@ -11,7 +11,7 @@ body {
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
-	font-family: 'pixel_font';
+	font-family: 'pixel_font', serif;
 	image-rendering: pixelated;
 }
 
@@ -136,7 +136,7 @@ body {
 
 .blockPlayList {
 	width: 900px;
-    height: 10000px;
+    height: 1000px;
     margin: 9% auto;
     border: 2px solid;
     background: #4394ff;
