@@ -10,10 +10,82 @@
 	<body>
 		<div id="bodyContent">
 			<div class="header">
-				<div class="profile">Login</div>
+                <div class="left_panel">
+                    <div class="Logo">
+                        <img src="../static/img/logo.png" alt="#">
+                    </div>
+                    <div class="block_search">
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="right_panel">
+                    <div class="profile">Login</div>
+                </div>
 			</div>
-			<div class="blockPlayList">
+			<div class="MainMusic">
+                <div class="PlayLists">
+                    {#            тут цикл ебаный        #}
+                    <div class="blockPlayList">
+                        <img src="../static/img/img_playlist_1.jpg" alt="#">
+                        <span>PlayList #1</span>
+                    </div>
 
+                    <div class="blockPlayList">
+                        <img src="../static/img/img_playlist_2.jpg" alt="#">
+                        <span>PlayList #2</span>
+                    </div>
+
+                    <div class="blockPlayList">
+                        <img src="../static/img/img_playlist_3.jpg" alt="#">
+                        <span>PlayList #3</span>
+                    </div>
+
+                    <div class="blockPlayList">
+                        <img src="../static/img/img_playlist_3.jpg" alt="#">
+                        <span>PlayList #3</span>
+                    </div>
+
+                    <div class="blockPlayList">
+                        <img src="../static/img/img_playlist_3.jpg" alt="#">
+                        <span>PlayList #3</span>
+                    </div>
+
+                </div>
+                <div class="AllMusicList">
+                    {#            тут цикл ебаный        #}
+                    <div class="blockMusic">
+                        <div>
+                            <img src="../static/img/img_playlist_1.jpg" alt="#">
+                            <div>
+                                <span>Name</span>
+                                <span>Author</span>
+                            </div>
+                        </div>
+                        <span>3:20</span>
+                    </div>
+
+                    <div class="blockMusic">
+                        <div>
+                            <img src="../static/img/img_playlist_2.jpg" alt="#">
+                            <div>
+                                <span>Name</span>
+                                <span>Author</span>
+                            </div>
+                        </div>
+                        <span>3:20</span>
+                    </div>
+
+                    <div class="blockMusic">
+                        <div>
+                            <img src="../static/img/img_playlist_3.jpg" alt="#">
+                            <div>
+                                <span>Name</span>
+                                <span>Author</span>
+                            </div>
+                        </div>
+                        <span>3:20</span>
+                    </div>
+                </div>
 			</div>
 			<div class="mainPlayer">
 				<div class="controlsPlayer">
@@ -23,8 +95,14 @@
 					<img src="../static/img/forward_v2.png" class="imgForWard">
 					<div class="timeLineAndName">
 						<div class="nameAndAuthor">
-							<span>Название - Автор</span>
-							<span>1:21/3:20</span>
+                            <div>
+                                <span>1000 и 1 мэшап с Фейсом</span>
+                                <span>№2</span>
+                            </div>
+                            <div>
+                                <span class="time_start">1:21</span>
+                                <span class="time_end">3:20</span>
+                            </div>
 						</div>
 						<div class="timeLine">
 							<div class="timeLine_fill" style="width: 45px; height: 6px;"></div>

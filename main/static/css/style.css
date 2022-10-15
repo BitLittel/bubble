@@ -1,6 +1,7 @@
 @font-face {
-	font-family: 'pixel_font';
-	src: url('../font/pixel_font.ttf');
+	font-family: pixel_font;
+	src: url('../font/mini_pixel-7.ttf') format('truetype'),
+		 url('../font/mini_pixel-7.fon');
 }
 
 body {
@@ -11,7 +12,7 @@ body {
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
-	font-family: 'pixel_font', serif;
+	font-family: pixel_font, serif;
 	image-rendering: pixelated;
 }
 
@@ -52,7 +53,7 @@ body {
 
 	.imgAlbom {
 		margin-right: 10px;
-		width: 18%;
+		width: 15%;
 	}
 
 	.imgBackWard, .imgPlay, .imgForWard, .imgLoop, .imgShuffle, .imgVolume {
@@ -62,10 +63,10 @@ body {
 
 	.timeLine {
 		position: absolute;
-    	bottom: 65px;
-    	height: 24px !important;
-    	left: -1px;
-    	width: 100.68% !important;
+    	bottom: 100%;
+    	height: 18px !important;
+    	left: -2px;
+    	width: 100.7% !important;
 	}
 
 	.header {
@@ -73,24 +74,60 @@ body {
 	}
 
 	.timeLine_fill {
-		height: 20px !important;
+		height: 14px !important;
 	}
 
 	.nameAndAuthor {
-		font-size: 15px !important;
+		font-size: 20px !important;
     	flex-direction: column;
     	align-items: center;
+	}
+
+	.blockMusic > div > span, .blockPlayList > span, .blockMusic > span {
+		font-size: 14px !important;
+	}
+
+	.time_start {
+		position: absolute;
+		left: 4px;
+		bottom: 98%;
+		z-index: 1;
+		color: #000;
+	}
+
+	.time_end {
+		position: absolute;
+		right: 4px;
+		color: #000;
+		bottom: 98%;
+		z-index: 1;
 	}
 }
 
 .header {
 	position: fixed;
 	top: 0;
-	height: 94px;
+	height: 80px;
 	width: 1000px;
     box-shadow: 0 -2px 0 inset #4FB8FF;
     background: #267AE9;
     border: 2px solid;
+	display: flex;
+	align-items: center;
+    justify-content: space-between;
+}
+
+.left_panel {
+	display: flex;
+	align-items: center;
+    justify-content: space-between;
+}
+
+.block_search > input {
+	border: 2px solid;
+    width: 190px;
+    height: 24px;
+    font-size: 20px;
 }
 
 
@@ -133,19 +170,96 @@ body {
 	display: flex;
 	width: 100%;
     flex-direction: column;
+	overflow: hidden;
 }
 
 .nameAndAuthor {
 	color: #fff;
 	display: flex;
     justify-content: space-between;
+	white-space: nowrap;
     font-size: 20px;
 }
 
-.blockPlayList {
-    min-height: 1000px;
-    margin: 9% auto;
+.t_name_author {
+	width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.MainMusic {
+	min-height: 765px;
+    margin: 78px 0 0 0;
     border: 2px solid;
     background: #4394ff;
     box-shadow: inset 2px 0 0 #76c0ff, inset -2px 0 0 #76c0ff;
+}
+
+.PlayLists {
+	width: 100%;
+    height: 150px;
+    display: flex;
+	overflow: auto;
+	padding: 2%;
+}
+
+.blockPlayList:hover {
+	transform: scale(1.1);
+}
+
+.blockPlayList {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	margin: 1%;
+	transition: ease 0.3s;
+}
+
+.blockPlayList > img {
+	width: 100px;
+	border: 1px solid;
+}
+
+.blockPlayList > span {
+	font-size: 20px;
+}
+
+.AllMusicList {
+	margin: 2% 6%;
+}
+
+.blockMusic {
+	display: flex;
+    align-items: center;
+	justify-content: space-between;
+	margin-bottom: .5%;
+}
+
+.blockMusic:hover {
+	background: #ffffff3d;
+}
+
+.blockMusic > div {
+	display: flex;
+    align-items: center;
+	width: 100%;
+}
+
+.blockMusic > div > div {
+	display: flex;
+    flex-direction: column;
+    padding-left: 1%;
+}
+
+.blockMusic > div > div > span {
+	font-size: 20px;
+}
+
+.blockMusic > span {
+	font-size: 20px;
+}
+
+.blockMusic > div > img {
+	width: 50px;
+    border: 1px solid;
 }
