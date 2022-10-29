@@ -3,28 +3,33 @@ import re
 import os
 import hashlib
 from flask import render_template, request, redirect, url_for, jsonify, g
-# from flask_login import current_user, login_required, login_user, LoginManager, logout_user
+from flask_login import current_user, login_required, login_user, LoginManager, logout_user
 from main import main
-# from main.database import User, Music
+from main.database import User, Music, Session
 
-# login_manager = LoginManager()
-# login_manager.init_app(main)
+login_manager = LoginManager()
+login_manager.init_app(main)
 
 
-# def hash_password(password):
-#     h = hashlib.new('sha1')
-#     h.update(password.encode('utf-8'))
-#     return h.hexdigest()
-#
-#
-# @login_manager.user_loader
-# def load_user(uid):
-#     return g.db.query(User).filter_by(id=uid).first()
-#
-#
-# @login_manager.unauthorized_handler
-# def unauth():
-#     return redirect(url_for("login", next=request.path))
+def hash_password(password):
+    h = hashlib.new('sha1')
+    h.update(password.encode('utf-8'))
+    return h.hexdigest()
+
+
+@main.before_request
+def before_request():
+    g.db = Session()
+
+
+@login_manager.user_loader
+def load_user(uid):
+    return g.db.query(User).filter_by(id=uid).first()
+
+
+@login_manager.unauthorized_handler
+def unauth():
+    return redirect(url_for("login", next=request.path))
 
 
 @main.errorhandler(404)
@@ -110,6 +115,7 @@ def teardown_request(exception):
 @main.route('/index', methods=['GET', 'POST'])
 # @login_required
 def index():
+    print(g.db.query(User).all())
     return render_template('index.html')  # , current_user=current_user)
 
 

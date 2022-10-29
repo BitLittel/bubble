@@ -137,6 +137,18 @@ body {
 	.add_playlist > img {
 		margin-right: 5% !important;
 	}
+
+	.blockMusic_on_play {
+		left: 4% !important;
+	}
+
+	#volume {
+		display: none !important;
+	}
+}
+
+.timeLine, .blockPlayList, .blockMusic, .imgBackWard, .imgPlay, .imgForWard, .imgLoop, .imgShuffle, .imgVolume {
+	cursor: pointer;
 }
 
 .header {
@@ -150,6 +162,7 @@ body {
 	display: flex;
 	align-items: center;
     justify-content: space-between;
+	z-index: 3;
 }
 
 .left_panel {
@@ -389,4 +402,40 @@ body {
 
 .add_playlist > img {
 	margin-right: 8%;
+}
+
+.blockMusic_on_play {
+	position: absolute;
+    left: 3.5%;
+    width: 40px !important;
+    height: 40px;
+    background: url("../img/playng_music.gif");
+    background-size: cover;
+}
+
+input[type="range"] {
+	-webkit-appearance: none;
+    height: 10px;
+    border: 2px solid;
+    background-image: linear-gradient(#3adf15, #3adf15);
+    background-size: 70% 100%;
+    background-repeat: no-repeat;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  	-webkit-appearance: none;
+  	height: 20px;
+  	width: 20px;
+	border: 2px solid;
+  	background: #4394ff;
+	box-shadow: -2px -2px 0 #4FB8FF inset;
+  	cursor: ew-resize;
+  	transition: background .3s ease-in-out;
+}
+
+input[type=range]::-webkit-slider-runnable-track  {
+  	-webkit-appearance: none;
+  	box-shadow: none;
+  	border: none;
+  	background: transparent;
 }

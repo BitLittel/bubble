@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="../static/css/style.css">
-        <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/png">
+        <link rel="shortcut icon" href="../static/img/favicon.png" type="image/png">
+        <script type="text/javascript" src="../static/js/Audio.js"></script>
 		<title>Music</title>
 	</head>
 	<body>
 		<div id="bodyContent">
 			<div class="header">
                 <div class="left_panel">
-                    <div class="Logo">
-{#                        <img src="../static/img/logo.png" alt="#">#}
-                    </div>
                     <div class="block_search">
                         <img src="../static/img/search.png" alt="#">
                         <span>Поиск</span>
@@ -35,247 +33,60 @@
                 <div class="PlayLists">
                     {#            тут цикл ебаный        #}
                     <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_1.jpg" alt="#">
+                        <img src="../static/img/default_img.jpg" alt="#">
                         <span>PlayList #1</span>
                     </div>
-
                     <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_2.jpg" alt="#">
+                        <img src="../static/img/default_img.jpg" alt="#">
                         <span>PlayList #2</span>
                     </div>
-
                     <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
+                        <img src="../static/img/default_img.jpg" alt="#">
                         <span>PlayList #3</span>
                     </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
-                    <div class="blockPlayList">
-                        <img src="../static/img/img_playlist_3.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-
                 </div>
                 <div class="Music_and_Frend">
                     <div class="AllMusicList">
                         {#            тут цикл ебаный        #}
-                        <div class="blockMusic">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/1.mp3" data-name="1" data-author="Bones">
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
+                                <img src="../static/img/default_img.jpg" alt="#">
+                                <div><span>1</span><span>Bones</span></div>
                             </div>
                             <span>3:20</span>
+                            <div class="blockMusic_on_play" id="blockMusic_on_play_0" style="display: none"></div>
                         </div>
-                        <div class="blockMusic">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/2.mp3" data-name="2" data-author="Bones">
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
+                                <img src="../static/img/default_img.jpg" alt="#">
+                                <div><span>2</span><span>Bones</span></div>
                             </div>
                             <span>3:20</span>
+                            <div class="blockMusic_on_play" id="blockMusic_on_play_1" style="display: none"></div>
                         </div>
-                        <div class="blockMusic">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/3.mp3" data-name="3" data-author="Bones">
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
+                                <img src="../static/img/default_img.jpg" alt="#">
+                                <div><span>3</span><span>Bones</span></div>
                             </div>
                             <span>3:20</span>
+                            <div class="blockMusic_on_play" id="blockMusic_on_play_2" style="display: none"></div>
                         </div>
-                        <div class="blockMusic">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/4.mp3" data-name="4" data-author="Bones">
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
+                                <img src="../static/img/default_img.jpg" alt="#">
+                                <div><span>4</span><span>Bones</span></div>
                             </div>
                             <span>3:20</span>
+                            <div class="blockMusic_on_play" id="blockMusic_on_play_3" style="display: none"></div>
                         </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-                        <div class="blockMusic">
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>Name</span>
-                                    <span>Author</span>
-                                </div>
-                            </div>
-                            <span>3:20</span>
-                        </div>
-
                     </div>
                     <div class="All_Freand_List">
                         <p>Список друзей</p>
                         {#            тут цикл ебаный        #}
                         <div class="FrendsList">
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
+                                <img src="../static/img/default_img.jpg" alt="#">
                                 <div>
                                     <span style="display: flex;align-content: center;align-items: center;">
                                         <img src="../static/img/gem_green.png" alt="" style="width: 12px; height: 12px;">
@@ -285,7 +96,7 @@
                                 </div>
                             </div>
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
+                                <img src="../static/img/default_img.jpg" alt="#">
                                 <div>
                                     <span style="display: flex;align-content: center;align-items: center;">
                                         <img src="../static/img/gem_green.png" alt="" style="width: 12px; height: 12px;">
@@ -295,7 +106,7 @@
                                 </div>
                             </div>
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
+                                <img src="../static/img/default_img.jpg" alt="#">
                                 <div>
                                     <span style="display: flex;align-content: center;align-items: center;">
                                         <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
@@ -305,145 +116,43 @@
                                 </div>
                             </div>
                             <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
+                                <img src="../static/img/default_img.jpg" alt="#">
                                 <div>
                                     <span style="display: flex;align-content: center;align-items: center;">
                                         <img src="../static/img/gem_green.png" alt="" style="width: 12px; height: 12px;">
                                         <span>UserLogin_Name</span>
                                     </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>UserLogin_Name</span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>UserLogin_Name</span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/img_playlist_1.jpg" alt="#">
-                                <div>
-                                    <span>UserLogin_Name</span>
                                     <span>1337 аудиозаписи</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
 			</div>
 			<div class="mainPlayer">
 				<div class="controlsPlayer">
-					<img src="../static/img/img_albom.png" class="imgAlbom">
-					<img src="../static/img/backward_v2.png" class="imgBackWard">
-					<img src="../static/img/play.png" class="imgPlay">
-					<img src="../static/img/forward_v2.png" class="imgForWard">
+					<img src="../static/img/default_img.jpg" class="imgAlbom" alt="#">
+					<img src="../static/img/backward_v2.png" class="imgBackWard" id="backward" alt="#">
+					<img src="../static/img/play.png" class="imgPlay" id="play" alt="#" style="display: block;">
+					<img src="../static/img/forward_v2.png" class="imgForWard" id="forward" alt="#">
 					<div class="timeLineAndName">
 						<div class="nameAndAuthor">
                             <div class="ushe_pohuy">
-                                <span class="t_name_author">1000 и 1 мэшап с Фейсом</span>
-                                <span>№2</span>
+                                <span id="song-name">Без названия</span>
+                                <span class="t_name_author" id="song_author">Неизвестен</span>
                             </div>
                             <div>
-                                <span class="time_start">1:21</span>
-                                <span class="time_end">3:20</span>
+                                <span class="time_start" id="c_time">0:00</span>
+                                <span class="time_end" id="time">0:00</span>
                             </div>
 						</div>
-						<div class="timeLine">
-							<div class="timeLine_fill" style="width: 100px;"></div>
+						<div class="timeLine" id="time-line">
+							<div class="timeLine_fill" id="in_line"></div>
 						</div>
 					</div>
-					<img src="../static/img/loop.png" class="imgLoop" style="margin-left: 10px;">
-					<img src="../static/img/shuffle.png" class="imgShuffle">
-					<img src="../static/img/volume_10up.png" class="imgVolume">
+                    <input type="range" id="volume" name="volume" min="0" max="100" value="100" style="background-size: 100% 100%;">
+                    <img src="../static/img/loop.png" class="imgLoop" id="loop" style="margin-left: 10px;" alt="#">
+					<img src="../static/img/shuffle.png" class="imgShuffle" id="shuffle" alt="#">
 				</div>
 			</div>
 		</div>
