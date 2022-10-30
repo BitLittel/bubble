@@ -19,6 +19,7 @@ window.onload = function () {
         cur_time = document.getElementById('c_time'),
         time = document.getElementById('time'),
         line = document.getElementById('in_line'),
+        img_player = document.getElementById('img_player'),
         list_playing_music = [],
         icon_play = document.getElementById('play'),
         volume = document.getElementById('volume'),
@@ -56,13 +57,11 @@ window.onload = function () {
     }
 
     forward.onclick = function () {
-        let number = ((play_cur_song+1) === list_playing_music.length) ? 0 : (play_cur_song+1);
-        Play(number);
+        Play(((play_cur_song+1) === list_playing_music.length) ? 0 : (play_cur_song+1));
     }
 
     backward.onclick = function () {
-        let number = ((play_cur_song-1) < 0) ? (list_playing_music.length-1) : (play_cur_song-1);
-        Play(number);
+        Play(((play_cur_song-1) < 0) ? (list_playing_music.length-1) : (play_cur_song-1));
     }
 
     /**
@@ -86,11 +85,12 @@ window.onload = function () {
         icon_play.onclick = function(){Play(number);};
         if (audio.paused) {audio.play();}else{audio.pause();}
         icon_play.src = audio.paused ? '../static/img/play.png' : '../static/img/pause.png';
+        img_player.src = list_playing_music[number].getAttribute('data-img');
         song_name_dom.innerText = list_playing_music[number].getAttribute('data-name');
         song_author_dom.innerText = list_playing_music[number].getAttribute('data-author');
     }
 
-    // тут audio забиваем собития
+    // тут audio забиваем событиями
 	audio.addEventListener('loadedmetadata', function(){
 		time.innerHTML=''+(audio.duration/60>>0)+':'+(audio.duration%60>>0);
 	});
@@ -103,27 +103,24 @@ window.onload = function () {
             audio.duration = 0;
             audio.play();
         } else {
-	        let number = ((play_cur_song+1) === list_playing_music.length) ? 0 : (play_cur_song+1);
-            Play(number);
+            Play(((play_cur_song+1) === list_playing_music.length) ? 0 : (play_cur_song+1));
         }
 	});
-
+    // вешаем на полосу громкости эвент, на изменение громкости и сохранение звука в куки
     volume.addEventListener('change', function (){
 	    document.cookie = "volume="+volume.value+";max-age=2629743;SameSite=Strict";
 	    volume.style.backgroundSize = volume.value+'% 100%';
 	    audio.volume = volume.value/100;
     });
+    // вешаем обработку на тайм-лайн
     time_line.onclick = function(){
 		line.style.width=(((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth)+'%';
 		audio.currentTime=(audio.duration*(((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth))/100;
 	};
-
-    for (let i = 0; i < all_music.length; i++) {
-        all_music[i].onclick = function(){Play(i);};
-    }
-
+    // инициализируем элементы управления и треки нашими функциями
+    for (let i = 0; i < all_music.length; i++) {all_music[i].onclick = function(){Play(i);};}
     icon_play.onclick = function(){Play(0);};
-
     song_name_dom.innerText = list_playing_music[0].getAttribute('data-name');
     song_author_dom.innerText = list_playing_music[0].getAttribute('data-author');
+    img_player.src = list_playing_music[0].getAttribute('data-img');
 };

@@ -2,6 +2,7 @@
 <html lang="ru">
 	<head>
 		<meta charset="utf-8">
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="../static/css/style.css">
         <link rel="shortcut icon" href="../static/img/favicon.png" type="image/png">
@@ -48,7 +49,7 @@
                 <div class="Music_and_Frend">
                     <div class="AllMusicList">
                         {#            тут цикл ебаный        #}
-                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/1.mp3" data-name="1" data-author="Bones">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/1.mp3" data-name="1" data-author="Bones" data-img="../static/img/default_img.jpg">
                             <div>
                                 <img src="../static/img/default_img.jpg" alt="#">
                                 <div><span>1</span><span>Bones</span></div>
@@ -56,7 +57,7 @@
                             <span>3:20</span>
                             <div class="blockMusic_on_play" id="blockMusic_on_play_0" style="display: none"></div>
                         </div>
-                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/2.mp3" data-name="2" data-author="Bones">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/2.mp3" data-name="2" data-author="Bones" data-img="../static/img/default_img.jpg">
                             <div>
                                 <img src="../static/img/default_img.jpg" alt="#">
                                 <div><span>2</span><span>Bones</span></div>
@@ -64,7 +65,7 @@
                             <span>3:20</span>
                             <div class="blockMusic_on_play" id="blockMusic_on_play_1" style="display: none"></div>
                         </div>
-                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/3.mp3" data-name="3" data-author="Bones">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/3.mp3" data-name="3" data-author="Bones" data-img="../static/img/default_img.jpg">
                             <div>
                                 <img src="../static/img/default_img.jpg" alt="#">
                                 <div><span>3</span><span>Bones</span></div>
@@ -72,7 +73,7 @@
                             <span>3:20</span>
                             <div class="blockMusic_on_play" id="blockMusic_on_play_2" style="display: none"></div>
                         </div>
-                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/4.mp3" data-name="4" data-author="Bones">
+                        <div class="blockMusic" data-src="http://192.168.1.191:5000/static/music/4.mp3" data-name="4" data-author="Bones" data-img="../static/img/default_img.jpg">
                             <div>
                                 <img src="../static/img/default_img.jpg" alt="#">
                                 <div><span>4</span><span>Bones</span></div>
@@ -131,7 +132,7 @@
 			</div>
 			<div class="mainPlayer">
 				<div class="controlsPlayer">
-					<img src="../static/img/default_img.jpg" class="imgAlbom" alt="#">
+					<img src="../static/img/default_img.jpg" class="imgAlbom" id="img_player" alt="#">
 					<img src="../static/img/backward_v2.png" class="imgBackWard" id="backward" alt="#">
 					<img src="../static/img/play.png" class="imgPlay" id="play" alt="#" style="display: block;">
 					<img src="../static/img/forward_v2.png" class="imgForWard" id="forward" alt="#">
