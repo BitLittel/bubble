@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+from flask import render_template, request, redirect, url_for, jsonify, g
+from flask_login import current_user, login_required, login_user, LoginManager, logout_user
+from main.database import Session, User, Music, Token
+from datetime import datetime
+from flask_wtf.csrf import CSRFProtect
+from main import main
 import re
 import os
 import hashlib
-from flask import render_template, request, redirect, url_for, jsonify, g
-from flask_login import current_user, login_required, login_user, LoginManager, logout_user
-from main import main
-from flask_wtf.csrf import CSRFProtect
-from sqlalchemy import select
-from main.database import Session, User, Music
 
 login_manager = LoginManager()
 login_manager.init_app(main)
@@ -50,26 +50,25 @@ def index():
     return render_template('index.html', auth=auth)
 
 
-# @main.route('/add_music', methods=['GET', 'POST'])
-# @login_required
-# def add_music():
-#     if request.method == 'POST':
-#         files = request.files.getlist('files')
-#         for f in files:
-#             filename = f.filename
-#             name = filename.split('-')
-#             artist = name[0].strip()
-#             music_name = name[1].split('.')[0].strip()
-#             file_extend = name[1].split('.')[1].strip()
-#             finaly_path = os.path.join(main.config['UPLOAD_FOLDER'],
-#                                        current_user.username,
-#                                        f'{artist}-{music_name}.{file_extend}')
-#             print(f'{artist}-{music_name}.{file_extend}')
-#             f.save(finaly_path)
-#             Music(name=music_name, author=artist, path=finaly_path)
-#             g.db.add(Music)
-#             g.db.commit()
-#     return render_template('add_music.html')
+@main.route('/token/<user_token>', methods=['GET', 'POST'])
+def activate_token(user_token):
+    find_token = g.db.query(Token).filter(Token.token == user_token).first()
+
+    if find_token is None:
+        return render_template('404.html'), 404
+
+    if find_token.date_activate != None:
+        return render_template('404.html'), 404
+
+    if find_token.date_to_active < datetime.now():
+        return render_template('404.html'), 404
+
+    find_token.date_activate = datetime.now()
+    g.db.commit()
+    find_user = g.db.query(User).filter(User.id == find_token.user_id).first()
+    login_user(find_user, remember=True)
+
+    return redirect(url_for('index'))
 
 
 @main.route("/logout")

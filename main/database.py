@@ -13,14 +13,15 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'User'
     id = Column(Integer, primary_key=True, index=True)
-    login = Column(String(length=255))
-    password = Column(String(length=255))
-    avatar = Column(String(length=255))
-    email = Column(String(length=255))
+    login = Column(String(length=20), nullable=False)
+    password = Column(String(length=50), nullable=False)
+    avatar = Column(String(length=255), nullable=True)
+    email = Column(String(length=100), nullable=False)
 
     user_music = relationship('UserMusic', backref='user_music', lazy='dynamic')
     user_message = relationship('Message', backref='user_message', lazy='dynamic')
     user_playlist = relationship('Playlist', backref='user_playlist', lazy='dynamic')
+    user_token = relationship('Token', backref='user_token', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -35,12 +36,22 @@ class User(Base):
         return "<User(%r, %r, %r)>" % (self.id, self.login, self.password)
 
 
+class Token(Base):
+    __tablename__ = 'Token'
+    id = Column(Integer, primary_key=True, nullable=False)
+    token = Column(String(length=50), index=True, nullable=False)
+    date_add = Column(DateTime, default=func.now(), nullable=False)
+    date_to_active = Column(DateTime, nullable=False)  # обязательно не забываем заполнять
+    date_activate = Column(DateTime, nullable=True)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+
+
 class Playlist(Base):
     __tablename__ = 'Playlist'
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(length=255))
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    name = Column(String(length=100), nullable=False)
     avatar = Column(String(length=255))
-    user_id = Column(Integer, ForeignKey(User.id))
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
 
     playlist_music = relationship('PlaylistMusic', backref='playlist_music', lazy='dynamic')
 
@@ -48,12 +59,12 @@ class Playlist(Base):
 class Music(Base):
     __tablename__ = 'Music'
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(length=255))
-    author = Column(String(length=255))
-    delay = Column(String(length=10))
+    name = Column(String(length=100), nullable=False)
+    author = Column(String(length=100), nullable=False)
+    delay = Column(String(length=10), nullable=False)
     avatar = Column(String(length=255))
-    path = Column(String(length=255))
-    ban = Column(Boolean, default=False)
+    path = Column(String(length=255), nullable=False)
+    ban = Column(Boolean, default=False, nullable=False)
 
     music_user = relationship('UserMusic', backref='music_user', lazy='dynamic')
     music_playlist = relationship('PlaylistMusic', backref='music_playlist', lazy='dynamic')
@@ -62,23 +73,23 @@ class Music(Base):
 class PlaylistMusic(Base):
     __tablename__ = 'PlaylistMusic'
     id = Column(Integer, primary_key=True, index=True)
-    music_id = Column(Integer, ForeignKey(Music.id))
-    playlist_id = Column(Integer, ForeignKey(Playlist.id))
+    music_id = Column(Integer, ForeignKey(Music.id), nullable=False)
+    playlist_id = Column(Integer, ForeignKey(Playlist.id), nullable=False)
 
 
 class UserMusic(Base):
     __tablename__ = 'UserMusic'
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey(User.id))
-    music_id = Column(Integer, ForeignKey(Music.id))
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    music_id = Column(Integer, ForeignKey(Music.id), nullable=False)
 
 
 class Message(Base):
     __tablename__ = 'Message'
     id = Column(Integer, primary_key=True, index=True)
-    user_from = Column(Integer, ForeignKey(User.id))
-    user_to = Column(Integer)
-    text = Column(Text)
+    user_from = Column(Integer, ForeignKey(User.id), nullable=False)
+    user_to = Column(Integer, nullable=False)
+    text = Column(Text, nullable=False)
 
 
 engine = create_engine(
