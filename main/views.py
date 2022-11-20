@@ -57,7 +57,7 @@ def activate_token(user_token):
     if find_token is None:
         return render_template('404.html'), 404
 
-    if find_token.date_activate != None:
+    if find_token.date_activate is not None:
         return render_template('404.html'), 404
 
     if find_token.date_to_active < datetime.now():

@@ -439,3 +439,68 @@ input[type=range]::-webkit-slider-runnable-track  {
   	border: none;
   	background: transparent;
 }
+
+.Login {
+	position: absolute;
+    z-index: 4;
+    width: 99vw;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+}
+
+.login_block {
+	width: 400px;
+    position: absolute;
+    z-index: 5;
+    top: 30%;
+    left: 37%;
+    background: #4394ff;
+    box-shadow: inset 2px 2px 0 #76c0ff, inset -2px -2px 0 #76c0ff;
+    border: 2px solid;
+}
+
+.login_block > p {
+    padding: 5% 14%;
+    text-align: center;
+    font-size: 5vh;
+}
+
+.login_input_block {
+	display: flex;
+	flex-direction: column;
+	margin: 0 10%;
+}
+
+.login_input_block > span {
+	font-size: 3vh;
+}
+
+.login_input_block > input {
+	border: 2px #000 solid;
+    background: #3b7cd1b5;
+    color: #fff;
+    font-size: 4vh;
+}
+
+.enter_login {
+	display: flex;
+    flex-direction: column;
+	margin: 0 25% 4% 25%;
+}
+
+.enter_login > span {
+	text-align: center;
+    padding: 1%;
+    cursor: pointer;
+    font-size: 2vh;
+}
+
+.enter_login > button {
+	padding: 1%;
+    margin: 2%;
+    font-size: 3vh;
+    border: 2px #000 solid;
+    background: #2d8afd;
+    color: #fff;
+    box-shadow: inset 2px 2px 0 #49abff, inset -2px -2px 0 #4dadff;
+}

@@ -28,7 +28,7 @@
                         <span>Создать плейлист</span>
                     </div>
                 </div>
-                <div class="right_panel block_search" onclick="SendTest()">
+                <div class="right_panel block_search" onclick="document.getElementById('Login').style.display = 'block';" {#onclick="SendTest()"#}>
                     <span>LogIn/RegIn</span>
                 </div>
 			</div>
@@ -153,11 +153,28 @@
 							<div class="timeLine_fill" id="in_line"></div>
 						</div>
 					</div>
-                    <input type="range" id="volume" name="volume" min="0" max="100" value="100" style="background-size: 100% 100%;">
+                    <input type="range" id="volume" name="volume" min="0" max="100" value="100">
                     <img src="../static/img/loop.png" class="imgLoop" id="loop" style="margin-left: 10px;" alt="#">
 					<img src="../static/img/shuffle.png" class="imgShuffle" id="shuffle" alt="#">
 				</div>
 			</div>
 		</div>
+        <div class="Login" id="Login" style="display: none" onclick="document.getElementById('Login').style.display = (event.target == this) ? 'none' : 'block';">
+            <div class="login_block">
+                <p>Вход</p>
+                <div class="login_input_block">
+                    <span>Логин</span>
+                    <input type="text" name="login">
+                </div>
+                <div class="login_input_block">
+                    <span>Пароль</span>
+                    <input type="password" name="password">
+                </div>
+                <div class="enter_login">
+                    <span>Нет аккаунта?</span>
+                    <button>Вход</button>
+                </div>
+            </div>
+        </div>
 	</body>
 </html>
