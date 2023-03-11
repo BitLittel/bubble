@@ -2,3 +2,4 @@
 /venv/
 .idea
 main/static/all_music/*
+config.py

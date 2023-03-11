@@ -93,11 +93,18 @@ class Message(Base):
 
 
 engine = create_engine(
-    f'postgresql+pg8000://{main.config["DATABASE_USER"]}'
+    f'postgresql+psycopg2://{main.config["DATABASE_USER"]}'
     f':{main.config["DATABASE_PASSWORD"]}'
     f'@{main.config["DATABASE_IP"]}'
     f'/{main.config["DATABASE_NAME"]}',
-    encoding='utf8', echo=False, pool_recycle=300, query_cache_size=0, pool_pre_ping=True
+    echo=False,
+    pool_recycle=300,
+    query_cache_size=0,
+    pool_pre_ping=True,
+    client_encoding="utf8",
+    pool_size=10,
+    max_overflow=2,
+    pool_use_lifo=True
 )
 
 Base.metadata.create_all(engine)
