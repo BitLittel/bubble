@@ -1,5 +1,5 @@
-#!flask/bin/python
+import uvicorn
+import main
 
-from main import main
 
-main.run(debug=True, host='0.0.0.0', port=5000)
+uvicorn.run(main.main, port=8000, host='127.0.0.1', use_colors=True, workers=2)

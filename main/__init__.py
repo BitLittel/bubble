@@ -1,9 +1,10 @@
-from flask import Flask
-from flask_mail import Mail
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
-main = Flask(__name__)
-main.config.from_object('config')
-mail = Mail(main)
+main = FastAPI()
+main.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 from main import views
-from main import rest_api

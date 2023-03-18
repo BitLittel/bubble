@@ -5,6 +5,7 @@ from sqlalchemy.sql import func, and_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.orm.scoping import scoped_session
+import main.config as config
 
 
 Base = declarative_base()
@@ -93,10 +94,10 @@ class Message(Base):
 
 
 engine = create_engine(
-    f'postgresql+psycopg2://{main.config["DATABASE_USER"]}'
-    f':{main.config["DATABASE_PASSWORD"]}'
-    f'@{main.config["DATABASE_IP"]}'
-    f'/{main.config["DATABASE_NAME"]}',
+    f'postgresql+psycopg2://{config.DATABASE_USER}'
+    f':{config.DATABASE_PASSWORD}'
+    f'@{config.DATABASE_IP}'
+    f'/{config.DATABASE_NAME}',
     echo=False,
     pool_recycle=300,
     query_cache_size=0,

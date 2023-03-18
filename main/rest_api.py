@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from main import main, mail
 from flask_mail import Message
-from flask import render_template, request, redirect, url_for, jsonify, g
-from flask_login import current_user, login_required, login_user, LoginManager, logout_user
+from flask import request, jsonify, g
 from datetime import datetime, timedelta
-from main.database import Session, User, Music, Token
+from main.models.database import User, Token
 import re
-import os
 import hashlib
 
 
@@ -25,7 +23,7 @@ def send_mail(user_email: str, subject: str, html_text: str) -> bool:
             charset='utf-8'
         )
         conn.send(message)
-    return Tru
+    return True
 
 
 @main.route('/test', methods=['GET'])
