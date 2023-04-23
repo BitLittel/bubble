@@ -163,6 +163,7 @@ body {
 	align-items: center;
     justify-content: space-between;
 	z-index: 3;
+	padding: 0 1%;
 }
 
 .left_panel {
@@ -261,7 +262,7 @@ body {
 }
 
 .MainMusic {
-	min-height: 765px;
+	min-height: 85vh;
     margin: 78px 0 0 0;
     border: 2px solid;
     background: #4394ff;
@@ -384,6 +385,10 @@ body {
     padding: 7% 15%;
 }
 
+.load_track {
+	margin: 0 3%;
+}
+
 .block_search, .load_track, .add_playlist {
 	display: flex;
     align-items: center;
@@ -392,7 +397,6 @@ body {
     height: 64px;
     padding: 3%;
     box-shadow: -2px -2px 0 #ffffff36 inset;
-    margin-right: 3%;
 	color: #fff;
 }
 .block_search:hover, .load_track:hover, .add_playlist:hover {

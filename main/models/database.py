@@ -1,96 +1,106 @@
 # -*- coding: utf-8 -*-
-from main import main
-from sqlalchemy import Column, Integer, create_engine, DateTime, ForeignKey, Text, PickleType, Boolean, String
-from sqlalchemy.sql import func, and_
+from sqlalchemy import Column, create_engine, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID
+from sqlalchemy import func, text
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.scoping import scoped_session
+import hashlib
 import main.config as config
+
+
+def hash_password(password: str) -> str:
+    h = hashlib.new('sha256')
+    h.update(password.encode('utf-8'))
+    return h.hexdigest()
 
 
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'User'
-    id = Column(Integer, primary_key=True, index=True)
-    login = Column(String(length=20), nullable=False)
-    password = Column(String(length=50), nullable=False)
-    avatar = Column(String(length=255), nullable=True)
+class Users(Base):
+    __tablename__ = 'Users'
+    id = Column(BigInteger, primary_key=True)
+    username = Column(String(length=30), nullable=False)
+    password = Column(String(length=255), nullable=False)
     email = Column(String(length=100), nullable=False)
+    avatar = Column(String(length=255), nullable=True)
+    online = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=False)
 
-    user_music = relationship('UserMusic', backref='user_music', lazy='dynamic')
-    user_message = relationship('Message', backref='user_message', lazy='dynamic')
-    user_playlist = relationship('Playlist', backref='user_playlist', lazy='dynamic')
-    user_token = relationship('Token', backref='user_token', lazy='dynamic')
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def get_id(self):
-        return self.id
-
-    def __repr__(self):
-        return "<User(%r, %r, %r)>" % (self.id, self.login, self.password)
+    def verify_password(self, password):
+        return self.password == hash_password(password)
 
 
-class Token(Base):
-    __tablename__ = 'Token'
-    id = Column(Integer, primary_key=True, nullable=False)
-    token = Column(String(length=50), index=True, nullable=False)
-    date_add = Column(DateTime, default=func.now(), nullable=False)
-    date_to_active = Column(DateTime, nullable=False)  # обязательно не забываем заполнять
-    date_activate = Column(DateTime, nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+class Tokens(Base):
+    __tablename__ = 'Tokens'
+    id = Column(BigInteger, primary_key=True)
+    type = Column(String(length=100), nullable=False, default='regular')
+    token = Column(UUID(as_uuid=False), unique=True, nullable=False, index=True,
+                   server_default=text('uuid_generate_v4()'))
+    datetime_create = Column(DateTime, default=func.now(), nullable=False)
+    expires = Column(DateTime, nullable=False)
+
+    # Foreign Key
+    user_id = Column(BigInteger, ForeignKey(Users.id), nullable=False)
 
 
-class Playlist(Base):
-    __tablename__ = 'Playlist'
-    id = Column(Integer, primary_key=True, index=True, nullable=False)
-    name = Column(String(length=100), nullable=False)
-    avatar = Column(String(length=255))
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+class UserData(Base):
+    __tablename__ = 'UserData'
+    id = Column(BigInteger, primary_key=True)
+    last_readed_message_id = Column(BigInteger, nullable=True)
+    last_user_from_readed = Column(BigInteger, nullable=True)
+    another = Column(String(length=255), nullable=True)
+    # Сюда можно всякий хлам накидать что можно использовать в будущем
 
-    playlist_music = relationship('PlaylistMusic', backref='playlist_music', lazy='dynamic')
+    # Foreign Key
+    user_id = Column(BigInteger, ForeignKey(Users.id), nullable=False)
 
 
-class Music(Base):
-    __tablename__ = 'Music'
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(length=100), nullable=False)
-    author = Column(String(length=100), nullable=False)
-    delay = Column(String(length=10), nullable=False)
-    avatar = Column(String(length=255))
+class PlayLists(Base):
+    __tablename__ = 'PlayLists'
+    id = Column(BigInteger, primary_key=True)
+    name = Column(String(length=30), nullable=False)
+    cover = Column(String(length=255), nullable=True)
+
+    # Foreign Key
+    user_id = Column(BigInteger, ForeignKey(Users.id), nullable=False)
+
+
+class Musics(Base):
+    __tablename__ = 'Musics'
+    id = Column(BigInteger, primary_key=True)
+    name = Column(String(length=30), nullable=False)
+    author = Column(String(length=30), nullable=False)
+    genre = Column(String(length=50), default=False)
+    picture = Column(String(length=255), nullable=True)
     path = Column(String(length=255), nullable=False)
-    ban = Column(Boolean, default=False, nullable=False)
+    time_duration = Column(String(length=20), default=False)
+    datetime_add = Column(DateTime, nullable=False, default=func.now())
 
-    music_user = relationship('UserMusic', backref='music_user', lazy='dynamic')
-    music_playlist = relationship('PlaylistMusic', backref='music_playlist', lazy='dynamic')
-
-
-class PlaylistMusic(Base):
-    __tablename__ = 'PlaylistMusic'
-    id = Column(Integer, primary_key=True, index=True)
-    music_id = Column(Integer, ForeignKey(Music.id), nullable=False)
-    playlist_id = Column(Integer, ForeignKey(Playlist.id), nullable=False)
+    # Foreign Key
+    user_id_add = Column(BigInteger, ForeignKey(Users.id), nullable=False)
 
 
-class UserMusic(Base):
-    __tablename__ = 'UserMusic'
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    music_id = Column(Integer, ForeignKey(Music.id), nullable=False)
+class Collections(Base):
+    __tablename__ = 'Collections'
+    id = Column(BigInteger, primary_key=True)
+
+    # Foreign Key
+    music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)
+    playlist_id = Column(BigInteger, ForeignKey(PlayLists.id), nullable=False)
 
 
-class Message(Base):
-    __tablename__ = 'Message'
-    id = Column(Integer, primary_key=True, index=True)
-    user_from = Column(Integer, ForeignKey(User.id), nullable=False)
-    user_to = Column(Integer, nullable=False)
-    text = Column(Text, nullable=False)
+class Messages(Base):
+    __tablename__ = 'Messages'
+    id = Column(BigInteger, primary_key=True)
+    text = Column(Text, nullable=True)
+
+    # Foreign Key
+    user_id_from = Column(BigInteger, ForeignKey(Users.id), nullable=False)
+    user_id_to = Column(BigInteger, nullable=False)
+    message_reply_id = Column(BigInteger, nullable=True)
+    playlist_id = Column(BigInteger, ForeignKey(PlayLists.id), nullable=False)
+    music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)
 
 
 engine = create_engine(
