@@ -1,23 +1,127 @@
-function api_login() {
+window.onload = function () {
+    sendRequest(
+        'GET',
+        '/users/me',
+        true,
+        null,
+        function (data) {
+            setDataCurrentUser(data.data.username, data.data.avatar);
+        }
+    );
+};
+
+function setDataCurrentUser(username, avatar) {
+    let block_Login = document.getElementById('Login'),
+        user_block = document.getElementById('user_block'),
+        button_login_reg_block = document.getElementById('button_login_reg_block'),
+        main_user_img = document.getElementById('main_user_img'),
+        main_user_login = document.getElementById('main_user_login');
+    block_Login.style.display = 'none';
+    user_block.style.display = 'flex';
+    button_login_reg_block.style.display = 'none';
+    main_user_img.src = avatar;
+    main_user_login.innerText = username;
+}
+
+
+function show_error(error_text, error_title) {
+    let global_error_text = document.getElementById('global_error_text'),
+        global_error = document.getElementById('global_error'),
+        global_error_title = document.getElementById('global_error_title');
+
+    global_error.style.display = 'block';
+    global_error_title.innerText = error_title;
+    global_error_text.innerText = error_text;
+}
+
+function sendRequest(method, url, async=true, responses_data, onsuccess) {
     let request = new XMLHttpRequest();
-    request.open('GET', '/api/login?login=qwerty&password=password');
-    request.setRequestHeader('token', '1234567');
-    request.send();
-    request.onload = function() {
-        let responseObj = request.response;
-        console.log(responseObj);
+    request.open(method, url, async);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    if (responses_data != null) {
+        request.send(JSON.stringify(responses_data));
+    } else {
+        request.send();
+    }
+    request.onload = function () {
+        let responseObj = JSON.parse(request.response);
+
+        if (responseObj.result == true) {
+            onsuccess(responseObj);
+        } else {
+            show_error(responseObj.message, 'Ошибка');
+            return false;
+        }
     };
-    // AJAX(
-    //     {
-    //         url: '/api/login',
-    //         data: {
-    //             token: '1234567',
-    //             login: document.getElementById('input_login_login').value,
-    //             password: document.getElementById('input_password_login').value
-    //         }
-    //     },
-    //     function (data) {
-    //         console.log(data);
-    //     }
-    // );
+
+    request.onerror = function () {
+        show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
+    };
+
+    request.ontimeout = function () {
+        show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
+    };
+
+    request.onabort = function () {
+        show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
+    };
+}
+
+function change_to_login() {
+    let pass_repeat = document.getElementById('pass_repeat_if_reg'),
+        email_reg = document.getElementById('email_if_reg'),
+        change_have_no_have_acc = document.getElementById('change_have_no_have_acc'),
+        button_login_reg = document.getElementById('button_login_reg');
+
+    pass_repeat.style.display = 'none';
+    email_reg.style.display = 'none';
+    change_have_no_have_acc.innerText = 'Нет аккаунта?';
+    change_have_no_have_acc.onclick = function(){change_to_reg();};
+    button_login_reg.innerText = 'Вход';
+    button_login_reg.onclick = LogIn;
+}
+
+function change_to_reg() {
+    let pass_repeat = document.getElementById('pass_repeat_if_reg'),
+        email_reg = document.getElementById('email_if_reg'),
+        change_have_no_have_acc = document.getElementById('change_have_no_have_acc'),
+        button_login_reg = document.getElementById('button_login_reg');
+
+    pass_repeat.style.display = 'flex';
+    email_reg.style.display = 'flex';
+    change_have_no_have_acc.innerText = 'Уже есть аккаунт?';
+    change_have_no_have_acc.onclick = function(){change_to_login();};
+    button_login_reg.innerText = 'Регистрация';
+    button_login_reg.onclick = signUp;
+}
+
+function signUp() {
+    let input_password_repeat = document.getElementById('input_password_repeat_login'),
+        input_email = document.getElementById('input_email_login'),
+        input_login = document.getElementById('input_login_login'),
+        input_password = document.getElementById('input_password_login');
+    console.log('nice');
+    // if (input_password_repeat !== input_password) {
+    //
+    // }
+}
+
+function LogIn() {
+    let input_login_login = document.getElementById('input_login_login'),
+        input_password_login = document.getElementById('input_password_login'),
+        block_Login = document.getElementById('Login'),
+        user_block = document.getElementById('user_block'),
+        button_login_reg_block = document.getElementById('button_login_reg_block'),
+        main_user_img = document.getElementById('main_user_img'),
+        main_user_login = document.getElementById('main_user_login');
+
+    sendRequest(
+        'POST',
+        '/login',
+        true,
+        {"username": input_login_login.value, "password": input_password_login.value},
+        function (data) {
+            setDataCurrentUser(data.data.username, data.data.avatar);
+        }
+    );
 }

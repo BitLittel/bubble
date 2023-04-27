@@ -8,6 +8,14 @@
 		<title>Music</title>
 	</head>
 	<body>
+        <div id="global_error" class="Login" style="z-index: 6; display: none;" onclick="document.getElementById('global_error').style.display = (event.target == this) ? 'none' : 'block';">
+            <div class="login_block">
+                <p style="color: #e9002b;" id="global_error_title">Ошибка</p>
+                <div class="login_input_block">
+                    <span style="font-size: 4vh;" id="global_error_text"></span>
+                </div>
+            </div>
+        </div>
 		<div id="bodyContent">
 			<div class="header">
                 <div class="left_panel">
@@ -24,7 +32,12 @@
                         <span>Создать плейлист</span>
                     </div>
                 </div>
-                <div class="right_panel block_search" onclick="document.getElementById('Login').style.display = 'block';" {#onclick="SendTest()"#}>
+                <div id="user_block" style="display: none; justify-content: space-between; width: 35vh;" class="right_panel block_search">
+                    <img src="" alt="" style="width: 40px; height: 40px; border: 2px solid #000;" id="main_user_img">
+                    <span id="main_user_login">User_Login</span>
+                    <div>Ex</div>
+                </div>
+                <div id="button_login_reg_block" class="right_panel block_search" onclick="document.getElementById('Login').style.display = 'block';">
                     <span>LogIn/RegIn</span>
                 </div>
 			</div>
@@ -168,17 +181,24 @@
                     <span>Логин</span>
                     <input type="text" name="login" id="input_login_login">
                 </div>
+                <div class="login_input_block" style="display: none;" id="email_if_reg">
+                    <span>Почта</span>
+                    <input type="email" name="login" id="input_email_login">
+                </div>
                 <div class="login_input_block">
                     <span>Пароль</span>
                     <input type="password" name="password" id="input_password_login">
                 </div>
+                <div class="login_input_block" style="display: none;" id="pass_repeat_if_reg">
+                    <span>Пароль ещё раз</span>
+                    <input type="password" name="password" id="input_password_repeat_login">
+                </div>
                 <div class="enter_login">
-                    <span>Нет аккаунта?</span>
-                    <button onclick="api_login()">Вход</button>
+                    <span id="change_have_no_have_acc" onclick="change_to_reg()">Нет аккаунта?</span>
+                    <button id="button_login_reg" onclick="LogIn()">Вход</button>
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="../static/js/AJAX.js"></script>
         <script type="text/javascript" src="../static/js/Main.js"></script>
 {#    <script type="text/javascript" src="../static/js/Audio.js"></script>#}
 	</body>

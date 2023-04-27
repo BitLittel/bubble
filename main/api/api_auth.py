@@ -1,64 +1,15 @@
-from pydantic import BaseModel, EmailStr, Field, UUID4
+from pydantic import UUID4
 from main import main
 from uuid import uuid4
 from datetime import datetime, timedelta
-from fastapi import status, Request, Response, Cookie
+from fastapi import Response
 from sqlalchemy import and_
 from main.models.database import Session, hash_password, Users, Tokens
 from fastapi import Depends, HTTPException
 from main import config
-
-
-class UserSignUp(BaseModel):
-    username: str
-    password: str = Field(..., regex="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})")
-    email: EmailStr
-
-
-class UserLogin(BaseModel):
-    username: str
-    password: str = Field(..., regex="((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})")
-
-
-class UserRegular(BaseModel):
-    id: int
-    username: str
-    avatar: str
-    online: bool
-
-
-async def get_user_by_username(username: str) -> UserRegular | bool:
-    with Session() as db:
-        user = db.query(Users).filter(Users.username == username).first()
-        if user is not None:
-            return UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
-        return False
-
-
-async def get_user_by_email(email: str) -> UserRegular | bool:
-    with Session() as db:
-        user = db.query(Users).filter(Users.email == email).first()
-        if user is not None:
-            return UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
-        return False
-
-
-async def get_current_user(token=Cookie()):
-    user = await get_user_by_token_with_type(token=token, type_token='regular')
-    if user:
-        return user
-    raise HTTPException(status_code=401, detail="Unauthorized")
-
-
-async def get_user_by_token_with_type(token: UUID4, type_token: str) -> UserRegular | bool:
-    with Session() as db:
-        token = db.query(Tokens).filter(
-            and_(Tokens.token == token, Tokens.type == type_token, Tokens.expires > datetime.now())
-        ).first()
-        if token is not None:
-            user = db.query(Users).filter(Users.id == token.user_id).first()
-            return UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
-        return False
+from main.schemas.response_model import DefaultResponse
+from main.schemas.user_model import UserRegular, UserLogin, UserSignUp
+from main.utils.user import get_user_by_username, get_user_by_email, get_current_user, get_user_by_token_with_type
 
 
 async def update_token(user_id: int) -> uuid4:
@@ -85,22 +36,31 @@ async def update_token(user_id: int) -> uuid4:
             return new_token.token
 
 
-@main.post('/login')
+@main.post('/login', response_model=DefaultResponse)
 async def login(user: UserLogin, response: Response):
     with Session() as db:
-        get_user = db.query(Users).filter(and_(
+        user_login = db.query(Users).filter(and_(
             Users.username == user.username,
             Users.is_active == True
         )).first()
-        if get_user is not None:
-            if get_user.verify_password(user.password):
-                check_token = await update_token(get_user.id)
-                response.set_cookie(key='token', value=check_token, httponly=True)
-                return {'status': 'ok'}
-        raise HTTPException(status_code=400, detail="Incorrect email or password")
+        if user_login is not None:
+            if user_login.verify_password(user.password):
+                token = await update_token(user_login.id)
+                response.set_cookie(key='token', value=token, httponly=True, samesite="strict", max_age=1209600)
+                return {
+                    'result': True,
+                    'message': 'Успех',
+                    'data': UserRegular(
+                        id=user_login.id,
+                        username=user_login.username,
+                        avatar=user_login.avatar,
+                        online=user_login.online
+                    )
+                }
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
 
 
-@main.post('/signup')
+@main.post('/signup', response_model=DefaultResponse)
 async def signup(user: UserSignUp):
     with Session() as db:
         print(user.username, user.password, user.email)
@@ -126,10 +86,14 @@ async def signup(user: UserSignUp):
         )
         db.add(new_token)
         db.commit()
-        return {'status': 'ok', 'link': f'{config.MAIN_URL}/activate/{new_token.token}'}
+        return {
+            'result': True,
+            'message': 'Успех',
+            'data': f'{config.MAIN_URL}/activate/{new_token.token}'
+        }
 
 
-@main.get('/activate/{token}')
+@main.get('/activate/{token}', response_model=DefaultResponse)
 async def activate_by_token(token: UUID4):
     check_token = await get_user_by_token_with_type(token=token, type_token='activate')
     if check_token:
@@ -137,11 +101,30 @@ async def activate_by_token(token: UUID4):
             user = db.query(Users).filter(Users.id == check_token.id).first()
             user.is_active = True
             db.commit()
-            return {'status': 'ok', 'message': 'Your account is activate'}
+            return {
+                'result': True,
+                'message': 'Вы активировали аккаунт',
+                'data': {}
+            }
     else:
-        raise HTTPException(status_code=404, detail="This token not found")
+        raise HTTPException(status_code=404, detail="This code not found")
 
 
-@main.get('/users/me')
+@main.get('/users/me', response_model=DefaultResponse)
 async def get_user(user: UserRegular = Depends(get_current_user)):
-    return user
+    return {
+        'result': True,
+        'message': 'Успех',
+        'data': UserRegular(
+            id=user.id,
+            username=user.username,
+            avatar=user.avatar,
+            online=user.online
+        )
+    }
+
+
+@main.get("/logout", response_model=DefaultResponse)
+async def logout(response: Response):
+    response.delete_cookie(key='token')
+    return {'result': True, 'message': 'Вы успешно вышли', 'data': {}}
