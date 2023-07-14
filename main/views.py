@@ -2,13 +2,13 @@
 import time
 from main import main, templates
 from fastapi import Request, status
-from fastapi.exceptions import ValidationError
+from fastapi.exceptions import ValidationException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse
 
 
-@main.exception_handler(ValidationError)
-async def validation_exeption_handler(request: Request, exc: ValidationError):
+@main.exception_handler(ValidationException)
+async def validation_exeption_handler(request: Request, exc: ValidationException):
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=jsonable_encoder({'detail': exc.errors()})

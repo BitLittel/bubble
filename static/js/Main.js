@@ -6,7 +6,8 @@ window.onload = function () {
         null,
         function (data) {
             setDataCurrentUser(data.data.username, data.data.avatar);
-        }
+        },
+        function () {}
     );
 };
 
@@ -34,7 +35,7 @@ function show_error(error_text, error_title) {
     global_error_text.innerText = error_text;
 }
 
-function sendRequest(method, url, async=true, responses_data, onsuccess) {
+function sendRequest(method, url, async=true, responses_data, onsuccess, onerror=function(){}) {
     let request = new XMLHttpRequest();
     request.open(method, url, async);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -46,11 +47,21 @@ function sendRequest(method, url, async=true, responses_data, onsuccess) {
     request.onload = function () {
         let responseObj = JSON.parse(request.response);
 
+        if (request.status == 401) {
+            console.log("Токен устарел, необходимо заново залогиниться");
+            //show_error("Токен устарел, необходимо заново залогиниться", 'Ошибка');
+        }
+
+        if (request.status == 400 || request.status == 409) {
+            show_error(responseObj.detail, 'Ошибка');
+        }
+
         if (responseObj.result == true) {
             onsuccess(responseObj);
         } else {
-            show_error(responseObj.message, 'Ошибка');
-            return false;
+            onerror();
+            //show_error(responseObj.message, 'Ошибка');
+            //return false;
         }
     };
 
@@ -100,20 +111,30 @@ function signUp() {
         input_email = document.getElementById('input_email_login'),
         input_login = document.getElementById('input_login_login'),
         input_password = document.getElementById('input_password_login');
-    console.log('nice');
-    // if (input_password_repeat !== input_password) {
-    //
-    // }
+
+    if (input_password_repeat.value !== input_password.value) {
+        show_error('Пароли не совпадают', 'Ошибка');
+    } else {
+        sendRequest(
+            'POST',
+            '/signup',
+            true,
+            {"username": input_login.value, "password": input_password.value, "email": input_email.value},
+            function (data) {
+                let block_Login = document.getElementById('Login');
+                block_Login.style.display = 'none';
+                show_error(
+                    'Всё заебись, но потом сделаю отправку сообщения по почте чтобы активировать акк',
+                    'Ошибка'
+                );
+            }
+        );
+    }
 }
 
 function LogIn() {
     let input_login_login = document.getElementById('input_login_login'),
-        input_password_login = document.getElementById('input_password_login'),
-        block_Login = document.getElementById('Login'),
-        user_block = document.getElementById('user_block'),
-        button_login_reg_block = document.getElementById('button_login_reg_block'),
-        main_user_img = document.getElementById('main_user_img'),
-        main_user_login = document.getElementById('main_user_login');
+        input_password_login = document.getElementById('input_password_login');
 
     sendRequest(
         'POST',

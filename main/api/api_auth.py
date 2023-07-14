@@ -86,15 +86,16 @@ async def signup(user: UserSignUp):
         )
         db.add(new_token)
         db.commit()
-        return {
-            'result': True,
-            'message': 'Успех',
-            'data': f'{config.MAIN_URL}/activate/{new_token.token}'
-        }
+        return DefaultResponse(
+            result=True,
+            message='Успех',
+            data={'src': f'{config.MAIN_URL}/activate/{new_token.token}'}
+        )
 
 
 @main.get('/activate/{token}', response_model=DefaultResponse)
 async def activate_by_token(token: UUID4):
+    print(token)
     check_token = await get_user_by_token_with_type(token=token, type_token='activate')
     if check_token:
         with Session() as db:
@@ -106,9 +107,13 @@ async def activate_by_token(token: UUID4):
                 'message': 'Вы активировали аккаунт',
                 'data': {}
             }
+            # todo: надо будет сделать что статус активации аккаунта
+            # отображаеться как окно оповещение на нашем сайте, а не как JSON
     else:
         raise HTTPException(status_code=404, detail="This code not found")
 
+
+# todo: Было бы классно сделать страничку для 500 и 404 стр, эхх... такие красивые можно заебашить
 
 @main.get('/users/me', response_model=DefaultResponse)
 async def get_user(user: UserRegular = Depends(get_current_user)):

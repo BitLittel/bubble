@@ -2,8 +2,10 @@
 from sqlalchemy import Column, create_engine, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID
 from sqlalchemy import func, text
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.scoping import scoped_session
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine, AsyncAttrs
 import hashlib
 import main.config as config
 
@@ -14,7 +16,10 @@ def hash_password(password: str) -> str:
     return h.hexdigest()
 
 
-Base = declarative_base()
+class Base(AsyncAttrs, DeclarativeBase):
+    pass
+
+# Base = declarative_base()
 
 
 class Users(Base):
@@ -103,21 +108,43 @@ class Messages(Base):
     music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)
 
 
-engine = create_engine(
-    f'postgresql+psycopg2://{config.DATABASE_USER}'
-    f':{config.DATABASE_PASSWORD}'
-    f'@{config.DATABASE_IP}'
-    f'/{config.DATABASE_NAME}',
-    echo=False,
-    pool_recycle=300,
-    query_cache_size=0,
-    pool_pre_ping=True,
-    client_encoding="utf8",
-    pool_size=10,
-    max_overflow=2,
-    pool_use_lifo=True
-)
+engine = create_async_engine(
+        f'postgresql+asyncpg://{config.DATABASE_USER}'
+        f':{config.DATABASE_PASSWORD}'
+        f'@{config.DATABASE_IP}'
+        f'/{config.DATABASE_NAME}',
+        echo=False,
+        pool_recycle=300,
+        query_cache_size=0,
+        pool_pre_ping=True,
+        pool_size=10,
+        max_overflow=2,
+        pool_use_lifo=True
+    )
 
-Base.metadata.create_all(engine)
-Session = scoped_session(sessionmaker())
-Session.configure(bind=engine)
+# begin = engine.begin()
+# begin.run_sync(Base.metadata.create_all)
+Session = async_sessionmaker(engine, expire_on_commit=False)
+
+
+
+
+
+# engine = create_engine(
+#     f'postgresql+psycopg2://{config.DATABASE_USER}'
+#     f':{config.DATABASE_PASSWORD}'
+#     f'@{config.DATABASE_IP}'
+#     f'/{config.DATABASE_NAME}',
+#     echo=False,
+#     pool_recycle=300,
+#     query_cache_size=0,
+#     pool_pre_ping=True,
+#     client_encoding="utf8",
+#     pool_size=10,
+#     max_overflow=2,
+#     pool_use_lifo=True
+# )
+#
+# Base.metadata.create_all(engine)
+# Session = scoped_session(sessionmaker())
+# Session.configure(bind=engine)
