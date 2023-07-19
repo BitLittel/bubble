@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import Column, create_engine, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID
+import asyncio
+from sqlalchemy import Column, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID, SmallInteger
 from sqlalchemy import func, text
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.scoping import scoped_session
-from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine, AsyncAttrs
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncAttrs
 import hashlib
 import main.config as config
 
@@ -18,8 +16,6 @@ def hash_password(password: str) -> str:
 
 class Base(AsyncAttrs, DeclarativeBase):
     pass
-
-# Base = declarative_base()
 
 
 class Users(Base):
@@ -34,6 +30,17 @@ class Users(Base):
 
     def verify_password(self, password):
         return self.password == hash_password(password)
+
+
+class Friends(Base):
+    __tablename__ = 'Friends'
+    id = Column(BigInteger, primary_key=True)
+    user_id = Column(BigInteger, ForeignKey(Users.id), nullable=False)
+    user_id_to = Column(BigInteger, ForeignKey(Users.id), nullable=False)
+    status = Column(SmallInteger, nullable=False)  # 1 - заявка отправлена и ожидает, 0 - заявка принята,
+    # 2 - заявка отклонена и можно будет повторно отправить через 24 часа
+    datetime_add = Column(DateTime, default=func.now(), nullable=False)
+    datetime_change_status = Column(DateTime, default=func.now(), nullable=False)
 
 
 class Tokens(Base):
@@ -86,6 +93,14 @@ class Musics(Base):
     user_id_add = Column(BigInteger, ForeignKey(Users.id), nullable=False)
 
 
+class Actions(Base):
+    __tablename__ = 'Actions'
+    id = Column(BigInteger, primary_key=True)
+    user_id = Column(BigInteger, ForeignKey(Users.id), nullable=False)
+    music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)
+    datetime_add = Column(DateTime, nullable=False, default=func.now())
+
+
 class Collections(Base):
     __tablename__ = 'Collections'
     id = Column(BigInteger, primary_key=True)
@@ -102,10 +117,10 @@ class Messages(Base):
 
     # Foreign Key
     user_id_from = Column(BigInteger, ForeignKey(Users.id), nullable=False)
-    user_id_to = Column(BigInteger, nullable=False)
+    user_id_to = Column(BigInteger, ForeignKey(Users.id), nullable=False)
     message_reply_id = Column(BigInteger, nullable=True)
-    playlist_id = Column(BigInteger, ForeignKey(PlayLists.id), nullable=False)
-    music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)
+    playlist_id = Column(BigInteger, ForeignKey(PlayLists.id), nullable=True)
+    music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=True)
 
 
 engine = create_async_engine(
@@ -122,29 +137,11 @@ engine = create_async_engine(
         pool_use_lifo=True
     )
 
-# begin = engine.begin()
-# begin.run_sync(Base.metadata.create_all)
+
+async def start() -> None:
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
 Session = async_sessionmaker(engine, expire_on_commit=False)
-
-
-
-
-
-# engine = create_engine(
-#     f'postgresql+psycopg2://{config.DATABASE_USER}'
-#     f':{config.DATABASE_PASSWORD}'
-#     f'@{config.DATABASE_IP}'
-#     f'/{config.DATABASE_NAME}',
-#     echo=False,
-#     pool_recycle=300,
-#     query_cache_size=0,
-#     pool_pre_ping=True,
-#     client_encoding="utf8",
-#     pool_size=10,
-#     max_overflow=2,
-#     pool_use_lifo=True
-# )
-#
-# Base.metadata.create_all(engine)
-# Session = scoped_session(sessionmaker())
-# Session.configure(bind=engine)
+# asyncio.run(start())
