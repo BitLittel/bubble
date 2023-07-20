@@ -73,6 +73,7 @@ class PlayLists(Base):
     id = Column(BigInteger, primary_key=True)
     name = Column(String(length=30), nullable=False)
     cover = Column(String(length=255), nullable=True)
+    datetime_add = Column(DateTime, nullable=False, default=func.now())
 
     # Foreign Key
     user_id = Column(BigInteger, ForeignKey(Users.id), nullable=False)
@@ -104,7 +105,8 @@ class Actions(Base):
 class Collections(Base):
     __tablename__ = 'Collections'
     id = Column(BigInteger, primary_key=True)
-
+    track_number = Column(BigInteger, nullable=False)
+    datetime_add = Column(DateTime, nullable=False, default=func.now())
     # Foreign Key
     music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)
     playlist_id = Column(BigInteger, ForeignKey(PlayLists.id), nullable=False)
