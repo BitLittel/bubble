@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import time
-from main import main, templates
-from fastapi import Request, status
+from main import main, templates, config
+from fastapi import Request, status, HTTPException
 from fastapi.exceptions import ValidationException
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
+from main.models.database import query_execute
+from main.api.api_auth import update_token
+from main.utils.user import get_user_by_token_with_type
 
 
 @main.exception_handler(ValidationException)
@@ -27,3 +30,6 @@ async def before_request(request: Request, call_next):
 @main.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", context={"request": request})
+
+
+# todo: Было бы классно сделать страничку для 500 и 404 стр, эхх... такие красивые можно заебашить

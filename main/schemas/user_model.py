@@ -2,13 +2,13 @@ from pydantic import BaseModel, EmailStr, Field
 
 
 class UserSignUp(BaseModel):
-    username: str
+    username: str = Field(pattern=r'^([a-zA-Z0-9_-|\\\/?.()*%$#@!<>{}\[\]]){5,25}$')
     password: str = Field(pattern=r'^([a-zA-Z0-9_]|\W){8,64}$')
     email: EmailStr
 
 
 class UserLogin(BaseModel):
-    username: str
+    username: str = Field(pattern=r'^([a-zA-Z0-9_-|\\\/?.()*%$#@!<>{}\[\]]){5,25}$')
     password: str = Field(pattern=r'^([a-zA-Z0-9_]|\W){8,64}$')
 
 

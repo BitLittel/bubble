@@ -7,8 +7,26 @@ window.onload = function () {
         function (data) {
             setDataCurrentUser(data.data.username, data.data.avatar);
         },
-        function () {}
+        function (data) {
+            console.log(data)
+        }
     );
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('token');
+    if (myParam !== undefined && myParam !== null) {
+        sendRequest(
+            'POST',
+            '/activate/'+myParam,
+            true,
+            null,
+            function (data) {
+                setDataCurrentUser(data.data.username, data.data.avatar);
+            },
+            function (data) {
+                console.log(data);
+            }
+        );
+    }
 };
 
 function setDataCurrentUser(username, avatar) {
@@ -59,9 +77,7 @@ function sendRequest(method, url, async=true, responses_data, onsuccess, onerror
         if (responseObj.result == true) {
             onsuccess(responseObj);
         } else {
-            onerror();
-            //show_error(responseObj.message, 'Ошибка');
-            //return false;
+            onerror(responseObj);
         }
     };
 
@@ -123,10 +139,7 @@ function signUp() {
             function (data) {
                 let block_Login = document.getElementById('Login');
                 block_Login.style.display = 'none';
-                show_error(
-                    'Всё заебись, но потом сделаю отправку сообщения по почте чтобы активировать акк',
-                    'Ошибка'
-                );
+                show_error(data.message,'Успех');
             }
         );
     }

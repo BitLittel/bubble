@@ -28,9 +28,6 @@ class Users(Base):
     online = Column(Boolean, default=False)
     is_active = Column(Boolean, default=False)
 
-    def verify_password(self, password):
-        return self.password == hash_password(password)
-
 
 class Friends(Base):
     __tablename__ = 'Friends'
@@ -86,6 +83,7 @@ class Musics(Base):
     author = Column(String(length=30), nullable=False)
     genre = Column(String(length=50), default=False)
     picture = Column(String(length=255), nullable=True)
+    hashsum = Column(String(length=255), nullable=True)
     path = Column(String(length=255), nullable=False)
     time_duration = Column(String(length=20), default=False)
     datetime_add = Column(DateTime, nullable=False, default=func.now())
@@ -139,11 +137,23 @@ engine = create_async_engine(
         pool_use_lifo=True
     )
 
+Session = async_sessionmaker(engine, expire_on_commit=False)
+
 
 async def start() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
-Session = async_sessionmaker(engine, expire_on_commit=False)
+async def query_execute(query_text: str, fetch_all: bool = False, type_query: str = 'read'):
+    async with Session() as db:
+        query_object = await db.execute(
+            text(query_text))
+        if type_query == 'read':
+            return query_object.fetchall() if fetch_all else query_object.fetchone()
+        else:
+            print(query_text, fetch_all, type_query)
+            await db.execute(text('commit'))
+            return True
+
 # asyncio.run(start())
