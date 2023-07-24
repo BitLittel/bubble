@@ -1,7 +1,7 @@
 window.onload = function () {
     sendRequest(
         'GET',
-        '/users/me',
+        '/api/users/me',
         true,
         null,
         function (data) {
@@ -133,7 +133,7 @@ function signUp() {
     } else {
         sendRequest(
             'POST',
-            '/signup',
+            '/api/signup',
             true,
             {"username": input_login.value, "password": input_password.value, "email": input_email.value},
             function (data) {
@@ -151,11 +151,27 @@ function LogIn() {
 
     sendRequest(
         'POST',
-        '/login',
+        '/api/login',
         true,
         {"username": input_login_login.value, "password": input_password_login.value},
         function (data) {
             setDataCurrentUser(data.data.username, data.data.avatar);
+        }
+    );
+}
+
+function LogOut() {
+    sendRequest(
+        'POST',
+        '/api/logout',
+        true,
+        {},
+        function (data) {
+            console.log(data);
+            window.location.reload();
+        },
+        function (data) {
+            console.log(data);
         }
     );
 }

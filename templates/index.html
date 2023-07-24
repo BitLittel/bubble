@@ -17,30 +17,6 @@
             </div>
         </div>
 		<div id="bodyContent">
-			<div class="header">
-                <div class="left_panel">
-                    <div class="block_search">
-                        <img src="../static/img/search.png" alt="#">
-                        <span>Поиск</span>
-                    </div>
-                    <div class="load_track">
-                        <img src="../static/img/plus.png" alt="#">
-                        <span>Загрузить трек</span>
-                    </div>
-                    <div class="add_playlist">
-                        <img src="../static/img/add_playlist.png" alt="#">
-                        <span>Создать плейлист</span>
-                    </div>
-                </div>
-                <div id="user_block" style="display: none; justify-content: space-between; width: 35vh;" class="right_panel block_search">
-                    <img src="" alt="" style="width: 40px; height: 40px; border: 2px solid #000;" id="main_user_img">
-                    <span id="main_user_login">User_Login</span>
-                    <div>Ex</div>
-                </div>
-                <div id="button_login_reg_block" class="right_panel block_search" onclick="document.getElementById('Login').style.display = 'block';">
-                    <span>LogIn/RegIn</span>
-                </div>
-			</div>
 			<div class="MainMusic">
                 <div class="PlayLists">
                     {#            тут цикл ебаный        #}
@@ -56,53 +32,76 @@
                         <img src="../static/img/default_img.jpg" alt="#">
                         <span>PlayList #3</span>
                     </div>
+                    <div class="blockPlayList">
+                        <img src="../static/img/plus.png" alt="#" style="border: none;">
+                        <span>Создать плейлист</span>
+                    </div>
                 </div>
                 <div class="Music_and_Frend">
                     <div class="AllMusicList">
-{#                        <div class="blockMusic">#}
-{#                            <audio src="{{ url_for("static", path='music/1.mp3') }}" controls></audio>#}
-{#                        </div>#}
-{#                        <div class="blockMusic">#}
-{#                            <audio src="{{ url_for("static", path='music/2.mp3') }}" controls></audio>#}
-{#                        </div>#}
-                        {#            тут цикл ебаный        #}
-{#                        <div class="blockMusic" data-src="{{ url_for("static", path='music/1.mp3') }}" data-name="1" data-author="Bones" data-img="../static/img/default_img.jpg">#}
-{#                            <div>#}
-{#                                <img src="../static/img/default_img.jpg" alt="#">#}
-{#                                <div><span>1</span><span>Bones</span></div>#}
-{#                            </div>#}
-{#                            <span>3:20</span>#}
-{#                            <div class="blockMusic_on_play" id="blockMusic_on_play_0" style="display: none"></div>#}
-{#                        </div>#}
-{#                        <div class="blockMusic" data-src="{{ url_for("static", path='music/2.mp3') }}" data-name="2" data-author="Bones" data-img="../static/img/default_img.jpg">#}
-{#                            <div>#}
-{#                                <img src="../static/img/default_img.jpg" alt="#">#}
-{#                                <div><span>2</span><span>Bones</span></div>#}
-{#                            </div>#}
-{#                            <span>3:20</span>#}
-{#                            <div class="blockMusic_on_play" id="blockMusic_on_play_1" style="display: none"></div>#}
-{#                        </div>#}
-{#                        <div class="blockMusic" data-src="{{ url_for("static", path='music/3.mp3') }}" data-name="3" data-author="Bones" data-img="../static/img/default_img.jpg">#}
-{#                            <div>#}
-{#                                <img src="../static/img/default_img.jpg" alt="#">#}
-{#                                <div><span>3</span><span>Bones</span></div>#}
-{#                            </div>#}
-{#                            <span>3:20</span>#}
-{#                            <div class="blockMusic_on_play" id="blockMusic_on_play_2" style="display: none"></div>#}
-{#                        </div>#}
-{#                        <div class="blockMusic" data-src="{{ url_for("static", path='music/4.mp3') }}" data-name="4" data-author="Bones" data-img="../static/img/default_img.jpg">#}
-{#                            <div>#}
-{#                                <img src="../static/img/default_img.jpg" alt="#">#}
-{#                                <div><span>4</span><span>Bones</span></div>#}
-{#                            </div>#}
-{#                            <span>3:20</span>#}
-{#                            <div class="blockMusic_on_play" id="blockMusic_on_play_3" style="display: none"></div>#}
-{#                        </div>#}
+                        <div class="search_and_add">
+                            <div class="block_search_input">
+                                <input type="text" name="search" class="input_search" id="input_search">
+                            </div>
+                            <div class="add_track block_search" id="add_track">
+                                <img src="../static/img/add_music.png" alt="#">
+                                <span>Загрузить трек</span>
+                            </div>
+                        </div>
+                        <div id="musics_list">
+                            <div class="blockMusic" data-src="{{ url_for("static", path='music/1.mp3') }}" data-name="1" data-author="Bones" data-img="../static/img/default_img.jpg">
+                                <div>
+                                    <img src="../static/img/default_img.jpg" alt="#">
+                                    <div><span>1</span><span>Bones</span></div>
+                                </div>
+                                <span>3:20</span>
+                                <div class="blockMusic_on_play" id="blockMusic_on_play_0" style="display: none"></div>
+                            </div>
+                            <div class="blockMusic" data-src="{{ url_for("static", path='music/2.mp3') }}" data-name="2" data-author="Bones" data-img="../static/img/default_img.jpg">
+                                <div>
+                                    <img src="../static/img/default_img.jpg" alt="#">
+                                    <div><span>2</span><span>Bones</span></div>
+                                </div>
+                                <span>3:20</span>
+                                <div class="blockMusic_on_play" id="blockMusic_on_play_1" style="display: none"></div>
+                            </div>
+                            <div class="blockMusic" data-src="{{ url_for("static", path='music/3.mp3') }}" data-name="3" data-author="Bones" data-img="../static/img/default_img.jpg">
+                                <div>
+                                    <img src="../static/img/default_img.jpg" alt="#">
+                                    <div><span>3</span><span>Bones</span></div>
+                                </div>
+                                <span>3:20</span>
+                                <div class="blockMusic_on_play" id="blockMusic_on_play_2" style="display: none"></div>
+                            </div>
+                            <div class="blockMusic" data-src="{{ url_for("static", path='music/4.mp3') }}" data-name="4" data-author="Bones" data-img="../static/img/default_img.jpg">
+                                <div>
+                                    <img src="../static/img/default_img.jpg" alt="#">
+                                    <div><span>4</span><span>Bones</span></div>
+                                </div>
+                                <span>3:20</span>
+                                <div class="blockMusic_on_play" id="blockMusic_on_play_3" style="display: none"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="All_Freand_List">
+                        <div class="user_block">
+                            <div id="user_block" class="right_panel block_search">
+                                <img src="" alt="" style="width: 40px; height: 40px; border: 2px solid #000;" id="main_user_img">
+                                <span id="main_user_login">User_Login</span>
+                                <div onclick="LogOut()"><img src="../static/img/no.png" alt="Exit"></div>
+                            </div>
+                            <div id="button_login_reg_block" class="right_panel block_search" onclick="document.getElementById('Login').style.display = 'block';">
+                                <span>LogIn/RegIn</span>
+                            </div>
+                        </div>
                         <p>Список друзей</p>
                         {#            тут цикл ебаный        #}
                         <div class="FrendsList">
+                            <div>
+                                <div class="right_panel block_search add_friend">
+                                    <span id="main_user_login">Добавить друга</span>
+                                </div>
+                            </div>
                             <div>
                                 <img src="../static/img/default_img.jpg" alt="#">
                                 <div>

@@ -3,7 +3,7 @@ from main import main
 from uuid import uuid4
 from datetime import datetime, timedelta
 from main.models.database import query_execute, hash_password
-from fastapi import Depends, HTTPException, Response, responses
+from fastapi import Depends, HTTPException, Response
 from main import config
 from main.schemas.response_model import DefaultResponse
 from main.schemas.user_model import UserRegular, UserLogin, UserSignUp
@@ -46,7 +46,7 @@ async def update_token(user_id: int) -> uuid4:
         return get_new_token.token
 
 
-@main.post('/login', response_model=DefaultResponse)
+@main.post('/api/login', response_model=DefaultResponse)
 async def login(user: UserLogin, response: Response):
     user_login = await query_execute(
         query_text=f'select * from "Users" as U where U.username = \'{user.username}\' and U.is_active = true',
@@ -71,7 +71,7 @@ async def login(user: UserLogin, response: Response):
     raise HTTPException(status_code=400, detail="Incorrect username or password")
 
 
-@main.post('/signup', response_model=DefaultResponse)
+@main.post('/api/signup', response_model=DefaultResponse)
 async def signup(user: UserSignUp):
     if await get_user_by_username(username=user.username):
         raise HTTPException(status_code=409, detail="This username already exist")
@@ -133,7 +133,7 @@ async def activate_by_token(token: UUID4, response: Response):
         raise HTTPException(status_code=404, detail="This code not found")
 
 
-@main.get('/users/me', response_model=DefaultResponse)
+@main.get('/api/users/me', response_model=DefaultResponse)
 async def get_user(user: UserRegular = Depends(get_current_user)):
     return {
         'result': True,
@@ -142,7 +142,7 @@ async def get_user(user: UserRegular = Depends(get_current_user)):
     }
 
 
-@main.get("/logout", response_model=DefaultResponse)
+@main.post("/api/logout", response_model=DefaultResponse)
 async def logout(response: Response):
     response.delete_cookie(key='token')
-    return responses.RedirectResponse('/')
+    return {'result': True, 'message': 'Выход выполнен успешно', 'data': {}}
