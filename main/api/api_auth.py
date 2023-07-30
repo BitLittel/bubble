@@ -3,11 +3,11 @@ from main import main
 from uuid import uuid4
 from datetime import datetime, timedelta
 from main.models.database import query_execute, hash_password
-from fastapi import Depends, HTTPException, Response
+from fastapi import HTTPException, Response
 from main import config
-from main.schemas.response_model import DefaultResponse
-from main.schemas.user_model import UserRegular, UserLogin, UserSignUp
-from main.utils.user import get_user_by_username, get_user_by_email, get_current_user, get_user_by_token_with_type
+from main.schemas.response import DefaultResponse
+from main.schemas.user import UserRegular, UserLogin, UserSignUp
+from main.utils.user import get_user_by_username, get_user_by_email, get_user_by_token_with_type
 
 
 async def update_token(user_id: int) -> uuid4:
@@ -47,7 +47,7 @@ async def update_token(user_id: int) -> uuid4:
 
 
 @main.post('/api/login', response_model=DefaultResponse)
-async def login(user: UserLogin, response: Response):
+async def api_login(user: UserLogin, response: Response):
     user_login = await query_execute(
         query_text=f'select * from "Users" as U where U.username = \'{user.username}\' and U.is_active = true',
         fetch_all=False,
@@ -72,7 +72,7 @@ async def login(user: UserLogin, response: Response):
 
 
 @main.post('/api/signup', response_model=DefaultResponse)
-async def signup(user: UserSignUp):
+async def api_signup(user: UserSignUp):
     if await get_user_by_username(username=user.username):
         raise HTTPException(status_code=409, detail="This username already exist")
 
@@ -131,15 +131,6 @@ async def activate_by_token(token: UUID4, response: Response):
         }
     else:
         raise HTTPException(status_code=404, detail="This code not found")
-
-
-@main.get('/api/users/me', response_model=DefaultResponse)
-async def get_user(user: UserRegular = Depends(get_current_user)):
-    return {
-        'result': True,
-        'message': 'Успех',
-        'data': UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
-    }
 
 
 @main.post("/api/logout", response_model=DefaultResponse)

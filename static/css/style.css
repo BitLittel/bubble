@@ -132,7 +132,7 @@ body {
 	}
 
 	.blockMusic_on_play {
-		left: 4% !important;
+		left: 5% !important;
 	}
 
 	#volume {
@@ -409,7 +409,7 @@ body {
 
 .blockMusic_on_play {
 	position: absolute;
-    left: 3.5%;
+    left: 4.5%;
     width: 40px !important;
     height: 40px;
     background: url("../img/playng_music.gif");

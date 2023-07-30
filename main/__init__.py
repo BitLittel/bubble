@@ -8,4 +8,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 from main import views
+from main.api import api_user
+from main.api import api_music
 from main.api import api_auth
+from main.api import api_upload_file

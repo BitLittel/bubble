@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import Cookie
 from main.models.database import query_execute
 from fastapi import HTTPException
-from main.schemas.user_model import UserRegular
+from main.schemas.user import UserRegular
 
 
 async def get_user_by_username(username: str) -> UserRegular | bool:

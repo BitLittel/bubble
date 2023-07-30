@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from main.schemas.user_model import UserRegular
+from main.schemas.user import UserRegular
 
 
 class DefaultResponse(BaseModel):
