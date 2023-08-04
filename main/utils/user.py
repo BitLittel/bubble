@@ -1,6 +1,7 @@
 from pydantic import UUID4
 from datetime import datetime
 from fastapi import Cookie
+from main import config
 from main.models.database import query_execute
 from fastapi import HTTPException
 from main.schemas.user import UserRegular
@@ -8,7 +9,14 @@ from main.schemas.user import UserRegular
 
 async def get_user_by_username(username: str) -> UserRegular | bool:
     user = await query_execute(
-        query_text=f'select * from "Users" as U where U.username = \'{username}\'',
+        query_text=f'select '
+                   f'U.id, '
+                   f'U.username, '
+                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
+                   f'U.online '
+                   f'from "Users" as U '
+                   f'left join "Images" as I on I.id = U.avatar '
+                   f'where U.username = \'{username}\'',
         fetch_all=False,
         type_query='read'
     )
@@ -19,7 +27,14 @@ async def get_user_by_username(username: str) -> UserRegular | bool:
 
 async def get_user_by_email(email: str) -> UserRegular | bool:
     user = await query_execute(
-        query_text=f'select * from "Users" as U where U.email = \'{email}\'',
+        query_text=f'select '
+                   f'U.id, '
+                   f'U.username, '
+                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
+                   f'U.online '
+                   f'from "Users" as U '
+                   f'left join "Images" as I on I.id = U.avatar '
+                   f'where U.email = \'{email}\'',
         fetch_all=False,
         type_query='read'
     )
@@ -47,7 +62,14 @@ async def get_user_by_token_with_type(token: UUID4, type_token: str) -> UserRegu
     )
     if token_user is not None:
         user = await query_execute(
-            query_text=f'select * from "Users" as U where U.id = {token_user.user_id}',
+            query_text=f'select '
+                       f'U.id, '
+                       f'U.username, '
+                       f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
+                       f'U.online '
+                       f'from "Users" as U '
+                       f'left join "Images" as I on I.id = U.avatar '
+                       f'where U.id = {token_user.user_id}',
             fetch_all=False,
             type_query='read'
         )

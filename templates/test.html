@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="file" multiple accept="audio/*" id="InputFiles">
+<button onclick="test();">Отправить</button>
+<script type="text/javascript" src="../static/js/Main.js"></script>
+<script>
+    function test() {
+        let InputFiles = document.getElementById('InputFiles'),
+            formData = new FormData,
+            xhr = new XMLHttpRequest();
+
+        console.log(InputFiles, InputFiles.files);
+
+        xhr.open('POST', '/api/upload_file', true);
+        for (let i = 0; i < InputFiles.files.length; i++) {
+            formData.append('files', InputFiles.files[i]);
+        }
+
+        xhr.upload.addEventListener('progress', (event) => {
+            console.log(event);
+            console.log(event.total, event.loaded);
+        })
+
+        xhr.send(formData);
+
+
+        // xhr.onload = function () {
+        //     console.log("onload", xhr.response);
+        // }
+        // xhr.addEventListener('progress', (function(e){
+        //     console.log(e);
+        // }));
+        // xhr.onprogress = function (e) {
+        //     console.log("onprogress", e, xhr.response);
+        // }
+        // sendRequest(
+        //     'POST',
+        //     '/api/upload_file',
+        //     true,
+        //     null,
+        //     function (data) {
+        //         setDataCurrentUser(data.data.username, data.data.avatar);
+        //         user_is_auth = true;
+        //         getAllUserData();
+        //     },
+        //     function (data) {
+        //         console.log(data)
+        //     }
+        // );
+
+    }
+
+</script>
+</body>
+</html>

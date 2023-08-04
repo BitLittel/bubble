@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
+from main.schemas.response import DefaultResponse
 
 
 class UserSignUp(BaseModel):
@@ -17,3 +18,7 @@ class UserRegular(BaseModel):
     username: str
     avatar: str
     online: bool
+
+
+class ResponseUserRegular(DefaultResponse):
+    data: UserRegular

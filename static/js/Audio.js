@@ -29,13 +29,6 @@ let max_track_number = 4,  // тут кароче из ответа апи вы�
 	on_shuffle = false;
 
 
-function getCookie(name) {
-	let matches = document.cookie.match(
-	    new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)")
-    );
-	return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
 function setVolumeFromCookie() {
 	let get_volume = getCookie("volume"),
 		volume_user = 50;
@@ -44,23 +37,6 @@ function setVolumeFromCookie() {
 	volume.value = volume_user;
     volume.style.backgroundSize = volume_user+'% 100%';
     theAudio.volume = volume_user/100;
-}
-
-window.onload = function () {
-	setVolumeFromCookie();
-	sendRequest(
-		'GET',
-		'/api/music_list_test',
-		true,
-		null,
-		function (data) {
-			console.log(data);
-			InitMusic(data);
-		},
-		function (data) {
-			console.log(data);
-		}
-    );
 }
 
 function generateRandomInteger(min, max) {return Math.floor(min + Math.random()*(max - min + 1))}
@@ -132,6 +108,9 @@ function InitMusic(objects_musics) {
 	current_track_number = objects_musics.first_track_number;
 	max_track_number = objects_musics.last_track_number;
 	console.log(objects_musics.track_list, objects_musics.track_list.length);
+
+	container_music_list_dom.innerHTML = "";
+
 	for (let i = 0; i < objects_musics.track_list.length; i++) {
 		console.log(objects_musics.track_list[i]);
 		createDomTrack(

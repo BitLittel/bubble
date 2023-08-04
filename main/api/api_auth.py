@@ -6,7 +6,7 @@ from main.models.database import query_execute, hash_password
 from fastapi import HTTPException, Response
 from main import config
 from main.schemas.response import DefaultResponse
-from main.schemas.user import UserRegular, UserLogin, UserSignUp
+from main.schemas.user import UserRegular, UserLogin, UserSignUp, ResponseUserRegular
 from main.utils.user import get_user_by_username, get_user_by_email, get_user_by_token_with_type
 
 
@@ -46,10 +46,18 @@ async def update_token(user_id: int) -> uuid4:
         return get_new_token.token
 
 
-@main.post('/api/login', response_model=DefaultResponse)
+@main.post('/api/login', response_model=ResponseUserRegular)
 async def api_login(user: UserLogin, response: Response):
     user_login = await query_execute(
-        query_text=f'select * from "Users" as U where U.username = \'{user.username}\' and U.is_active = true',
+        query_text=f'select '
+                   f'U.id, '
+                   f'U.username, '
+                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar,'
+                   f'U.online,'
+                   f'U.password '
+                   f' from "Users" as U '
+                   f'left join "Images" as I on I.id = U.avatar '
+                   f'where U.username = \'{user.username}\' and U.is_active = true',
         fetch_all=False,
         type_query='read'
     )
@@ -68,27 +76,27 @@ async def api_login(user: UserLogin, response: Response):
                     online=user_login.online
                 )
             }
-    raise HTTPException(status_code=400, detail="Incorrect username or password")
+    raise HTTPException(status_code=400, detail="Не верное имя пользователя или пароль")
 
 
 @main.post('/api/signup', response_model=DefaultResponse)
 async def api_signup(user: UserSignUp):
     if await get_user_by_username(username=user.username):
-        raise HTTPException(status_code=409, detail="This username already exist")
+        raise HTTPException(status_code=409, detail="Это имя пользователя уже занято")
 
     if await get_user_by_email(email=user.email):
-        raise HTTPException(status_code=409, detail="This email already exist")
-
+        raise HTTPException(status_code=409, detail="Эта почта уже занята")
+    # Регистрируем пользователя
     await query_execute(
         query_text=f'insert into "Users" (username, password, email, avatar, online, is_active) '
                    f'values (\'{user.username}\', \'{hash_password(user.password)}\', '
-                   f'\'{user.email}\', \'{config.DEFAULT_AVATAR}\', false, false)',
+                   f'\'{user.email}\', 1, false, false)',
         fetch_all=False,
         type_query='insert'
     )
 
     get_new_user = await get_user_by_email(user.email)
-
+    # Создаём токен для активации аккаунта
     new_token_gen = uuid4()
     await query_execute(
         query_text=f'insert into "Tokens" (type, user_id, expires, token, datetime_create) '
@@ -97,6 +105,12 @@ async def api_signup(user: UserSignUp):
         fetch_all=False,
         type_query='insert'
     )
+    # Создаём дефолтный плейлист, где будет храниться вся музыка пользователя
+    await query_execute(query_text=f'insert into "PlayLists" (name, cover, datetime_add, user_id) '
+                                   f'values (\'Вся моя музыка\', \'{config.DEFAULT_AVATAR}\', \'{datetime.now()}\', '
+                                   f'{get_new_user.id})',
+                        fetch_all=False,
+                        type_query='insert')
 
     return DefaultResponse(
         result=True,
@@ -105,7 +119,7 @@ async def api_signup(user: UserSignUp):
     )
 
 
-@main.post('/activate/{token}', response_model=DefaultResponse)
+@main.post('/activate/{token}', response_model=ResponseUserRegular)
 async def activate_by_token(token: UUID4, response: Response):
     check_token = await get_user_by_token_with_type(token=token, type_token='activate')
     if check_token:
@@ -130,7 +144,7 @@ async def activate_by_token(token: UUID4, response: Response):
             )
         }
     else:
-        raise HTTPException(status_code=404, detail="This code not found")
+        raise HTTPException(status_code=404, detail="Код не найден")
 
 
 @main.post("/api/logout", response_model=DefaultResponse)

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import asyncio
 from sqlalchemy import Column, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID, SmallInteger
 from sqlalchemy import func, text
 from sqlalchemy.orm import DeclarativeBase
@@ -18,13 +17,20 @@ class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 
+class Images(Base):
+    __tablename__ = 'Images'
+    id = Column(BigInteger, primary_key=True)
+    content_type = Column(String(length=30), nullable=False)
+    file_name = Column(String(length=40), nullable=False)
+
+
 class Users(Base):
     __tablename__ = 'Users'
     id = Column(BigInteger, primary_key=True)
     username = Column(String(length=30), nullable=False)
-    password = Column(String(length=255), nullable=False)
+    password = Column(String(length=70), nullable=False)
     email = Column(String(length=100), nullable=False)
-    avatar = Column(String(length=255), nullable=True)
+    avatar = Column(BigInteger, ForeignKey(Images.id), nullable=False)  # Column(String(length=255), nullable=True)
     online = Column(Boolean, default=False)
     is_active = Column(Boolean, default=False)
 
@@ -81,11 +87,11 @@ class Musics(Base):
     id = Column(BigInteger, primary_key=True)
     name = Column(String(length=30), nullable=False)
     author = Column(String(length=30), nullable=False)
-    genre = Column(String(length=50), default=False)
-    picture = Column(String(length=255), nullable=True)
-    hashsum = Column(String(length=255), nullable=True)
-    path = Column(String(length=255), nullable=False)
-    time_duration = Column(String(length=20), default=False)
+    genre = Column(String(length=20), nullable=True)
+    cover = Column(BigInteger, ForeignKey(Images.id), nullable=False)
+    hashsum = Column(String(length=100), nullable=True)
+    filename = Column(String(length=75), nullable=False)
+    duration = Column(String(length=20), nullable=True)
     datetime_add = Column(DateTime, nullable=False, default=func.now())
 
     # Foreign Key
@@ -141,19 +147,24 @@ Session = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def start() -> None:
+    await query_execute(query_text='CREATE EXTENSION "uuid-ossp";', fetch_all=False, type_query='insert')
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    await query_execute(
+        query_text='insert into "Images" (content_type, file_name) '
+                   'values (\'image/jpeg\', \'default_img.jpg\')',
+        fetch_all=False,
+        type_query='insert'
+    )
 
 
 async def query_execute(query_text: str, fetch_all: bool = False, type_query: str = 'read'):
     async with Session() as db:
+        print(query_text, fetch_all, type_query)
         query_object = await db.execute(
             text(query_text))
         if type_query == 'read':
             return query_object.fetchall() if fetch_all else query_object.fetchone()
         else:
-            print(query_text, fetch_all, type_query)
             await db.execute(text('commit'))
             return True
-
-# asyncio.run(start())

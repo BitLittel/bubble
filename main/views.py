@@ -32,4 +32,9 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", context={"request": request})
 
 
+@main.get("/test", response_class=HTMLResponse)
+async def test(request: Request):
+    return templates.TemplateResponse("test.html", context={"request": request})
+
+
 # todo: Было бы классно сделать страничку для 500 и 404 стр, эхх... такие красивые можно заебашить
