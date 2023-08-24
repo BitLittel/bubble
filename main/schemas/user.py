@@ -18,6 +18,7 @@ class UserRegular(BaseModel):
     username: str
     avatar: str
     online: bool
+    liked_playlist: list
 
 
 class ResponseUserRegular(DefaultResponse):

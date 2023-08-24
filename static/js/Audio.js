@@ -36,7 +36,7 @@ function setVolumeFromCookie() {
 	document.cookie = "volume="+volume_user+";max-age=2629743;SameSite=Strict";
 	volume.value = volume_user;
     volume.style.backgroundSize = volume_user+'% 100%';
-    theAudio.volume = volume_user/100;
+    theAudio.volume = (0.01*(Math.pow(volume_user, 2))/100).toFixed(5);
 }
 
 function generateRandomInteger(min, max) {return Math.floor(min + Math.random()*(max - min + 1))}
@@ -75,9 +75,7 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 		div_on_play.className = "blockMusic_on_play";
 		div_on_play.id = "blockMusic_on_play_"+index_track;
 		div_on_play.style.display = "none";
-
-	container_music_list_dom.appendChild(div_blockMusic);
-	// return div_blockMusic;
+	return div_blockMusic;
 }
 
 function getMusicOnIndex(index) {
@@ -105,35 +103,39 @@ function initMainPlayer(index, track_path, track_name, track_author, track_cover
 
 // вот в этот инит мы передадим response data
 function InitMusic(objects_musics) {
-	current_track_number = objects_musics.first_track_number;
+	current_track_number = objects_musics.current_track_number;
 	max_track_number = objects_musics.last_track_number;
 	console.log(objects_musics.track_list, objects_musics.track_list.length);
-
 	container_music_list_dom.innerHTML = "";
-
-	for (let i = 0; i < objects_musics.track_list.length; i++) {
-		console.log(objects_musics.track_list[i]);
-		createDomTrack(
-			i,
-			objects_musics.track_list[i].track_path,
-			objects_musics.track_list[i].track_id,
-			objects_musics.track_list[i].track_number,
-			objects_musics.track_list[i].track_name,
-			objects_musics.track_list[i].track_author,
-			objects_musics.track_list[i].track_duration,
-			objects_musics.track_list[i].track_cover,
-		);
-		if (objects_musics.track_list[i].track_number === current_track_number) {
-			initMainPlayer(
-				i,
-				objects_musics.track_list[i].track_path,
-				objects_musics.track_list[i].track_name,
-				objects_musics.track_list[i].track_author,
-				objects_musics.track_list[i].track_cover
+	//if (objects_musics.track_list) {
+		for (let i = 0; i < objects_musics.track_list.length; i++) {
+			console.log(objects_musics.track_list[i]);
+			container_music_list_dom.appendChild(
+				createDomTrack(
+					i,
+					objects_musics.track_list[i].path,
+					objects_musics.track_list[i].id,
+					objects_musics.track_list[i].number,
+					objects_musics.track_list[i].name,
+					objects_musics.track_list[i].author,
+					objects_musics.track_list[i].duration,
+					objects_musics.track_list[i].cover,
+				)
 			);
+			if (objects_musics.track_list[i].track_number === current_track_number) {
+				initMainPlayer(
+					i,
+					objects_musics.track_list[i].path,
+					objects_musics.track_list[i].name,
+					objects_musics.track_list[i].author,
+					objects_musics.track_list[i].cover
+				);
+			}
 		}
-	}
-	generateDefaultIndexArrayTrack(max_track_number);
+		generateDefaultIndexArrayTrack(max_track_number);
+	//} else {
+	//	container_music_list_dom.innerHTML = "<div>У вас нет треков</div>";
+	//}
 }
 
 /**
@@ -154,7 +156,7 @@ function Play(index) {
         get_cur_track_dom.style.background = '#0000003d';
     } else {
         document.getElementById('blockMusic_on_play_'+current_index_track).style.display = 'none';
-        get_cur_track_dom.style.background = 'none';
+        get_cur_track_dom.style.background = '';
         document.getElementById('blockMusic_on_play_'+index).style.display = 'block';
         get_next_track_dom.style.background = '#0000003d';
         theAudio.src = get_next_track_dom.getAttribute('data-track-src');
@@ -204,12 +206,21 @@ backward.onclick = function () {
 }
 
 // вешаем на полосу громкости эвент, на изменение громкости и сохранение звука в куки
-// todo: сделать логорифмическое изменение громкости, иногда так хочется чтобы было намного потише
 volume.addEventListener('change', function () {
     document.cookie = "volume="+volume.value+";max-age=2629743;SameSite=Strict";
-    volume.style.backgroundSize = volume.value+'% 100%';
-    theAudio.volume = volume.value/100;
+    theAudio.volume = (0.01*(Math.pow(volume.value, 2))/100).toFixed(5);
 });
+
+function handleInputChange(e) {
+  let target = e.target;
+  if (e.target.type !== 'range') {target = volume}
+  const min = target.min;
+  const max = target.max;
+  const val = target.value;
+  target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
+}
+
+volume.addEventListener('input', handleInputChange);
 
 //theAudio.onplay = function () {console.log(theAudio.currentTime)};
 

@@ -4,7 +4,6 @@ window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search),
         myParam = urlParams.get('token');
 
-
     if (myParam !== undefined && myParam !== null) {
         sendRequest(
             'POST',
@@ -15,17 +14,28 @@ window.onload = function () {
                 console.log(data);
                 setDataCurrentUser(data.data.username, data.data.avatar);
                 user_is_auth = true;
+                getAllUserData();
             },
             function (data) {
                 console.log(data);
             }
         );
-        window.location = '/';
-    } else {
-        console.log("Всё круто!");
     }
 
+    if (!user_is_auth) {
+        get_current_user();
+    }
+};
 
+function getAllUserData() {
+    setVolumeFromCookie();
+    getFriends();
+    getPlayLists();
+    //getAllUserMusics();
+    UploadTrack();
+}
+
+function get_current_user() {
     sendRequest(
         'GET',
         '/api/users/me',
@@ -40,7 +50,7 @@ window.onload = function () {
             console.log(data)
         }
     );
-};
+}
 
 function sendRequest(method, url, async=true, responses_data, onsuccess, onerror=function(){}) {
     let request = new XMLHttpRequest();
@@ -81,23 +91,6 @@ function sendRequest(method, url, async=true, responses_data, onsuccess, onerror
     request.onabort = function () {
         show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
     };
-}
-
-function getAllUserData() {
-    setVolumeFromCookie();
-    sendRequest(
-        'GET',
-        '/api/music_list_test',
-        true,
-        null,
-        function (data) {
-            console.log(data);
-            InitMusic(data);
-        },
-        function (data) {
-            console.log(data);
-        }
-    );
 }
 
 function getCookie(name) {

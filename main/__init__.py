@@ -13,4 +13,5 @@ from main.api import api_playlist
 from main.api import api_image
 from main.api import api_music
 from main.api import api_auth
+from main.api import api_friend
 from main.api import api_upload_file

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import Column, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID, SmallInteger
+from sqlalchemy import Column, DateTime, ForeignKey, Text, Boolean, String, BigInteger, UUID, SmallInteger, ARRAY
 from sqlalchemy import func, text
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncAttrs
@@ -30,8 +30,9 @@ class Users(Base):
     username = Column(String(length=30), nullable=False)
     password = Column(String(length=70), nullable=False)
     email = Column(String(length=100), nullable=False)
-    avatar = Column(BigInteger, ForeignKey(Images.id), nullable=False)  # Column(String(length=255), nullable=True)
+    avatar = Column(BigInteger, ForeignKey(Images.id), nullable=False)
     online = Column(Boolean, default=False)
+    liked_playlist = Column(ARRAY(BigInteger), default=list())
     is_active = Column(Boolean, default=False)
 
 
@@ -75,7 +76,7 @@ class PlayLists(Base):
     __tablename__ = 'PlayLists'
     id = Column(BigInteger, primary_key=True)
     name = Column(String(length=30), nullable=False)
-    cover = Column(String(length=255), nullable=True)
+    cover = Column(BigInteger, ForeignKey(Images.id), nullable=False)  # Column(String(length=255), nullable=True)
     datetime_add = Column(DateTime, nullable=False, default=func.now())
 
     # Foreign Key
@@ -85,8 +86,8 @@ class PlayLists(Base):
 class Musics(Base):
     __tablename__ = 'Musics'
     id = Column(BigInteger, primary_key=True)
-    name = Column(String(length=30), nullable=False)
-    author = Column(String(length=30), nullable=False)
+    name = Column(String(length=50), nullable=False)
+    author = Column(String(length=50), nullable=False)
     genre = Column(String(length=20), nullable=True)
     cover = Column(BigInteger, ForeignKey(Images.id), nullable=False)
     hashsum = Column(String(length=100), nullable=True)

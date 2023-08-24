@@ -1,6 +1,7 @@
 from pydantic import UUID4
 from main import main
 from uuid import uuid4
+from main.utils.another import escape
 from datetime import datetime, timedelta
 from main.models.database import query_execute, hash_password
 from fastapi import HTTPException, Response
@@ -52,10 +53,11 @@ async def api_login(user: UserLogin, response: Response):
         query_text=f'select '
                    f'U.id, '
                    f'U.username, '
-                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar,'
+                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
                    f'U.online,'
+                   f'U.liked_playlist, '
                    f'U.password '
-                   f' from "Users" as U '
+                   f'from "Users" as U '
                    f'left join "Images" as I on I.id = U.avatar '
                    f'where U.username = \'{user.username}\' and U.is_active = true',
         fetch_all=False,
@@ -73,7 +75,8 @@ async def api_login(user: UserLogin, response: Response):
                     id=user_login.id,
                     username=user_login.username,
                     avatar=user_login.avatar,
-                    online=user_login.online
+                    online=user_login.online,
+                    liked_playlist=user_login.liked_playlist
                 )
             }
     raise HTTPException(status_code=400, detail="Не верное имя пользователя или пароль")
@@ -88,9 +91,9 @@ async def api_signup(user: UserSignUp):
         raise HTTPException(status_code=409, detail="Эта почта уже занята")
     # Регистрируем пользователя
     await query_execute(
-        query_text=f'insert into "Users" (username, password, email, avatar, online, is_active) '
-                   f'values (\'{user.username}\', \'{hash_password(user.password)}\', '
-                   f'\'{user.email}\', 1, false, false)',
+        query_text=f'insert into "Users" (username, password, email, avatar, online, is_active, liked_playlist) '
+                   f'values (\'{escape(user.username)}\', \'{hash_password(user.password)}\', '
+                   f'\'{escape(user.email)}\', 1, false, false, ARRAY[]::bigint[])',
         fetch_all=False,
         type_query='insert'
     )
@@ -106,17 +109,43 @@ async def api_signup(user: UserSignUp):
         type_query='insert'
     )
     # Создаём дефолтный плейлист, где будет храниться вся музыка пользователя
-    await query_execute(query_text=f'insert into "PlayLists" (name, cover, datetime_add, user_id) '
-                                   f'values (\'Вся моя музыка\', \'{config.DEFAULT_AVATAR}\', \'{datetime.now()}\', '
-                                   f'{get_new_user.id})',
-                        fetch_all=False,
-                        type_query='insert')
-
-    return DefaultResponse(
-        result=True,
-        message=f'Вам на почту отправлено письмо для активации аккаунта. http://127.0.0.1:8000/?token={new_token_gen}',
-        data={}
+    await query_execute(
+        query_text=f'insert into "PlayLists" (name, cover, datetime_add, user_id) '
+                   f'values (\'Вся моя музыка\', 1, \'{datetime.now()}\', '
+                   f'{get_new_user.id})',
+        fetch_all=False,
+        type_query='insert'
     )
+
+    default_playlist = await query_execute(
+        query_text=f'select * from "PlayLists" as PL '
+                   f'where PL.name = \'Вся моя музыка\' and PL.user_id = {get_new_user.id}',
+        fetch_all=False,
+        type_query='read'
+    )
+    # append default playlist id in liked_playlist array
+    await query_execute(
+        query_text=f'update "Users" '
+                   f'set liked_playlist = ('
+                   f'select U.liked_playlist || {default_playlist.id} from "Users" as U where U.id = {get_new_user.id}'
+                   f') where id = {get_new_user.id}',
+        fetch_all=False,
+        type_query='update'
+    )
+    # remove playlist id in liked_playlist array
+    # update "Users"
+    # set liked_playlist = (select
+    #     array_remove(U.liked_playlist, 12)
+    # from "Users" as U
+    # where U.id = 11)
+    # where id = 11
+
+    return {
+        'result': True,
+        'message': f'Вам на почту отправлено письмо для активации аккаунта. '
+                   f'http://127.0.0.1:8000/?token={new_token_gen}',
+        'data': {}
+    }
 
 
 @main.post('/activate/{token}', response_model=ResponseUserRegular)
@@ -136,12 +165,7 @@ async def activate_by_token(token: UUID4, response: Response):
         return {
             'result': True,
             'message': 'Успех',
-            'data': UserRegular(
-                id=user_login.id,
-                username=user_login.username,
-                avatar=user_login.avatar,
-                online=user_login.online
-            )
+            'data': user_login
         }
     else:
         raise HTTPException(status_code=404, detail="Код не найден")

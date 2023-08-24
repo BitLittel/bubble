@@ -12,16 +12,22 @@ async def get_user_by_username(username: str) -> UserRegular | bool:
         query_text=f'select '
                    f'U.id, '
                    f'U.username, '
-                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
-                   f'U.online '
+                   f'CONCAT(\'{config.API_IMAGE}\', U.avatar) as avatar, '
+                   f'U.online,'
+                   f'U.liked_playlist '
                    f'from "Users" as U '
-                   f'left join "Images" as I on I.id = U.avatar '
                    f'where U.username = \'{username}\'',
         fetch_all=False,
         type_query='read'
     )
     if user is not None:
-        return UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
+        return UserRegular(
+            id=user.id,
+            username=user.username,
+            avatar=user.avatar,
+            online=user.online,
+            liked_playlist=user.liked_playlist
+        )
     return False
 
 
@@ -30,16 +36,22 @@ async def get_user_by_email(email: str) -> UserRegular | bool:
         query_text=f'select '
                    f'U.id, '
                    f'U.username, '
-                   f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
-                   f'U.online '
+                   f'CONCAT(\'{config.API_IMAGE}\', U.avatar) as avatar, '
+                   f'U.online,'
+                   f'U.liked_playlist '
                    f'from "Users" as U '
-                   f'left join "Images" as I on I.id = U.avatar '
                    f'where U.email = \'{email}\'',
         fetch_all=False,
         type_query='read'
     )
     if user is not None:
-        return UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
+        return UserRegular(
+            id=user.id,
+            username=user.username,
+            avatar=user.avatar,
+            online=user.online,
+            liked_playlist=user.liked_playlist
+        )
     return False
 
 
@@ -65,10 +77,10 @@ async def get_user_by_token_with_type(token: UUID4, type_token: str) -> UserRegu
             query_text=f'select '
                        f'U.id, '
                        f'U.username, '
-                       f'CONCAT(\'{config.MAIN_URL}/api/image/\', I.id) as avatar, '
-                       f'U.online '
+                       f'CONCAT(\'{config.API_IMAGE}\', U.avatar) as avatar, '
+                       f'U.online,'
+                       f'U.liked_playlist '
                        f'from "Users" as U '
-                       f'left join "Images" as I on I.id = U.avatar '
                        f'where U.id = {token_user.user_id}',
             fetch_all=False,
             type_query='read'
@@ -79,5 +91,11 @@ async def get_user_by_token_with_type(token: UUID4, type_token: str) -> UserRegu
                 fetch_all=False,
                 type_query='delete'
             )
-        return UserRegular(id=user.id, username=user.username, avatar=user.avatar, online=user.online)
+        return UserRegular(
+            id=user.id,
+            username=user.username,
+            avatar=user.avatar,
+            online=user.online,
+            liked_playlist=user.liked_playlist
+        )
     return False

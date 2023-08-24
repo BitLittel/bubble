@@ -84,6 +84,8 @@ function LogIn() {
         {"username": input_login_login.value, "password": input_password_login.value},
         function (data) {
             setDataCurrentUser(data.data.username, data.data.avatar);
+            user_is_auth = true;
+            getAllUserData();
         }
     );
 }

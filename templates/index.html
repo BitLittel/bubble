@@ -10,6 +10,8 @@
 		<title>Music</title>
 	</head>
 	<body>
+
+        {#    Pop-Up Block's    #}
         <div id="global_error" class="Login" style="z-index: 6; display: none;" onclick="document.getElementById('global_error').style.display = (event.target == this) ? 'none' : 'block';">
             <div class="login_block">
                 <p style="color: #e9002b;" id="global_error_title">Ошибка</p>
@@ -18,44 +20,48 @@
                 </div>
             </div>
         </div>
+
+        <div class="Login" id="upload" style="z-index: 4; display: none; overflow-y: auto;" onclick="document.getElementById('upload').style.display = (event.target == this) ? 'none' : 'block';">
+            <div class="login_block">
+                <p style="color: #1bff00;" id="global_error_title">Загрузка</p>
+                <div class="login_input_block">
+                    <p>Выберите музыку которую необходимо загрузить. После начала загрузки, пожалуйста не закрывайте текущее окно, дождитесь полного окончания</p>
+                    <input name="music_file" type="file" accept="audio/*" multiple id="music_file" style="display: block; opacity: 0; position: absolute; z-index: -1; width: 0; height: 0;">
+                    <div class="enter_login" id="button_select_upload_music">
+                        <button onclick="PrepareUpload();">Выберите файлы</button>
+                    </div>
+                    <div class="list_uploaded_music" id="list_uploaded_music" style="margin-bottom: 6%;"></div>
+                    <span style="font-size: 4vh;" id="global_error_text"></span>
+                </div>
+            </div>
+        </div>
+
+        {#    Body Block's    #}
 		<div id="bodyContent">
 			<div class="MainMusic">
-                <div class="PlayLists">
-                    {#            тут цикл ебаный        #}
-                    <div class="blockPlayList">
-                        <img src="../static/img/default_img.jpg" alt="#">
-                        <span>PlayList #1</span>
-                    </div>
-                    <div class="blockPlayList">
-                        <img src="../static/img/default_img.jpg" alt="#">
-                        <span>PlayList #2</span>
-                    </div>
-                    <div class="blockPlayList">
-                        <img src="../static/img/default_img.jpg" alt="#">
-                        <span>PlayList #3</span>
-                    </div>
-                    <div class="blockPlayList">
+                <div class="PlayLists" id="playlists" style="display: none;">
+                    <div class="blockPlayList" id="button_add_playlist">
                         <img src="../static/img/plus.png" alt="#" style="border: none;">
                         <span>Создать плейлист</span>
                     </div>
                 </div>
-                <div class="Music_and_Frend">
+                <div class="Music_and_Frend" style="margin-bottom: 9%;">
                     <div class="AllMusicList">
                         <div class="search_and_add">
                             <div class="block_search_input">
                                 <input type="text" name="search" class="input_search" id="input_search">
                             </div>
-                            <div class="add_track block_search" id="add_track">
+                            <div class="add_track block_search" id="add_track" style="display: none;" onclick="document.getElementById('upload').style.display = 'block';">
                                 <img src="../static/img/add_music.png" alt="#">
                                 <span>Загрузить трек</span>
                             </div>
                         </div>
                         <div id="musics_list"><div>У вас нет треков</div></div>
                     </div>
-                    <div class="All_Freand_List">
+                    <div class="all_friends_list">
                         <div class="user_block">
                             <div id="user_block" class="right_panel block_search">
-                                <img src="" alt="" style="width: 40px; height: 40px; border: 2px solid #000;" id="main_user_img">
+                                <img src="" alt="" class="default_img" id="main_user_img">
                                 <span id="main_user_login">User_Login</span>
                                 <div onclick="LogOut()"><img src="../static/img/no.png" alt="Exit"></div>
                             </div>
@@ -63,60 +69,14 @@
                                 <span>LogIn/RegIn</span>
                             </div>
                         </div>
-                        <p>Список друзей</p>
-                        {#            тут цикл ебаный        #}
-                        <div class="FrendsList">
-                            <div>
-                                <div class="right_panel block_search add_friend">
-                                    <span id="main_user_login">Добавить друга</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/default_img.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_green.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/default_img.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_green.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/default_img.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_grey.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="../static/img/default_img.jpg" alt="#">
-                                <div>
-                                    <span style="display: flex;align-content: center;align-items: center;">
-                                        <img src="../static/img/gem_green.png" alt="" style="width: 12px; height: 12px;">
-                                        <span>UserLogin_Name</span>
-                                    </span>
-                                    <span>1337 аудиозаписи</span>
-                                </div>
-                            </div>
+                        <div class="friends" id="friends" style="display: none;">
+                            <p>Список друзей:</p>
+                            <div id="list_friends"></div>
                         </div>
                     </div>
                 </div>
 			</div>
 			<div class="mainPlayer">
-{#                <audio src="" style="display: none" id="testAudio"></audio>#}
 				<div class="controlsPlayer">
 					<img src="../static/img/default_img.jpg" class="imgAlbom" id="img_cover" alt="#">
 					<img src="../static/img/backward_v2.png" class="imgBackWard" id="backward" alt="#">
@@ -128,13 +88,11 @@
                                 <span id="song-name">Без названия</span>
                                 <span class="t_name_author" id="song_author">Неизвестен</span>
                             </div>
-                            <div>
-                                <span class="time_start" id="c_time">0:00</span>
-                                <span class="time_end" id="time">0:00</span>
-                            </div>
 						</div>
 						<div class="timeLine" id="time-line">
 							<div class="timeLine_fill" id="in_line"></div>
+                            <span class="time_start" id="c_time">0:00</span>
+                            <span class="time_end" id="time">0:00</span>
 						</div>
 					</div>
                     <input type="range" id="volume" name="volume" min="0" max="100" value="100">
@@ -171,5 +129,9 @@
         <script type="text/javascript" src="../static/js/Main.js"></script>
         <script type="text/javascript" src="../static/js/Auth.js"></script>
         <script type="text/javascript" src="../static/js/Audio.js"></script>
+        <script type="text/javascript" src="../static/js/Friends.js"></script>
+        <script type="text/javascript" src="../static/js/PlayList.js"></script>
+        <script type="text/javascript" src="../static/js/Musics.js"></script>
+        <script type="text/javascript" src="../static/js/Upload.js"></script>
 	</body>
 </html>
