@@ -88,7 +88,7 @@ class Musics(Base):
     id = Column(BigInteger, primary_key=True)
     name = Column(String(length=200), nullable=False)
     author = Column(String(length=200), nullable=False)
-    genre = Column(String(length=20), nullable=True)
+    genre = Column(String(length=200), nullable=True)
     cover = Column(BigInteger, ForeignKey(Images.id), nullable=False)
     hashsum = Column(String(length=100), nullable=True)
     filename = Column(String(length=75), nullable=False)

@@ -133,8 +133,12 @@ function UploadFile(e) {
     }
 
     for (let j = 0; j < limit_uploading_file; j++) {
-        let task = queue_file.shift();
-        console.log(task);
-        ProcessingFile(task[0], task[1]);
+        if (queue_file.length != 0) {
+            let task = queue_file.shift();
+            console.log(task);
+            ProcessingFile(task[0], task[1]);
+        } else {
+            break;
+        }
     }
 }
