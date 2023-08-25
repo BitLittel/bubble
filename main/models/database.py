@@ -86,8 +86,8 @@ class PlayLists(Base):
 class Musics(Base):
     __tablename__ = 'Musics'
     id = Column(BigInteger, primary_key=True)
-    name = Column(String(length=50), nullable=False)
-    author = Column(String(length=50), nullable=False)
+    name = Column(String(length=200), nullable=False)
+    author = Column(String(length=200), nullable=False)
     genre = Column(String(length=20), nullable=True)
     cover = Column(BigInteger, ForeignKey(Images.id), nullable=False)
     hashsum = Column(String(length=100), nullable=True)
@@ -162,8 +162,7 @@ async def start() -> None:
 async def query_execute(query_text: str, fetch_all: bool = False, type_query: str = 'read'):
     async with Session() as db:
         print(query_text, fetch_all, type_query)
-        query_object = await db.execute(
-            text(query_text))
+        query_object = await db.execute(text(query_text))
         if type_query == 'read':
             return query_object.fetchall() if fetch_all else query_object.fetchone()
         else:

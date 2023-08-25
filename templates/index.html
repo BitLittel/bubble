@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="Login" id="upload" style="z-index: 4; display: none; overflow-y: auto;" onclick="document.getElementById('upload').style.display = (event.target == this) ? 'none' : 'block';">
+        <div class="Login" id="upload" style="z-index: 4; display: none; overflow-y: auto;" onclick="closeUpload(this);">
             <div class="login_block">
                 <p style="color: #1bff00;" id="global_error_title">Загрузка</p>
                 <div class="login_input_block">
@@ -51,7 +51,7 @@
                             <div class="block_search_input">
                                 <input type="text" name="search" class="input_search" id="input_search">
                             </div>
-                            <div class="add_track block_search" id="add_track" style="display: none;" onclick="document.getElementById('upload').style.display = 'block';">
+                            <div class="add_track block_search" id="add_track" style="display: none;" onclick="showUpload();">
                                 <img src="../static/img/add_music.png" alt="#">
                                 <span>Загрузить трек</span>
                             </div>

@@ -8,6 +8,8 @@ from datetime import datetime
 from fastapi import HTTPException
 from main.schemas.music import Music
 from main.utils.another import escape
+from main.models.database import Session
+from sqlalchemy import text
 from main.models.database import query_execute
 from main.schemas.file import FileResponse, File, Photo
 
@@ -26,6 +28,7 @@ async def validate_file(file_, action_):
 
     # Проверяем content_type
     content_type = file.content_type
+    print(f'CONTENT_TYPE: {content_type}')
     if action_ in ['photo', 'cover']:
         if content_type not in config.PHOTO_FORMAT:
             raise HTTPException(406, detail="Получен не корректный формат данных")
@@ -36,7 +39,7 @@ async def validate_file(file_, action_):
 
 
 async def save_file(file_, photo=False):
-    new_name = f'{uuid4()}.{file_.filename.rsplit(".")[1]}'
+    new_name = f'{uuid4()}.{file_.filename.rsplit(".")[-1]}'
     path_file = os.path.join(config.MUSICS_FOLDER if not photo else config.PHOTOS_FOLDER, new_name)
 
     try:
@@ -105,7 +108,7 @@ async def processed_audio(file_, user_id_):
     name = escape(name)
     author = escape(author)
 
-    if len(name) > 50 or len(author) > 50:
+    if len(name) > 200 or len(author) > 200:
         raise HTTPException(406, detail="Название песни не должно превышать 90 символов")
 
     get_image = 1  # идентификатор дефолтной картинки
@@ -142,28 +145,19 @@ async def processed_audio(file_, user_id_):
     if get_music is None:
         raise HTTPException(500, detail="Внутренняя ошибка сервера")
 
-    get_playlist_user = await query_execute(
-        query_text=f'select * from "PlayLists" as PL where PL.user_id = {user_id_} and PL.name = \'Вся моя музыка\''
-    )
+    async with Session() as db:
+        await db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE'))
+        await db.execute(text(
+            f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
+            f'values ('
+            f'(select coalesce(max(C.track_number), 0) from "Collections" as C where C.playlist_id = 1) + 1, '
+            f'\'{datetime.now()}\', '
+            f'{get_music.id}, '
+            f'(select PL.id from "PlayLists" as PL '
+            f'where PL.user_id = {user_id_} and PL.name = \'Вся моя музыка\'));'
+        ))
+        await db.execute(text('commit'))
 
-    get_last_track_number = await query_execute(
-        query_text=f'select max(C.track_number) as last_track_number from "Collections" as C '
-                   f'where C.playlist_id = {get_playlist_user.id}',
-        fetch_all=False,
-        type_query='read'
-    )
-
-    if get_last_track_number is None or get_last_track_number.last_track_number is None:
-        get_last_track_number = 1
-    else:
-        get_last_track_number = int(get_last_track_number.last_track_number) + 1
-
-    await query_execute(
-        query_text=f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
-                   f'values ({get_last_track_number}, \'{datetime.now()}\', {get_music.id}, {get_playlist_user.id})',
-        fetch_all=False,
-        type_query='insert'
-    )
     result = FileResponse(
         result=True,
         message='Лютый музон загружен',

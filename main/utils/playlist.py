@@ -63,7 +63,8 @@ async def get_playlist_by_id(id_playlist: int, user_id: int) -> PlayListWithMusi
                        f'M.user_id_add '
                        f'from "Collections" as C '
                        f'left join "Musics" M on C.music_id = M.id '
-                       f'where C.playlist_id = {id_playlist}',
+                       f'where C.playlist_id = {id_playlist} '
+                       f'order by M.datetime_add desc',
             fetch_all=True,
             type_query='read'
         )

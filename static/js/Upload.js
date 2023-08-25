@@ -2,11 +2,21 @@ let main_input_music_upload = document.getElementById('music_file'),
     button_select_upload_music = document.getElementById('button_select_upload_music'),
     list_uploaded_music = document.getElementById('list_uploaded_music'),
     count_all_file = 0,
-    limit_uploading_file = 10,
-    count_awaited_file = 0,
-    count_processed_file = 0,
-    count_finish_file = 0
+    limit_uploading_file = 5,
+    count_finished_file = 0,
     queue_file = [];
+
+function showUpload() {
+    document.getElementById('upload').style.display = 'block';
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+}
+
+function closeUpload(target) {
+    if (event.target == target) {
+        document.getElementById('upload').style.display = 'none';
+        document.getElementsByTagName('body')[0].style.overflow = 'auto';
+    }
+}
 
 main_input_music_upload.addEventListener('change', UploadFile);
 
@@ -17,8 +27,8 @@ function PrepareUpload() {
 function ProcessingFile(index_, file_) {
     let request = new XMLHttpRequest(),
         formData = new FormData;
+
     request.open('POST', '/api/upload_file', true);
-    //request.setRequestHeader("Content-Type", "multipart/form-data");
 
     formData.append('action', 'music');
     formData.append('file', file_);
@@ -28,10 +38,7 @@ function ProcessingFile(index_, file_) {
     };
 
     request.upload.onprogress = function (event) {
-        console.log(event);
-        console.log(request);
         let percents = ((event.loaded/event.total)*100).toFixed(2);
-        console.log('processed: ', percents);
         document.getElementById('status_loading_track_'+index_).innerText = percents+'%';
     };
 
@@ -42,7 +49,6 @@ function ProcessingFile(index_, file_) {
 
     request.onload = function () {
         let responseObj = JSON.parse(request.response);
-
         console.log(responseObj);
 
         if (request.status == 400 || request.status == 409) {
@@ -50,33 +56,29 @@ function ProcessingFile(index_, file_) {
         }
 
         if (responseObj.result == true) {
-            console.log(responseObj);
+            document.getElementById('cover_track_'+index_).src = responseObj.data.file_data.cover;
+            document.getElementById('name_track_'+index_).innerText = responseObj.data.file_data.author+" - "+responseObj.data.file_data.name
+
+            count_finished_file += 1;
+            console.log('ИКРЕМЕНТИРУЕМ ФИНИШ!', count_finished_file);
+
+            if (queue_file.length !== 0) {
+                console.log('ОЧЕРЕДЬ НЕ ПУСТА', queue_file.length);
+                let task = queue_file.shift();
+                console.log(task);
+                ProcessingFile(task[0], task[1]);
+            } else {
+                console.log('ОЧЕРЕДЬ ПУСТА!!!!!!!!!', count_finished_file);
+                if (count_all_file === count_finished_file) {
+                    console.log('REDIRECT!!!!!!!!');
+                    window.location = '/';
+                }
+            }
         } else {
             show_error(responseObj.detail, 'Ошибка');
         }
     };
-
-
     request.send(formData);
-
-
-
-    // request.addEventListener('loadstart', (event) => {
-    //     document.getElementById('status_loading_track_'+index_).innerText = '0%';
-    // });
-
-    // request.addEventListener('progress', (event) => {
-    //     let percents = ((event.loaded/event.total)*100).toFixed(2);
-    //     console.log('processed: ', percents);
-    //     document.getElementById('status_loading_track_'+index_).innerText = percents+'%';
-    // });
-
-    // request.addEventListener('loadend', (event) => {
-    //     document.getElementById('status_yes_track_'+index_).style.display = 'block';
-    //     document.getElementById('status_loading_track_'+index_).style.display = 'none';
-    // });
-
-
 }
 
 function generateDomUploadedTrack(index, name_track) {
@@ -117,20 +119,22 @@ function generateDomUploadedTrack(index, name_track) {
 
 function UploadFile(e) {
     let target = e.target,
-        files = target.files,
-        counter_to_uploading = 0;
+        files = target.files;
+
     button_select_upload_music.style.display = 'none';
     count_all_file = files.length;
-    console.log(files);
-
 
     for (let i = 0; i < files.length; i++) {
+        queue_file.push([i, files[i]]);
+
         list_uploaded_music.appendChild(
             generateDomUploadedTrack(i, files[i].name)
         );
-        // todo: реализовать очередь загрузки файлов.
-        //if (limit_uploading_file !== counter_to_uploading) {
-            ProcessingFile(i, files[i]);
-        //}
+    }
+
+    for (let j = 0; j < limit_uploading_file; j++) {
+        let task = queue_file.shift();
+        console.log(task);
+        ProcessingFile(task[0], task[1]);
     }
 }
