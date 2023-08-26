@@ -95,7 +95,7 @@ function generateDomUploadedTrack(index, name_track) {
 
     img_cover_track.className = 'default_img';
     img_cover_track.id = 'cover_track_'+index;
-    img_cover_track.src = 'http://192.168.0.100:8000/api/image/1';
+    img_cover_track.src = '/api/image/1';
 
     div_uploaded_track.appendChild(span_name_track);
     span_name_track.id = 'name_track_'+index;

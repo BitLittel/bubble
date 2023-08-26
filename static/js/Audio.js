@@ -28,6 +28,10 @@ let max_track_number = 4,  // тут кароче из ответа апи вы�
 	on_loop = false,
 	on_shuffle = false;
 
+function get_slowly_volume(value) {
+	return (0.01*(Math.pow(value, 2))/100).toFixed(5)
+}
+
 
 function setVolumeFromCookie() {
 	let get_volume = getCookie("volume"),
@@ -36,7 +40,7 @@ function setVolumeFromCookie() {
 	document.cookie = "volume="+volume_user+";max-age=2629743;SameSite=Strict";
 	volume.value = volume_user;
     volume.style.backgroundSize = volume_user+'% 100%';
-    theAudio.volume = (0.01*(Math.pow(volume_user, 2))/100).toFixed(5);
+    theAudio.volume = get_slowly_volume(volume_user);
 }
 
 function generateRandomInteger(min, max) {return Math.floor(min + Math.random()*(max - min + 1))}
@@ -62,7 +66,9 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 	div_blockMusic.onclick = function () {Play(index_track);};
 	div_blockMusic.appendChild(div_with_img_name_author);
 		div_with_img_name_author.appendChild(img_cover_track);
-			img_cover_track.src = data_track_cover;
+			img_cover_track.className = 'cover_track';
+			img_cover_track.src = '../static/img/default_img.jpg';//data_track_cover;
+			img_cover_track.setAttribute('data-src', data_track_cover);
 			img_cover_track.alt = data_track_author + " - " + data_track_name;
 		div_with_img_name_author.appendChild(div_with_name_author);
 			div_with_name_author.appendChild(span_name);
@@ -105,11 +111,11 @@ function initMainPlayer(index, track_path, track_name, track_author, track_cover
 function InitMusic(objects_musics) {
 	current_track_number = objects_musics.current_track_number;
 	max_track_number = objects_musics.last_track_number;
-	console.log(objects_musics.track_list, objects_musics.track_list.length);
+	// console.log(objects_musics.track_list, objects_musics.track_list.length);
 	container_music_list_dom.innerHTML = "";
 	//if (objects_musics.track_list) {
 		for (let i = 0; i < objects_musics.track_list.length; i++) {
-			console.log(objects_musics.track_list[i]);
+			// console.log(objects_musics.track_list[i]);
 			container_music_list_dom.appendChild(
 				createDomTrack(
 					i,
@@ -136,6 +142,7 @@ function InitMusic(objects_musics) {
 	//} else {
 	//	container_music_list_dom.innerHTML = "<div>У вас нет треков</div>";
 	//}
+	lazy();
 }
 
 /**
@@ -189,7 +196,7 @@ theAudio.addEventListener('ended', function (){
 });
 
 theAudio.addEventListener('loadedmetadata', function(){
-    all_time_track.innerHTML=''+(theAudio.duration/60>>0)+':'+(theAudio.duration%60>>0);
+    all_time_track.innerHTML=(theAudio.duration/60>>0)+':'+((theAudio.duration%60>>0)<10?'0'+(theAudio.duration%60>>0):(theAudio.duration%60>>0));
 });
 
 theAudio.addEventListener('timeupdate', function(){
@@ -205,19 +212,20 @@ backward.onclick = function () {
     Play(((current_index_track-1) < 0) ? (max_track_number-1) : (current_index_track-1));
 }
 
-// вешаем на полосу громкости эвент, на изменение громкости и сохранение звука в куки
+// вешаем на полосу громкости эвенты, на изменение громкости и сохранение звука в куки
 volume.addEventListener('change', function () {
     document.cookie = "volume="+volume.value+";max-age=2629743;SameSite=Strict";
-    theAudio.volume = (0.01*(Math.pow(volume.value, 2))/100).toFixed(5);
+    theAudio.volume = get_slowly_volume(volume.value);
 });
 
 function handleInputChange(e) {
-  let target = e.target;
-  if (e.target.type !== 'range') {target = volume}
-  const min = target.min;
-  const max = target.max;
-  const val = target.value;
-  target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
+	let target = e.target;
+	if (e.target.type !== 'range') {target = volume}
+	const min = target.min;
+	const max = target.max;
+	const val = target.value;
+	target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
+	theAudio.volume = get_slowly_volume(target.value);
 }
 
 volume.addEventListener('input', handleInputChange);
@@ -237,7 +245,6 @@ function changeProgress() {
 		buff_ = ((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth;
 	current_time_track.innerHTML=(cur_time/60>>0)+':'+((cur_time%60>>0)<10?'0'+(cur_time%60>>0):(cur_time%60>>0));
 	in_line.style.width=buff_+'%';
-    // in_line.style.width=(cur_time*100)/duration+'%';
 	theAudio.currentTime = (duration*buff_)/100;
 }
 

@@ -25,6 +25,8 @@ window.onload = function () {
     if (!user_is_auth) {
         get_current_user();
     }
+
+    //lazy();
 };
 
 function getAllUserData() {
