@@ -367,7 +367,7 @@ body {
 }
 
 .Music_and_Frend {
-	/*min-height: 75vh;*/
+	margin-bottom: 8%;
 	display: flex;
 }
 

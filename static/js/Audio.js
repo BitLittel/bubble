@@ -23,10 +23,13 @@ const theAudio = new Audio(), //document.getElementById('testAudio'),
 
 let max_track_number = 4,  // тут кароче из ответа апи выдернуть максимальный номер трека
 	current_index_track = 0,
+	last_index_track = 0,
 	array_index_track = [],
 	current_track_number = 1,  // по дефолту всегда 1 будет
 	on_loop = false,
-	on_shuffle = false;
+	on_shuffle = false,
+	cur_track_dom_element = 0,
+	next_track_dom_element = 0;
 
 function get_slowly_volume(value) {
 	return (0.01*(Math.pow(value, 2))/100).toFixed(5)
@@ -81,6 +84,10 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 		div_on_play.className = "blockMusic_on_play";
 		div_on_play.id = "blockMusic_on_play_"+index_track;
 		div_on_play.style.display = "none";
+
+	// set lazy load to cover track
+	imageObserver.observe(img_cover_track);
+
 	return div_blockMusic;
 }
 
@@ -88,14 +95,21 @@ function getMusicOnIndex(index) {
 	return all_music[array_index_track[index]];
 }
 
-function generateDefaultIndexArrayTrack(max_number) {
-	for (let i = 0; i < max_number; i++) {
+function generateDefaultIndexArrayTrack() {
+	array_index_track = [];
+	for (let i = 0; i < max_track_number; i++) {
 		array_index_track.push(i);
 	}
 }
 
-function generateShuffledIndexArrayTrack() {
-	array_index_track.sort(() => Math.random() - 0.5);
+function generateShuffledIndexArrayTrack(){
+	let j, temp;
+	for(let i = array_index_track.length - 1; i > 0; i--){
+		j = Math.floor(Math.random()*(i + 1));
+		temp = array_index_track[j];
+		array_index_track[j] = array_index_track[i];
+		array_index_track[i] = temp;
+	}
 }
 
 function initMainPlayer(index, track_path, track_name, track_author, track_cover) {
@@ -105,44 +119,37 @@ function initMainPlayer(index, track_path, track_name, track_author, track_cover
 	song_name.innerText = track_name;
 	song_author.innerText = track_author;
 	img_cover.src = track_cover;
+	cur_track_dom_element = getMusicOnIndex(index);
 }
 
 // вот в этот инит мы передадим response data
 function InitMusic(objects_musics) {
-	current_track_number = objects_musics.current_track_number;
+	// current_track_number = objects_musics.current_track_number;
 	max_track_number = objects_musics.last_track_number;
 	// console.log(objects_musics.track_list, objects_musics.track_list.length);
 	container_music_list_dom.innerHTML = "";
-	//if (objects_musics.track_list) {
-		for (let i = 0; i < objects_musics.track_list.length; i++) {
-			// console.log(objects_musics.track_list[i]);
-			container_music_list_dom.appendChild(
-				createDomTrack(
-					i,
-					objects_musics.track_list[i].path,
-					objects_musics.track_list[i].id,
-					objects_musics.track_list[i].number,
-					objects_musics.track_list[i].name,
-					objects_musics.track_list[i].author,
-					objects_musics.track_list[i].duration,
-					objects_musics.track_list[i].cover,
-				)
-			);
-			if (objects_musics.track_list[i].track_number === current_track_number) {
-				initMainPlayer(
-					i,
-					objects_musics.track_list[i].path,
-					objects_musics.track_list[i].name,
-					objects_musics.track_list[i].author,
-					objects_musics.track_list[i].cover
-				);
-			}
-		}
-		generateDefaultIndexArrayTrack(max_track_number);
-	//} else {
-	//	container_music_list_dom.innerHTML = "<div>У вас нет треков</div>";
-	//}
-	lazy();
+	for (let i = 0; i < objects_musics.track_list.length; i++) {
+		container_music_list_dom.appendChild(
+			createDomTrack(
+				i,
+				objects_musics.track_list[i].path,
+				objects_musics.track_list[i].id,
+				objects_musics.track_list[i].number,
+				objects_musics.track_list[i].name,
+				objects_musics.track_list[i].author,
+				objects_musics.track_list[i].duration,
+				objects_musics.track_list[i].cover,
+			)
+		);
+	}
+	generateDefaultIndexArrayTrack();
+	initMainPlayer(
+		0,
+		objects_musics.track_list[0].path,
+		objects_musics.track_list[0].name,
+		objects_musics.track_list[0].author,
+		objects_musics.track_list[0].cover
+	);
 }
 
 /**
@@ -151,48 +158,68 @@ function InitMusic(objects_musics) {
 **/
 
 function Play(index) {
-	let get_cur_track_dom = getMusicOnIndex(current_index_track), //all_music[current_index_track],
-		get_next_track_dom = getMusicOnIndex(index); //all_music[index];
+	next_track_dom_element = getMusicOnIndex(index);
 
-    if (theAudio.src === '') {
-		theAudio.src = get_cur_track_dom.getAttribute('data-track-src');
-		theAudio.load();
-	}
     if (current_index_track === index) {
-		document.getElementById('blockMusic_on_play_'+index).style.display = theAudio.paused ? 'block' : 'none';
-        get_cur_track_dom.style.background = '#0000003d';
+		cur_track_dom_element.children[2].style.display = theAudio.paused ? 'block' : 'none';
+        cur_track_dom_element.style.background = '#0000003d';
     } else {
-        document.getElementById('blockMusic_on_play_'+current_index_track).style.display = 'none';
-        get_cur_track_dom.style.background = '';
-        document.getElementById('blockMusic_on_play_'+index).style.display = 'block';
-        get_next_track_dom.style.background = '#0000003d';
-        theAudio.src = get_next_track_dom.getAttribute('data-track-src');
-		// theAudio.load();
+		cur_track_dom_element.children[2].style.display = 'none';
+        cur_track_dom_element.style.background = '';
+
+		next_track_dom_element.children[2].style.display = 'block';
+        next_track_dom_element.style.background = '#0000003d';
+        theAudio.src = next_track_dom_element.getAttribute('data-track-src');
+
+		cur_track_dom_element = next_track_dom_element
 		current_index_track = index;
     }
-    play.onclick = function(){Play(index);};
+    play.onclick = function(){Play(current_index_track);};
     if (theAudio.paused) {theAudio.play();} else {theAudio.pause();}
+	navigator.mediaSession.metadata = new MediaMetadata({
+		title: next_track_dom_element.getAttribute('data-track-name'),
+		artist: next_track_dom_element.getAttribute('data-track-author'),
+		album: 'Bubble',
+		artwork: [{
+			src: next_track_dom_element.getAttribute('data-track-cover'),
+			sizes: "300x300",
+			type: "image/jpeg",
+      	}]
+	  });
+	theAudio.textContent = next_track_dom_element.getAttribute('data-track-author') + '-' + next_track_dom_element.getAttribute('data-track-author');
     play.src = theAudio.paused ? '../static/img/play.png' : '../static/img/pause.png';
-    img_cover.src = get_next_track_dom.getAttribute('data-track-cover');
-    song_name.innerText = get_next_track_dom.getAttribute('data-track-name');
-    song_author.innerText = get_next_track_dom.getAttribute('data-track-author');
+    img_cover.src = next_track_dom_element.getAttribute('data-track-cover');
+    song_name.innerText = next_track_dom_element.getAttribute('data-track-name');
+    song_author.innerText = next_track_dom_element.getAttribute('data-track-author');
 }
+
+function ChangeTrack(forward=true) {
+	let buff_ = 0;
+
+	if (forward) {
+		buff_ = ((current_index_track+1) === max_track_number) ? 0 : (current_index_track+1);
+	} else {
+		buff_ = ((current_index_track-1) < 0) ? (max_track_number-1) : (current_index_track-1);
+	}
+
+	last_index_track = array_index_track[buff_]
+
+	Play(buff_);
+}
+
+forward.onclick = function () {ChangeTrack(true)};
+backward.onclick = function () {ChangeTrack(false)};
+navigator.mediaSession.setActionHandler('previoustrack', function() {ChangeTrack(false)});
+navigator.mediaSession.setActionHandler('nexttrack', function() {ChangeTrack(true)});
 
 
 theAudio.addEventListener('ended', function (){
     if (on_loop) {
         theAudio.currentTime = 0;
         theAudio.play();
-    } else if (on_shuffle) {
-		// todo: переписать на индексы
-		let random_number_track = generateRandomInteger(1, max_track_number);
-		while (random_number_track === current_track_number) {
-			random_number_track = generateRandomInteger(1, max_track_number);
-		}
-        Play(random_number_track);
 	} else {
-        Play(((current_index_track+1) === max_track_number) ? 0 : (current_index_track+1));
-    }
+		ChangeTrack(true);
+	}
 });
 
 theAudio.addEventListener('loadedmetadata', function(){
@@ -203,14 +230,6 @@ theAudio.addEventListener('timeupdate', function(){
     current_time_track.innerHTML=(theAudio.currentTime/60>>0)+':'+((theAudio.currentTime%60>>0)<10?'0'+(theAudio.currentTime%60>>0):(theAudio.currentTime%60>>0));
     in_line.style.width=(theAudio.currentTime*100)/theAudio.duration+'%';
 });
-
-forward.onclick = function () {
-    Play(((current_index_track+1) === max_track_number) ? 0 : (current_index_track+1));
-}
-
-backward.onclick = function () {
-    Play(((current_index_track-1) < 0) ? (max_track_number-1) : (current_index_track-1));
-}
 
 // вешаем на полосу громкости эвенты, на изменение громкости и сохранение звука в куки
 volume.addEventListener('change', function () {
@@ -230,15 +249,7 @@ function handleInputChange(e) {
 
 volume.addEventListener('input', handleInputChange);
 
-//theAudio.onplay = function () {console.log(theAudio.currentTime)};
-
 // вешаем обработку на тайм-лайн
-
-// theAudio.addEventListener('canplay', function () {console.log("canplay");})
-// theAudio.addEventListener('loadedmetadata',()=>{console.log("metadataloaded");});
-// theAudio.addEventListener('loadeddata',()=>{console.log("dataloaded");});
-// theAudio.addEventListener('canplaythrough',()=>{console.log("canplaythrough");});
-
 function changeProgress() {
 	const cur_time = theAudio.currentTime,
 		duration = theAudio.duration,
@@ -248,35 +259,23 @@ function changeProgress() {
 	theAudio.currentTime = (duration*buff_)/100;
 }
 
-time_line.addEventListener('click', function () {
-	changeProgress();
-});
-
-// time_line.addEventListener('click', function () {
-//     //console.log(audio.currentTime, audio.duration, event.clientX, time_line.getBoundingClientRect().x, time_line.clientWidth);
-//     //console.log((audio.duration*(((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth))/100);
-//     //in_line.style.width=(((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth)+'%';
-//     //let set_time = ((audio.duration*(((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth))/100);
-//     //console.log(set_time, isFinite(set_time));
-//     //audio.currentTime=Math.floor(set_time);
-// 	console.log(audio.currentTime);
-//     audio.currentTime=5;
-// 	console.log(audio.currentTime);
-// 	//audio.duration = 10;
-// });
+time_line.addEventListener('click', function () {changeProgress();});
 
 loop.onclick = function () {
     on_loop = !on_loop;
     loop.src = on_loop ? '../static/img/loop_active.png' : '../static/img/loop.png';
-}
-//
-// shuffle_button.onclick = function () {
-//     play_random = !play_random;
-//     shuffle_button.src = play_random ? '../static/img/shuffle_active.png' : '../static/img/shuffle.png';
-//     if (play_random) {
-//         shuffle_array(list_playing_music);
-//     } else {
-//         list_playing_music = [];
-//         for (let i = 0; i <= all_music.length; i++) {list_playing_music.push(all_music[i]);}
-//     }
-// }
+};
+
+shuffle.onclick = function () {
+	if (on_shuffle) {
+		on_shuffle = false;
+		shuffle.src = '../static/img/shuffle.png';
+		generateDefaultIndexArrayTrack();
+		current_index_track = last_index_track;
+	} else {
+		on_shuffle = true;
+		shuffle.src = '../static/img/shuffle_active.png';
+		generateShuffledIndexArrayTrack();
+		last_index_track = current_index_track;
+	}
+};

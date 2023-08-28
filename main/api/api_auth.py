@@ -126,9 +126,8 @@ async def api_signup(user: UserSignUp):
     # append default playlist id in liked_playlist array
     await query_execute(
         query_text=f'update "Users" '
-                   f'set liked_playlist = ('
-                   f'select U.liked_playlist || {default_playlist.id} from "Users" as U where U.id = {get_new_user.id}'
-                   f') where id = {get_new_user.id}',
+                   f'set liked_playlist =  array_append(liked_playlist, {default_playlist.id}) '
+                   f'where id = {get_new_user.id}',
         fetch_all=False,
         type_query='update'
     )
