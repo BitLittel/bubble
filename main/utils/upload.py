@@ -132,7 +132,7 @@ async def processed_audio(file_, user_id_):
 
     await query_execute(
         query_text=f'insert into "Musics" (name, author, genre, cover, filename, duration, datetime_add, user_id_add) '
-                   f'values (\'{name}\', \'{author}\', \'{genre}\', {get_image}, '
+                   f'values ($$\'{name}\'$$, $$\'{author}\'$$, $$\'{genre}\'$$, {get_image}, '
                    f'\'{new_name_}\', \'{duration}\', \'{datetime.now()}\', {user_id_})',
         fetch_all=False,
         type_query='insert'
@@ -145,9 +145,9 @@ async def processed_audio(file_, user_id_):
     if get_music is None:
         raise HTTPException(500, detail="Внутренняя ошибка сервера")
 
-    with Session() as db:
-        db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;'))
-        db.execute(text(
+    async with Session() as db:
+        await db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;'))
+        await db.execute(text(
             f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
             f'values ('
             f'(select coalesce(max(C.track_number), 0) from "Collections" as C where C.playlist_id = 1) + 1, '
@@ -156,7 +156,7 @@ async def processed_audio(file_, user_id_):
             f'(select PL.id from "PlayLists" as PL '
             f'where PL.user_id = {user_id_} and PL.name = \'Вся моя музыка\'));'
         ))
-        db.execute(text('COMMIT;'))
+        await db.execute(text('COMMIT;'))
 
     result = FileResponse(
         result=True,
