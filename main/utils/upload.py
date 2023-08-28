@@ -151,7 +151,15 @@ async def processed_audio(file_, user_id_):
         await db.execute(text('COMMIT'))
 
     get_music = await query_execute(
-        query_text=f'select * from "Musics" as M where M.user_id_add = {user_id_} and M.filename = \'{new_name_}\''
+        query_text=f'select * from "Musics" as M where M.user_id_add = {user_id_} and M.filename = \'{new_name_}\'',
+        type_query='read',
+        fetch_all=False
+    )
+
+    get_default_playlist = await query_execute(
+        query_text=f'select PL.id from "PlayLists" as PL where PL.user_id={user_id_} and PL.name=\'Вся моя музыка\'',
+        fetch_all=False,
+        type_query='read'
     )
 
     if get_music is None:
@@ -161,11 +169,11 @@ async def processed_audio(file_, user_id_):
         await db.execute(text(
             f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
             f'values ('
-            f'(select coalesce(max(C.track_number), 0) from "Collections" as C where C.playlist_id = 1) + 1, '
+            f'(select coalesce(max(C.track_number), 0) from "Collections" as C '
+            f'where C.playlist_id = {get_default_playlist.id}) + 1, '
             f'\'{datetime.now()}\', '
             f'{get_music.id}, '
-            f'(select PL.id from "PlayLists" as PL '
-            f'where PL.user_id = {user_id_} and PL.name = \'Вся моя музыка\'));'
+            f'{get_default_playlist.id});'
         ))
         await db.execute(text('COMMIT;'))
 
