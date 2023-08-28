@@ -74,6 +74,11 @@ body {
 		display: none;
 	}
 
+	.login_block {
+		left: 0 !important;
+		width: 101% !important;
+	}
+
 	.mainPlayer {
 		padding: 0;
 	    width: 100%;
