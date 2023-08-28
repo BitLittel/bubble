@@ -141,7 +141,7 @@ async def api_signup(user: UserSignUp):
 
     return {
         'result': True,
-        'message': f'Вам на почту отправлено письмо для активации аккаунта. '
+        'message': f'Скопируй ссылку и в адресную строку вставь. '
                    f'{config.MAIN_URL}/?token={new_token_gen}',
         'data': {}
     }
