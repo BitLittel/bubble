@@ -7,7 +7,7 @@ class Music(BaseModel):
     number: int | None
     name: str
     author: str
-    genre: str
+    genre: str | None
     cover: str
     path: str
     duration: str

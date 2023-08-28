@@ -130,13 +130,25 @@ async def processed_audio(file_, user_id_):
         )
         get_image = get_image.id
 
-    await query_execute(
-        query_text=f'insert into "Musics" (name, author, genre, cover, filename, duration, datetime_add, user_id_add) '
-                   f'values ($$\'{name}\'$$, $$\'{author}\'$$, $$\'{genre}\'$$, {get_image}, '
-                   f'\'{new_name_}\', \'{duration}\', \'{datetime.now()}\', {user_id_})',
-        fetch_all=False,
-        type_query='insert'
-    )
+    # await query_execute(
+    #     query_text=f'insert into "Musics" (name, author, genre, cover, filename, duration, datetime_add, user_id_add) '
+    #                f'values ($name${name}$name$, $author${author}$author$, $genre${genre}$genre$, {get_image}, '
+    #                f'\'{new_name_}\', \'{duration}\', \'{datetime.now()}\', {user_id_})',
+    #     fetch_all=False,
+    #     type_query='insert'
+    # )
+    async with Session() as db:
+        await db.execute(
+            text(
+                f'insert into "Musics" (name, author, genre, cover, filename, duration, datetime_add, user_id_add) '
+                f'values (:name_, :author, :genre, :get_image, :new_name_, :duration, :datetime, :user_id_)'
+            ),
+            {
+                'name_': name, 'author': author, 'genre': genre, 'get_image': get_image, 'new_name_': new_name_,
+                'duration': duration, 'datetime': datetime.now(), 'user_id_': user_id_
+            }
+        )
+        await db.execute(text('COMMIT'))
 
     get_music = await query_execute(
         query_text=f'select * from "Musics" as M where M.user_id_add = {user_id_} and M.filename = \'{new_name_}\''
@@ -144,7 +156,6 @@ async def processed_audio(file_, user_id_):
 
     if get_music is None:
         raise HTTPException(500, detail="Внутренняя ошибка сервера")
-
     async with Session() as db:
         await db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;'))
         await db.execute(text(
