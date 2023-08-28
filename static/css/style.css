@@ -564,6 +564,7 @@ input[type=range]::-webkit-slider-runnable-track  {
     justify-content: center;
     align-items: center;
     padding: 1%;
+	cursor: pointer;
 }
 
 .add_track > img {
@@ -613,6 +614,12 @@ input[type=range]::-webkit-slider-runnable-track  {
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 2%;
+}
+
+.uploaded_track > span {
+	overflow: hidden;
+    width: 75%;
+    text-overflow: ellipsis;
 }
 
 .uploaded_track > div > span {
