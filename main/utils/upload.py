@@ -82,7 +82,7 @@ def calculating_human_duration(length):
     return f'{hours//10}{hours%10}:{mins//10}{mins%10}:{seconds//10}{seconds%10}'
 
 
-def get_data_music_with_tinytag(path_file_):
+async def get_data_music_with_tinytag(path_file_):
     name, author, duration, genre, picture = None, None, None, None, None
     try:
         tag = TinyTag.get(path_file_, image=True)
@@ -100,7 +100,7 @@ def get_data_music_with_tinytag(path_file_):
 async def processed_audio(file_, user_id_):
     new_name_, path_file_, content_type_ = await save_file(file_, photo=False)
 
-    name, author, duration, genre, picture = get_data_music_with_tinytag(path_file_)
+    name, author, duration, genre, picture = await get_data_music_with_tinytag(path_file_)
 
     if name is None or author is None:
         name, author = get_data_music_default(file_.filename)
