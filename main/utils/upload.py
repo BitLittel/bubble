@@ -4,12 +4,11 @@ import audioread
 from uuid import uuid4
 from main import config
 from tinytag import TinyTag
+from sqlalchemy import text
 from datetime import datetime
 from fastapi import HTTPException
 from main.schemas.music import Music
-from main.utils.another import escape
 from main.models.database import Session
-from sqlalchemy import text
 from main.models.database import query_execute
 from main.schemas.file import FileResponse, File, Photo
 
@@ -171,9 +170,7 @@ async def processed_audio(file_, user_id_):
             f'values ('
             f'(select coalesce(max(C.track_number), 0) from "Collections" as C '
             f'where C.playlist_id = {get_default_playlist.id}) + 1, '
-            f'\'{datetime.now()}\', '
-            f'{get_music.id}, '
-            f'{get_default_playlist.id});'
+            f'\'{datetime.now()}\', {get_music.id}, {get_default_playlist.id});'
         ))
         await db.execute(text('COMMIT;'))
 

@@ -1,8 +1,8 @@
-from main import main
 import os
+from main import main
+from main import config
 from main.models.database import query_execute
 from fastapi.responses import StreamingResponse
-from main import config
 
 
 async def open_image(file_path):

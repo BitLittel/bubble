@@ -176,6 +176,7 @@ function Play(index) {
     }
     play.onclick = function(){Play(current_index_track);};
     if (theAudio.paused) {theAudio.play();} else {theAudio.pause();}
+
 	navigator.mediaSession.metadata = new MediaMetadata({
 		title: next_track_dom_element.getAttribute('data-track-name'),
 		artist: next_track_dom_element.getAttribute('data-track-author'),
@@ -185,7 +186,8 @@ function Play(index) {
 			sizes: "300x300",
 			type: "image/jpeg",
       	}]
-	  });
+	});
+
 	theAudio.textContent = next_track_dom_element.getAttribute('data-track-author') + '-' + next_track_dom_element.getAttribute('data-track-author');
     play.src = theAudio.paused ? '../static/img/play.png' : '../static/img/pause.png';
     img_cover.src = next_track_dom_element.getAttribute('data-track-cover');
@@ -221,6 +223,21 @@ theAudio.addEventListener('ended', function (){
 		ChangeTrack(true);
 	}
 });
+
+// theAudio.addEventListener("progress", () => {
+// 	const duration = theAudio.duration;
+//
+// 	if (duration > 0) {
+// 		for (let i = 0; i < theAudio.buffered.length; i++) {
+// 			if (theAudio.buffered.start(theAudio.buffered.length - 1 - i) < theAudio.currentTime) {
+// 				let buffered_time = (theAudio.buffered.end(theAudio.buffered.length - 1 - i) * 100) / duration
+// 				console.log(buffered_time);
+// 			break;
+// 			}
+// 		}
+// 	}
+// });
+
 
 theAudio.addEventListener('loadedmetadata', function(){
     all_time_track.innerHTML=(theAudio.duration/60>>0)+':'+((theAudio.duration%60>>0)<10?'0'+(theAudio.duration%60>>0):(theAudio.duration%60>>0));
