@@ -1,0 +1,252 @@
+@font-face {
+	font-family: montserrat;
+	src: url('/static/font/Montserrat-Medium.ttf') format('truetype');
+}
+
+@media (max-width: 1000px) {
+    .navbar__link {
+        width: 3.5rem !important;
+    }
+    .navbar__item:last-child:before {
+        left: 0 !important;
+    }
+    .main_content {
+        width: calc(100vw - 4rem) !important;
+        left: 57px !important;
+    }
+    .cover_playlist {
+        height: 100px !important;
+    }
+    .playlists {
+        padding: 0 !important;
+    }
+    .playlists {
+        height: 150px !important;
+    }
+    .rounded_add {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    .title_add_playlist {
+        padding: 25.5% !important;
+        font-size: 83px !important;
+    }
+    .functions {
+        display: none !important;
+        width: 0 !important;
+    }
+    .music_cover {
+        height: 50px !important;
+    }
+    .music_title, .music_timing {
+        font-size: 14px !important;
+    }
+}
+
+
+*::-webkit-scrollbar {
+  	width: 8px;
+}
+
+.playlists::-webkit-scrollbar {
+	height: 8px;
+}
+
+.playlists::-webkit-scrollbar-thumb {
+	background: linear-gradient(90deg, #00c6fb, #005bea);
+}
+
+*::-webkit-scrollbar-track {
+  	background: none;
+}
+
+*::-webkit-scrollbar-thumb {
+  	/*background-color: #406ff3;*/
+    background: linear-gradient(180deg, #00c6fb, #005bea);
+  	border-radius: 4px;
+	/*border: 1px solid;*/
+	position: absolute;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+    font-family: montserrat, serif;
+}
+
+.background_cover {
+    height: 100%;
+    background: #ffffff3d;
+    backdrop-filter: blur(60px);
+}
+
+.background {
+    background: url('/static/img/back_ground.svg') no-repeat;
+    /*background: url('/static/img/test_back.png') no-repeat;*/
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.main_menu {
+    position: fixed;
+    border-right: 1px solid #00000026;
+    height: 100%;
+    padding: 2%;
+    z-index: 3;
+    background: #ffffffb5;
+    backdrop-filter: blur(7px);
+    box-shadow: 0 0 50px;
+    width: 17vw;
+}
+
+.elements_menu > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 13%;
+}
+
+.elements_menu > div > div {
+    margin-right: 12%;
+}
+
+.main_content {
+    position: absolute;
+    top: 0;
+    left: 88px;
+    width: calc(100vw - 6rem);
+    /*max-width: 94vw;*/
+    padding: 1%;
+}
+
+.main_player {
+    position: fixed;
+    bottom: 0;
+    height: 5rem;
+    width: 100%;
+    background: #ffffffa6;
+    z-index: 1;
+    backdrop-filter: blur(7px);
+}
+
+.playlists {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2% 0;
+    border-bottom: 1px solid #68686861;
+}
+
+.block_playlist {
+    display: flex;
+    flex-direction: column;
+    margin-right: 2.5%;
+    transition: 250ms ease all;
+    text-align: center;
+    cursor: pointer;
+    max-width: 128px;
+}
+
+.title_playlist {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.block_playlist:hover {
+    transform: scale(1.1);
+}
+
+.cover_playlist {
+    height: 128px;
+    border-radius: 20px;
+    background-size: contain;
+}
+
+.add_playlist {
+    text-align: center;
+    cursor: pointer;
+    width: 256px;
+}
+
+.rounded_add {
+    width: 128px;
+    height: 128px;
+    background: #ffffff8c;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.rounded_add:hover {
+    background: #e9e9e98c;
+}
+
+.title_add_playlist {
+    padding: 27.5%;
+    font-size: 100px;
+    color: #b3b3b3;
+}
+
+.musics {
+    margin: 1% 0 7% 0;
+}
+
+.music {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5%;
+    border-radius: 12px;
+    transition: 250ms ease all;
+    cursor: pointer;
+}
+
+.cover_name_container {
+    display: flex;
+    align-items: center;
+    width: 60vw;
+}
+
+.music:hover {
+    background: #ffffff73;
+}
+
+.music_cover {
+    height: 60px;
+    border-radius: 12px;
+    background-size: contain;
+    margin-right: 2%;
+}
+
+.music_timing {
+    margin-right: 1%;
+}
+
+.functions {
+    display: flex;
+    width: 15%;
+    background: #ffffff73;
+    border-radius: 5px;
+    padding: .5%;
+}
+
+.functions > img {
+    width: 24px;
+    padding: 1%;
+    margin: 0 5%;
+    border-radius: 5px;
+}
+
+.functions > img:hover {
+    background: #406ff3;
+    color: #fff;
+}
+
+.music_title {
+    display: flex;
+    flex-direction: column;
+}
