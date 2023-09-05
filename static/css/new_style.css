@@ -123,16 +123,6 @@
     padding: 1%;
 }
 
-.main_player {
-    position: fixed;
-    bottom: 0;
-    height: 5rem;
-    width: 100%;
-    background: #ffffffa6;
-    z-index: 1;
-    backdrop-filter: blur(7px);
-}
-
 .playlists {
     display: flex;
     overflow-x: auto;
@@ -249,4 +239,39 @@
 .music_title {
     display: flex;
     flex-direction: column;
+}
+
+.main_player {
+    position: fixed;
+    bottom: 0;
+    height: 5rem;
+    width: 100%;
+    background: #ffffffa6;
+    z-index: 1;
+    backdrop-filter: blur(7px);
+    display: flex;
+    align-items: center;
+    padding: 0 3%;
+}
+
+.main_player_cover_and_title {
+    display: flex;
+    align-items: center;
+}
+
+.main_player_cover_and_title > img {
+    width: 60px;
+    border-radius: 12px;
+}
+
+.main_player_controls > img {
+    width: 50px;
+}
+
+.main_player_controls {
+    display: flex;
+}
+
+.main_player_function {
+    display: flex;
 }
