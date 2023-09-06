@@ -10,8 +10,13 @@
   }
 }
 
+.navbar__menu {
+    list-style-type: none;
+}
+
 .navbar__link > img {
   width: 24px;
+  height: 24px;
   transition: 250ms ease all;
 }
 
@@ -26,7 +31,7 @@
   background: #ffffff54;
   padding: 1rem 0;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  height: calc(100% - 5rem);
+  height: 100%;
 }
 
 .navbar__link {
@@ -34,15 +39,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3.5rem;
+  /*height: 3.5rem;*/
+  height: 9vh;
   width: 5.5rem;
   color: #6a778e;
   transition: 250ms ease all;
-}
-
-.navbar__link > div {
-  background-size: contain;
-  padding: 22%;
 }
 
 .navbar__link span {
