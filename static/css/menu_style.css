@@ -39,8 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /*height: 3.5rem;*/
-  height: 9vh;
+  height: 3.5rem;
   width: 5.5rem;
   color: #6a778e;
   transition: 250ms ease all;
