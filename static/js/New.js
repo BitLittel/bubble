@@ -67,15 +67,15 @@ function getCookie(name) {
 	return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-function showPopUp() {
-    let popup = document.getElementById('pop_up'),
+function showPopUp(id_pop_up = 'pop_up') {
+    let popup = document.getElementById(id_pop_up),
         body = document.getElementsByTagName('body')[0];
     popup.style.display = 'block';
     body.style.overflow = 'hidden';
 }
 
-function closePopUp() {
-    let popup = document.getElementById('pop_up'),
+function closePopUp(id_pop_up = 'pop_up') {
+    let popup = document.getElementById(id_pop_up),
         body = document.getElementsByTagName('body')[0];
     popup.style.display = 'none';
     body.style.overflow = 'auto';
@@ -84,14 +84,13 @@ function closePopUp() {
 function profile_PopUp() {
     let pop_up_header = document.getElementById('pop_up_header'),
         pop_up_body = document.getElementById('pop_up_body')
-    showPopUp();
+    showPopUp('pop_up');
     pop_up_header.innerText = 'Профиль';
     pop_up_body.innerText = 'Тут типо тело';
 }
 
 function login_PopUp() {
-    let login_pop_up = document.getElementById('login_pop_up');
-    login_pop_up.style.display = 'block';
+    showPopUp('login_pop_up');
 }
 
 function createPopUp(type = 'profile') {

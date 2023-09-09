@@ -13,23 +13,21 @@
 <body>
     <div class="background_pop_up" id="pop_up" style="display: none;">
         <div class="pop_up">
-            <div class="close_pop_up" onclick="closePopUp();"><span>x</span></div>
+            <div class="close_pop_up" onclick="closePopUp('pop_up');"><span>+</span></div>
             <div class="header_pop_up" id="pop_up_header"></div>
             <hr>
             <div class="body_pop_up" id="pop_up_body"></div>
         </div>
     </div>
 
-    <div class="background_pop_up" id="login_pop_up" style="display: none;">
-        <div class="pop_up">
-            <div class="close_pop_up" onclick="document.getElementById('login_pop_up').style.display = 'none';"><span>x</span></div>
+    <div class="background_pop_up" id="login_pop_up" style="display: none; transition: 4s ease all;">
+        <div class="pop_up" style="padding: 0;">
+            <div class="close_pop_up" onclick="closePopUp('login_pop_up');"><span>+</span></div>
             <div class="login_block">
-                <div class="login_pic">
-
-                </div>
+                <div class="login_pic"></div>
                 <div class="login_form">
                     <div class="login_form_header">
-                        <span>Вход</span>
+                        <span id="header_log_reg">Вход</span>
                     </div>
                     <div class="login_form_inputs">
                         <label>
@@ -48,6 +46,8 @@
                             <span>Пароль ещё раз</span>
                             <input type="password" name="password_repeat" id="password_repeat" placeholder="Введите Пароль ещё раз...">
                         </label>
+                        <button>Вход</button>
+                        <span style="text-align: center; padding: 1%;">Нет аккаунта? <span style="color: #06f;">Создать сейчас!</span></span>
                     </div>
                 </div>
             </div>
