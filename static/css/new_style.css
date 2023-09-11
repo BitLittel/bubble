@@ -497,6 +497,25 @@ input[type="range"]::-webkit-slider-thumb {
     border: none;
     border-radius: 10px;
     background: linear-gradient(91deg, #2400FF 0%, #1C00CB 100%);
+    transition: 1s ease all;
     color: #fff;
     font-size: 18px;
+    cursor: pointer;
+}
+
+.login_form_inputs > button:hover {
+    background: linear-gradient(91deg, #1C00CB 0%, #2400FF 100%);
+}
+
+#info_reg_log {
+    text-align: center;
+    padding: 1%;
+}
+
+#info_reg_log > span {
+    color: #06f;
+    cursor: pointer;
+}
+#info_reg_log > span:hover {
+    color: #022e6e;
 }

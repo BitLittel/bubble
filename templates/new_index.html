@@ -34,7 +34,7 @@
                             <span>Логин</span>
                             <input type="text" name="login" id="login" placeholder="Введите Логин...">
                         </label>
-                        <label>
+                        <label id="label_on_reg_email" style="display: none;">
                             <span>Почта</span>
                             <input type="email" name="email" id="email" placeholder="Введите Почту...">
                         </label>
@@ -42,12 +42,12 @@
                             <span>Пароль</span>
                             <input type="password" name="password" id="password" placeholder="Введите Пароль...">
                         </label>
-                        <label>
+                        <label id="label_on_reg_repeat_password" style="display: none;">
                             <span>Пароль ещё раз</span>
                             <input type="password" name="password_repeat" id="password_repeat" placeholder="Введите Пароль ещё раз...">
                         </label>
-                        <button>Вход</button>
-                        <span style="text-align: center; padding: 1%;">Нет аккаунта? <span style="color: #06f;">Создать сейчас!</span></span>
+                        <button id="button_submit_reg_log" onclick="LogSign()">Вход</button>
+                        <span id="info_reg_log">Нет аккаунта? <span onclick="change_to_login()">Создать сейчас!</span></span>
                     </div>
                 </div>
             </div>
