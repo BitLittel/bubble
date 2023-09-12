@@ -81,8 +81,23 @@
         justify-content: normal !important;
     }
     .close_pop_up {
-        left: 96% !important;
-        top: -18px !important;
+        right: 5.5vh !important;
+        top: auto;
+    }
+    .login_block, .notification_block {
+        margin-top: 44%;
+    }
+    .login_pic {
+        display: none !important;
+    }
+    .login_form {
+        width: 100% !important;
+    }
+    .pop_up {
+        height: 100vh !important;
+        padding: 5% !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
     }
 }
 input[type="range"] {
@@ -430,6 +445,7 @@ input[type="range"]::-webkit-slider-thumb {
 .close_pop_up {
     position: absolute;
     right: 11.5vh;
+    top: 10.5vh;
     transform: rotate(45deg);
     font-size: 40px;
     cursor: pointer;

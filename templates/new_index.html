@@ -11,6 +11,21 @@
     <title>Music</title>
 </head>
 <body>
+
+    <div class="background_pop_up" id="notification_pop_up" style="z-index: 10; display: none;">
+        <div class="pop_up">
+            <div class="close_pop_up" onclick="closePopUp('notification_pop_up');"><span>+</span></div>
+            <div class="notification_block">
+                <div class="header_pop_up" style="font-size: 1.8rem; font-weight: 600; text-align: center;">
+                    <span id="header_notification">Ошибка</span>
+                </div>
+                <div class="body_pop_up" style="font-size: 1.4rem; text-align: center;">
+                    <span id="body_notification">Ебать, ну чёт не так</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="background_pop_up" id="pop_up" style="display: none;">
         <div class="pop_up">
             <div class="close_pop_up" onclick="closePopUp('pop_up');"><span>+</span></div>
@@ -20,7 +35,7 @@
         </div>
     </div>
 
-    <div class="background_pop_up" id="login_pop_up" style="display: none; transition: 4s ease all;">
+    <div class="background_pop_up" id="login_pop_up" style="display: none;">
         <div class="pop_up" style="padding: 0;">
             <div class="close_pop_up" onclick="closePopUp('login_pop_up');"><span>+</span></div>
             <div class="login_block">

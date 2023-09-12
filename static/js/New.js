@@ -46,11 +46,14 @@ function changeNavBar() {
     let friend_link = document.getElementById('friend_link'),
         upload_link = document.getElementById('upload_link'),
         message_link = document.getElementById('message_link'),
-        profile_link = document.getElementById('profile_link');
+        profile_link = document.getElementById('profile_link'),
+        profile_avatar = document.getElementById('profile_avatar');
     friend_link.style.display = 'block'
     upload_link.style.display = 'block';
     message_link.style.display = 'block';
     profile_link.onclick = function(){createPopUp('profile');};
+    profile_avatar.className = 'profile';
+    profile_avatar.src = user_data.avatar;
 }
 
 function AuthContent() {
@@ -77,9 +80,21 @@ function showPopUp(id_pop_up = 'pop_up') {
 
 function closePopUp(id_pop_up = 'pop_up') {
     let popup = document.getElementById(id_pop_up),
-        body = document.getElementsByTagName('body')[0];
+        body = document.getElementsByTagName('body')[0],
+        all_pop_up = document.getElementsByClassName('background_pop_up'),
+        check = false;
     popup.style.display = 'none';
-    body.style.overflow = 'auto';
+
+    for (let i = 0; i < all_pop_up.length; i++) {
+        if (all_pop_up[i].style.display === 'block') {
+            check = false;
+            break;
+        } else {
+            check = true;
+        }
+    }
+
+    body.style.overflow = (check) ? 'auto' : 'hidden';
 }
 
 function profile_PopUp() {
@@ -105,9 +120,22 @@ function change_to_login() {
     label_on_reg_repeat_password.style.display = (login) ? 'none' : 'flex';
     button_submit_reg_log.innerText = (login) ? 'Вход' : 'Регистрация';
     header_log_reg.innerText = (login) ? 'Вход' : 'Регистрация';
-    // button_submit_reg_log.onclick = (login) ? function(){LogIn()} : function(){signUp()};
-    info_reg_log.innerHTML = (login) ?  'Нет аккаунта? <span onclick="change_to_login()">Создать сейчас!</span>' : 'Уже есть аккаунт? <span onclick="change_to_login()">Войти!</span>';
+    info_reg_log.innerHTML = (login)
+        ?  'Нет аккаунта? <span onclick="change_to_login()">Создать сейчас!</span>'
+        : 'Уже есть аккаунт? <span onclick="change_to_login()">Войти!</span>';
     login = !login
+}
+
+function show_error(error=false, message='', header_text='') {
+    let notification_pop_up = document.getElementById('notification_pop_up'),
+        header_notification = document.getElementById('header_notification'),
+        body_notification = document.getElementById('body_notification'),
+        body = document.getElementsByTagName('body')[0];
+    notification_pop_up.style.display = 'block';
+    header_notification.innerText = header_text;
+    body_notification.innerText = message;
+    header_notification.style.color = (error) ? '#00c93e' : '#ff3a3a';
+    body.style.overflow = 'hidden';
 }
 
 function createPopUp(type = 'profile') {
@@ -123,45 +151,42 @@ function LogSign() {
     let input_login_login = document.getElementById('login'),
         input_password_login = document.getElementById('password'),
         input_email = document.getElementById('email'),
-        input_password_repeat = document.getElementById('input_password_repeat_login');
+        input_password_repeat = document.getElementById('password_repeat');
 
-    sendRequest(
-        'POST',
-        '/api/login',
-        true,
-        {"username": input_login_login.value, "password": input_password_login.value},
-        function (data) {
-            is_auth = true;
-            user_data = data.data;
-            AuthContent();
-        }
-    );
-}
-
-function signUp() {
-    let input_password_repeat = document.getElementById('input_password_repeat_login'),
-        input_email = document.getElementById('input_email_login'),
-        input_login = document.getElementById('input_login_login'),
-        input_password = document.getElementById('input_password_login');
-
-    if (input_password_repeat.value !== input_password.value) {
-        show_error('Пароли не совпадают', 'Ошибка');
-    } else {
+    if (!login) {
         sendRequest(
             'POST',
-            '/api/signup',
+            '/api/login',
             true,
-            {"username": input_login.value, "password": input_password.value, "email": input_email.value},
+            {"username": input_login_login.value, "password": input_password_login.value},
             function (data) {
-                let block_Login = document.getElementById('Login');
-                block_Login.style.display = 'none';
-                show_error(data.message,'Успех');
+                is_auth = true;
+                user_data = data.data;
+                AuthContent();
+                closePopUp('login_pop_up');
+            },
+            function (data) {
+                show_error(false, data.detail, 'Ошибка');
             }
         );
+    } else {
+        if (input_password_repeat.value !== input_password_login.value) {
+            show_error(false, 'Пароли не совпадают', 'Ошибка');
+        } else {
+            sendRequest(
+                'POST',
+                '/api/signup',
+                true,
+                {"username": input_login_login.value, "password": input_password_login.value, "email": input_email.value},
+                function (data) {
+                    show_error(true, data.message, 'Успех');
+                },
+                function (data) {
+                    show_error(false, data.detail, 'Ошибка');
+                }
+            );
+        }
     }
-}
-
-function LogIn() {
 
 }
 
