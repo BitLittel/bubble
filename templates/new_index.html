@@ -46,19 +46,19 @@
                     </div>
                     <div class="login_form_inputs">
                         <label>
-                            <span>Логин</span>
+                            <span style="display: flex"><img src="/static/img/person.svg" alt=""> Логин</span>
                             <input type="text" name="login" id="login" placeholder="Введите Логин...">
                         </label>
                         <label id="label_on_reg_email" style="display: none;">
-                            <span>Почта</span>
+                            <span style="display: flex"><img src="/static/img/email.svg" alt=""> Почта</span>
                             <input type="email" name="email" id="email" placeholder="Введите Почту...">
                         </label>
                         <label>
-                            <span>Пароль</span>
+                            <span style="display: flex"><img src="/static/img/lock.svg" alt=""> Пароль</span>
                             <input type="password" name="password" id="password" placeholder="Введите Пароль...">
                         </label>
                         <label id="label_on_reg_repeat_password" style="display: none;">
-                            <span>Пароль ещё раз</span>
+                            <span style="display: flex"><img src="/static/img/lock.svg" alt=""> Пароль ещё раз</span>
                             <input type="password" name="password_repeat" id="password_repeat" placeholder="Введите Пароль ещё раз...">
                         </label>
                         <button id="button_submit_reg_log" onclick="LogSign()">Вход</button>
@@ -73,7 +73,6 @@
         <ul class="navbar__menu">
             <li class="navbar__item" id="profile_link" onclick="createPopUp(type='login');">
                 <a href="#" class="navbar__link">
-{#                      class="profile"      src="/static/img/default_img.jpg"#}
                     <img id="profile_avatar" src="/static/img/enter.svg" alt="Y">
                     <span id="profile_login">Вход/Регистрация</span>
                 </a>
@@ -117,370 +116,35 @@
     </div>
 
     <div class="main_content">
-        <div class="playlists">
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/default_img.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/default_img.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/default_img.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/default_img.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud [e[e[e[[e[e[e[[e[e[e[e[[sdafsd sdfasdfa dsfsdf </span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/default_img.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/test_cover.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/test_cover.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/test_cover.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/test_cover.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/test_cover.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="block_playlist">
-                <img class="cover_playlist" src="/static/img/test_cover.jpg" alt="cover">
-                <span class="title_playlist">GoneFlud</span>
-            </div>
-            <div class="add_playlist">
+        <div class="playlists" id="playlists" style="display: none;">
+            <div class="add_playlist" id="block_add_playlist" onclick="addPlayList();">
                 <div class="rounded_add"><span class="title_add_playlist">+</span></div>
                 <span>Создать плейлист</span>
             </div>
         </div>
 
-        <div class="musics">
+        <div class="musics" id="musics">
             <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title title_playlist">
-                        <span class="music_name">НеизвестенfSDAFSDAFGDSFGSDFHDFGHDFSGDFGSDFHFGHSFDGHFGJSFGHGDHSDFHSDFG</span>
-                        <span class="music_author">Без названияDFGSDFGSDFHGFGJDFGJFGJDFGHGFHSDGFHFGJSFGDHFDGSDFGSDFGSDFGSDF</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
+                <span>Треков нет, сори</span>
             </div>
-
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-            <div class="music">
-                <div class="cover_name_container">
-                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">
-                    <div class="music_title">
-                        <span class="music_name">Неизвестен</span>
-                        <span class="music_author">Без названия</span>
-                    </div>
-                </div>
-                <div class="functions">
-                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">
-                    <img src="/static/img/download.svg" alt="" title="Скачать трек">
-                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">
-                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">
-                </div>
-                <div class="music_timing">
-                    <span>10:25:33</span>
-                </div>
-            </div>
-
+{#            <div class="music">#}
+{#                <div class="cover_name_container">#}
+{#                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">#}
+{#                    <div class="music_title title_playlist">#}
+{#                        <span class="music_name">НеизвестенfSDAFSDAFGDSFGSDFHDFGHDFSGDFGSDFHFGHSFDGHFGJSFGHGDHSDFHSDFG</span>#}
+{#                        <span class="music_author">Без названияDFGSDFGSDFHGFGJDFGJFGJDFGHGFHSDGFHFGJSFGDHFDGSDFGSDFGSDFGSDF</span>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="functions" style="display: none;">#}
+{#                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">#}
+{#                    <img src="/static/img/download.svg" alt="" title="Скачать трек">#}
+{#                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">#}
+{#                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">#}
+{#                </div>#}
+{#                <div class="music_timing">#}
+{#                    <span>10:25:33</span>#}
+{#                </div>#}
+{#            </div>#}
         </div>
     </div>
 

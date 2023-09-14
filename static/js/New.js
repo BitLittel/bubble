@@ -39,6 +39,8 @@ window.onload = function () {
                 console.log(data)
             }
         );
+    } else {
+        unAuthContent()
     }
 };
 
@@ -47,20 +49,65 @@ function changeNavBar() {
         upload_link = document.getElementById('upload_link'),
         message_link = document.getElementById('message_link'),
         profile_link = document.getElementById('profile_link'),
-        profile_avatar = document.getElementById('profile_avatar');
+        profile_avatar = document.getElementById('profile_avatar'),
+        user_login = document.getElementById('profile_login');
     friend_link.style.display = 'block'
     upload_link.style.display = 'block';
     message_link.style.display = 'block';
     profile_link.onclick = function(){createPopUp('profile');};
     profile_avatar.className = 'profile';
+    user_login.innerText = user_data.username;
     profile_avatar.src = user_data.avatar;
+}
+
+function generatePlayLists(playlists) {
+    let main_playlist = document.getElementById('playlists');
+
+    main_playlist.style.display = 'flex';
+
+    for (let i = 0; i < playlists.length; i++) {
+        let div_blockPlayList = document.createElement('div'),
+            img_cover = document.createElement('img'),
+            span_name = document.createElement('span');
+        div_blockPlayList.className = 'block_playlist';
+        //div_blockPlayList.onclick = function () {getMusicFromPlayList(playlists.id);};
+        div_blockPlayList.appendChild(img_cover);
+        img_cover.src = playlists[i].cover;
+        img_cover.className = 'cover_playlist';
+        div_blockPlayList.appendChild(span_name);
+        span_name.className = 'title_playlist';
+        span_name.innerText = playlists[i].name;
+
+        main_playlist.firstChild.before(div_blockPlayList);
+        // todo: получить треки из первого плейлиста, реализовать получение треков из плейлистов,
+        //  а так же получение треков для неавторезированных пользователей.
+        //if (playlists[i].name === 'Вся моя музыка') {getMusicFromPlayList(playlists[i].id);}
+    }
+}
+
+function getPlayLists() {
+    sendRequest(
+        'GET',
+        '/api/playlist',
+        true,
+        null,
+        function (data) {
+            console.log(data);
+            generatePlayLists(data.data);
+        },
+        function (data) {
+            console.log(data);
+        }
+    );
 }
 
 function AuthContent() {
     changeNavBar();
+    getPlayLists();
 }
 
 function unAuthContent() {
+    //getUnAuthMusics();
     // todo: убирать блок плейлисты, выводить 20 рандомных треков, Будет доступен поиск иииии.... всё
 }
 

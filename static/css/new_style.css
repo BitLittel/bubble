@@ -492,7 +492,7 @@ input[type="range"]::-webkit-slider-thumb {
 .login_form_inputs > label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1%;
+    margin-bottom: 2%;
 }
 
 .login_form_inputs > label > input {
