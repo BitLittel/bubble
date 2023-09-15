@@ -2,26 +2,26 @@
  * Created by BitLittel on 22.10.2022.
  **/
 
-
+// todo: переписать моменты: теперь нет гифки On_play , добавить svg pause, shuffle and loop
 
 const theAudio = new Audio(), //document.getElementById('testAudio'),
-	container_music_list_dom = document.getElementById('musics_list'),
+	container_music_list_dom = document.getElementById('musics'),
 	img_cover = document.getElementById('img_cover'),
-	song_name = document.getElementById('song-name'),
+	song_name = document.getElementById('song_name'),
 	song_author = document.getElementById('song_author'),
 	backward = document.getElementById('backward'),
 	play = document.getElementById('play'),
 	forward = document.getElementById('forward'),
 	current_time_track = document.getElementById('c_time'),
 	all_time_track = document.getElementById('time'),
-	time_line = document.getElementById('time-line'),
+	time_line = document.getElementById('time_line'),
 	in_line = document.getElementById('in_line'),
 	volume = document.getElementById('volume'),
 	loop = document.getElementById('loop'),
 	shuffle = document.getElementById('shuffle'),
-	all_music = document.getElementsByClassName('blockMusic');
+	all_music = document.getElementsByClassName('music');
 
-let max_track_number = 4,  // тут кароче из ответа апи выдернуть максимальный номер трека
+let max_track_number = 4,  // тут короче из ответа апи выдернуть максимальный номер трека
 	current_index_track = 0,
 	last_index_track = 0,
 	array_index_track = [],
@@ -48,47 +48,80 @@ function setVolumeFromCookie() {
 
 function generateRandomInteger(min, max) {return Math.floor(min + Math.random()*(max - min + 1))}
 
-function createDomTrack(index_track, data_track_src, data_track_id, data_track_number, data_track_name, data_track_author, data_track_duration, data_track_cover) {
-	let div_blockMusic = document.createElement('div'),
-		div_with_img_name_author = document.createElement('div'),
-		img_cover_track = document.createElement('img'),
-		div_with_name_author = document.createElement('div'),
-		span_name = document.createElement('span'),
-		span_author = document.createElement('span'),
-		span_duration = document.createElement('span'),
-		div_on_play = document.createElement('div');
+function createDomTrack(index_track, data_track_src, data_track_id, data_track_number, data_track_name, data_track_author, data_track_duration, data_track_cover, can_edit) {
+	let div_music = document.createElement('div'),
+		dic_cover_name_container = document.createElement('div'),
+		img_music_cover = document.createElement('img'),
+		div_music_title = document.createElement('div'),
+		span_music_name = document.createElement('span'),
+		span_music_author = document.createElement('span'),
+		div_functions = document.createElement('div'),
+		img_add_to_playlist = document.createElement('img'),
+		img_download = document.createElement('img'),
+		img_delete = document.createElement('img'),
+		img_edit = document.createElement('img'),
+		div_music_timing = document.createElement('div'),
+		span_music_timing = document.createElement('span');
 
-	div_blockMusic.className = "blockMusic";
-	div_blockMusic.setAttribute("data-track-src", data_track_src);
-	div_blockMusic.setAttribute("data-track-id", data_track_id);
-	div_blockMusic.setAttribute("data-track-number", data_track_number);
-	div_blockMusic.setAttribute("data-track-name", data_track_name);
-	div_blockMusic.setAttribute("data-track-author", data_track_author);
-	div_blockMusic.setAttribute("data-track-duration", data_track_duration);
-	div_blockMusic.setAttribute("data-track-cover", data_track_cover);
-	div_blockMusic.onclick = function () {Play(index_track);};
-	div_blockMusic.appendChild(div_with_img_name_author);
-		div_with_img_name_author.appendChild(img_cover_track);
-			img_cover_track.className = 'cover_track';
-			img_cover_track.src = '../static/img/default_img.jpg';//data_track_cover;
-			img_cover_track.setAttribute('data-src', data_track_cover);
-			img_cover_track.alt = data_track_author + " - " + data_track_name;
-		div_with_img_name_author.appendChild(div_with_name_author);
-			div_with_name_author.appendChild(span_name);
-				span_name.innerText = data_track_name;
-			div_with_name_author.appendChild(span_author);
-				span_author.innerText = data_track_author;
-	div_blockMusic.appendChild(span_duration);
-		span_duration.innerText = data_track_duration;
-	div_blockMusic.appendChild(div_on_play);
-		div_on_play.className = "blockMusic_on_play";
-		div_on_play.id = "blockMusic_on_play_"+index_track;
-		div_on_play.style.display = "none";
+	div_music.className = "music";
+	div_music.setAttribute("data-track-src", data_track_src);
+	div_music.setAttribute("data-track-id", data_track_id);
+	div_music.setAttribute("data-track-number", data_track_number);
+	div_music.setAttribute("data-track-name", data_track_name);
+	div_music.setAttribute("data-track-author", data_track_author);
+	div_music.setAttribute("data-track-duration", data_track_duration);
+	div_music.setAttribute("data-track-cover", data_track_cover);
+
+	div_music.appendChild(dic_cover_name_container);
+		dic_cover_name_container.className = 'cover_name_container';
+
+		dic_cover_name_container.appendChild(img_music_cover);
+			img_music_cover.className = 'music_cover';
+			img_music_cover.onclick = function () {Play(index_track);};
+			img_music_cover.src = '/static/img/default_img.jpg';
+			img_music_cover.setAttribute('data-src', data_track_cover);
+
+		dic_cover_name_container.appendChild(div_music_title);
+			div_music_title.className = 'music_title title_playlist';
+
+			div_music_title.appendChild(span_music_name);
+				span_music_name.className = 'music_name';
+				span_music_name.innerText = data_track_name;
+
+			div_music_title.appendChild(span_music_author);
+				span_music_author.className = 'music_author';
+				span_music_author.innerText = data_track_author;
+
+	div_music.appendChild(div_functions);
+		div_functions.className = 'functions';
+		div_functions.style.display = (!can_edit) ? 'none' : 'block';
+
+		div_functions.appendChild(img_add_to_playlist);
+			img_add_to_playlist.src = '/static/img/add_to_playlist.svg';
+			img_add_to_playlist.title = 'Добавить в плейлист';
+
+		div_functions.appendChild(img_download);
+			img_download.src = '/static/img/download.svg';
+			img_download.title = 'Скачать трек';
+
+		div_functions.appendChild(img_delete);
+			img_delete.src = '/static/img/delete.svg';
+			img_delete.title = 'Удалить трек';
+
+		div_functions.appendChild(img_edit);
+			img_edit.src = '/static/img/edit.svg';
+			img_edit.title = 'Редактировать трек';
+
+	div_music.appendChild(div_music_timing);
+		div_music_timing.className = 'music_timing';
+
+		div_music_timing.appendChild(span_music_timing);
+			span_music_timing.innerText = data_track_duration;
 
 	// set lazy load to cover track
-	imageObserver.observe(img_cover_track);
+	imageObserver.observe(img_music_cover);
 
-	return div_blockMusic;
+	return div_music;
 }
 
 function getMusicOnIndex(index) {
@@ -139,6 +172,7 @@ function InitMusic(objects_musics) {
 				objects_musics.track_list[i].author,
 				objects_musics.track_list[i].duration,
 				objects_musics.track_list[i].cover,
+				objects_musics.track_list[i].can_edit
 			)
 		);
 	}

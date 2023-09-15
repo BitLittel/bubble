@@ -250,7 +250,7 @@ input[type="range"]::-webkit-slider-thumb {
 .add_playlist {
     text-align: center;
     cursor: pointer;
-    width: 256px;
+    width: 180px;
 }
 
 .rounded_add {
@@ -266,7 +266,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .title_add_playlist {
-    padding: 27.5%;
+    padding: 25.5%;
     font-size: 100px;
     color: #b3b3b3;
 }
@@ -417,7 +417,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .main_player_cur_time_line {
-    width: 18%;
+    width: 0%;
     background: #000;
     height: 3px;
     border-radius: 2px;

@@ -125,64 +125,48 @@
 
         <div class="musics" id="musics">
             <div class="music">
-                <span>Треков нет, сори</span>
+                <span>Треков нет, сори)</span>
             </div>
-{#            <div class="music">#}
-{#                <div class="cover_name_container">#}
-{#                    <img class="music_cover" src="/static/img/test_cover.jpg" alt="cover">#}
-{#                    <div class="music_title title_playlist">#}
-{#                        <span class="music_name">НеизвестенfSDAFSDAFGDSFGSDFHDFGHDFSGDFGSDFHFGHSFDGHFGJSFGHGDHSDFHSDFG</span>#}
-{#                        <span class="music_author">Без названияDFGSDFGSDFHGFGJDFGJFGJDFGHGFHSDGFHFGJSFGDHFDGSDFGSDFGSDFGSDF</span>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="functions" style="display: none;">#}
-{#                    <img src="/static/img/add_to_playlist.svg" alt="" title="Добавить в плейлист">#}
-{#                    <img src="/static/img/download.svg" alt="" title="Скачать трек">#}
-{#                    <img src="/static/img/delete.svg" alt="" title="Удалить трек">#}
-{#                    <img src="/static/img/edit.svg" alt="" title="Редактировать трек">#}
-{#                </div>#}
-{#                <div class="music_timing">#}
-{#                    <span>10:25:33</span>#}
-{#                </div>#}
-{#            </div>#}
         </div>
     </div>
 
     <div class="main_player">
         <div class="main_player_cover_and_title">
-            <img src="/static/img/test_cover.jpg" alt="" class="music_cover">
+            <img src="/static/img/test_cover.jpg" alt="" class="music_cover" id="img_cover">
         </div>
         <div class="main_player_controls">
-            <img src="/static/img/forward.svg" alt="" style="transform: rotate(180deg);">
-            <img src="/static/img/play.svg" alt="" style="margin: 0 3% 0 6%;">
-            <img src="/static/img/forward.svg" alt="">
+            <img src="/static/img/forward.svg" alt="" style="transform: rotate(180deg);" id="backward">
+            <img src="/static/img/play.svg" alt="" style="margin: 0 3% 0 6%;" id="play">
+            <img src="/static/img/forward.svg" alt="" id="forward">
         </div>
 
         <div class="music_title">
-            <span class="music_name">Неизвестенqwetwqetweqtwetqwe</span>
-            <span class="music_author">Без названияtqwetqwetqwetqwetqwetqwetqwetqwetwetqwetqw</span>
+            <span class="music_name" id="song_name">Неизвестен</span>
+            <span class="music_author" id="song_author">Без названия</span>
         </div>
 
         <div class="main_player_timeline">
-            <div class="main_player_full_time_line">
-                <div class="main_player_cur_time_line"></div>
+            <div class="main_player_full_time_line" id="time_line">
+                <div class="main_player_cur_time_line" id="in_line"></div>
             </div>
         </div>
-        <div class="main_player_time">
+        <div class="main_player_time" style="width: 6%;">
             <div>
-                <span>20:35</span>
+                <span id="c_time">00:00</span>
                 <span>/</span>
-                <span>13:45</span>
+                <span id="time">00:00</span>
             </div>
         </div>
         <div class="main_player_volume">
-            <input type="range" min="0" max="100" value="100">
+            <input type="range" min="0" max="100" value="0" id="volume">
         </div>
         <div class="main_player_function">
-            <img src="/static/img/repeat.svg" alt="">
-            <img src="/static/img/shuffle.svg" alt="">
+            <img src="/static/img/repeat.svg" alt="" id="loop">
+            <img src="/static/img/shuffle.svg" alt="" id="shuffle">
         </div>
     </div>
     <script type="text/javascript" src="../static/js/New.js"></script>
+    <script type="text/javascript" src="../static/js/lazy.js"></script>
+    <script type="text/javascript" src="../static/js/Audio.js"></script>
 </body>
 </html>

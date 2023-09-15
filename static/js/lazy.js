@@ -1,4 +1,3 @@
-//function lazy() {
 let imageObserver = new IntersectionObserver((entries, imgObserver) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -8,8 +7,5 @@ let imageObserver = new IntersectionObserver((entries, imgObserver) => {
         }
     })
 });
-    // const arr = document.querySelectorAll('img.cover_track');
-    // arr.forEach((v) => {imageObserver.observe(v);});
-//}
 
 

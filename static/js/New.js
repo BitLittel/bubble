@@ -70,19 +70,42 @@ function generatePlayLists(playlists) {
             img_cover = document.createElement('img'),
             span_name = document.createElement('span');
         div_blockPlayList.className = 'block_playlist';
-        //div_blockPlayList.onclick = function () {getMusicFromPlayList(playlists.id);};
+        div_blockPlayList.onclick = function () {getMusicFromPlayList(playlists[i].id);};
         div_blockPlayList.appendChild(img_cover);
         img_cover.src = playlists[i].cover;
         img_cover.className = 'cover_playlist';
+        img_cover.id = 'cover_playlist_' + playlists[i].id;
         div_blockPlayList.appendChild(span_name);
         span_name.className = 'title_playlist';
         span_name.innerText = playlists[i].name;
-
         main_playlist.firstChild.before(div_blockPlayList);
-        // todo: получить треки из первого плейлиста, реализовать получение треков из плейлистов,
-        //  а так же получение треков для неавторезированных пользователей.
+
+        if (i === 0) {
+            getMusicFromPlayList(playlists[i].id);
+        }
+        // todo: получение треков для неавторезированных пользователей.
         //if (playlists[i].name === 'Вся моя музыка') {getMusicFromPlayList(playlists[i].id);}
     }
+}
+
+function getMusicFromPlayList(playlist_id= 0) {
+    let cover_playlist = document.getElementById('cover_playlist_'+playlist_id);
+    // todo: Потом не забудь у предыдущего плейлиста убрать boxShadow
+    cover_playlist.style.boxShadow = '0 0 10px';
+
+    sendRequest(
+        'GET',
+        '/api/playlist/'+playlist_id,
+        true,
+        null,
+        function (data) {
+            console.log(data);
+            InitMusic(data.data);
+        },
+        function (data) {
+            console.log(data);
+        }
+    );
 }
 
 function getPlayLists() {
@@ -108,7 +131,7 @@ function AuthContent() {
 
 function unAuthContent() {
     //getUnAuthMusics();
-    // todo: убирать блок плейлисты, выводить 20 рандомных треков, Будет доступен поиск иииии.... всё
+    // todo: выводить 20 рандомных треков, Будет доступен поиск иииии.... всё
 }
 
 function getCookie(name) {
