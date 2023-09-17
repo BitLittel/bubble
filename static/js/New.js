@@ -261,7 +261,7 @@ function LogSign() {
                 closePopUp('login_pop_up');
             },
             function (data) {
-                show_error(false, data.detail, 'Ошибка');
+                show_error(false, data.detail[0].msg, 'Ошибка');
             }
         );
     } else {
@@ -277,7 +277,7 @@ function LogSign() {
                     show_error(true, data.message, 'Успех');
                 },
                 function (data) {
-                    show_error(false, data.detail, 'Ошибка');
+                    show_error(false, data.detail[0].msg, 'Ошибка');
                 }
             );
         }
@@ -303,7 +303,7 @@ function sendRequest(method, url, async=true, responses_data, onsuccess, onerror
         }
 
         if (request.status == 400 || request.status == 409) {
-            show_error(responseObj.detail, 'Ошибка');
+            show_error(false, responseObj.detail[0].msg, 'Ошибка');
         }
 
         if (responseObj.result == true) {
@@ -314,14 +314,14 @@ function sendRequest(method, url, async=true, responses_data, onsuccess, onerror
     };
 
     request.onerror = function () {
-        show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
+        show_error(false, 'Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
     };
 
     request.ontimeout = function () {
-        show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
+        show_error(false, 'Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
     };
 
     request.onabort = function () {
-        show_error('Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
+        show_error(false, 'Не предвиденная ошибка, перезагрузите страницу', 'Ошибка');
     };
 }

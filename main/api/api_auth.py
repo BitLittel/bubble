@@ -79,16 +79,16 @@ async def api_login(user: UserLogin, response: Response):
                     liked_playlist=user_login.liked_playlist
                 )
             }
-    raise HTTPException(status_code=400, detail="Не верное имя пользователя или пароль")
+    raise HTTPException(status_code=400, detail=[{'msg': "Не верное имя пользователя или пароль"}])
 
 
 @main.post('/api/signup', response_model=DefaultResponse)
 async def api_signup(user: UserSignUp):
     if await get_user_by_username(username=user.username):
-        raise HTTPException(status_code=409, detail="Это имя пользователя уже занято")
+        raise HTTPException(status_code=409, detail=[{'msg': "Это имя пользователя уже занято"}])
 
     if await get_user_by_email(email=user.email):
-        raise HTTPException(status_code=409, detail="Эта почта уже занята")
+        raise HTTPException(status_code=409, detail=[{'msg': "Эта почта уже занята"}])
     # Регистрируем пользователя
     await query_execute(
         query_text=f'insert into "Users" (username, password, email, avatar, online, is_active, liked_playlist) '
