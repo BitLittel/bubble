@@ -57,6 +57,7 @@
   padding: 0.75rem;
   transition: 250ms ease all;
   border-radius: 18px;
+  white-space: nowrap;
 }
 
 .navbar__link:hover {

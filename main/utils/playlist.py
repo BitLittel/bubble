@@ -1,7 +1,54 @@
+import datetime
 from main.models.database import query_execute
 from main.schemas.playlist import ResponseAllPlayList, PlayList, PlayListWithMusic, PlayListAndMusic
 from main.schemas.music import Music
 from main import config
+
+
+async def get_un_auth_playlist() -> PlayListWithMusic:
+    get_random_music = await query_execute(
+        query_text=f'select '
+                   f'M.id as track_id, '
+                   f'M.name as track_name, '
+                   f'M.author as track_author, '
+                   f'M.genre as track_genre, '
+                   f'CONCAT(\'{config.API_IMAGE}\', M.cover) as track_cover, '
+                   f'CONCAT(\'{config.API_MUSIC}\', M.id) as track_path, '
+                   f'M.duration as track_duration, '
+                   f'M.datetime_add as track_datetime_add '
+                   f' from "Musics" as M order by random() limit 20',
+        fetch_all=True,
+        type_query='read'
+    )
+    return PlayListWithMusic(
+        result=True,
+        message="Успех",
+        data=PlayListAndMusic(
+            current_track_number=1,
+            last_track_number=20,
+            playlist=PlayList(
+                id=0,
+                name='UnAuthPlayList',
+                cover='/static/img/default_img.jpg',
+                datetime_add=datetime.datetime.now(),
+                can_edit=False
+            ),
+            track_list=[
+                Music(
+                    id=i.track_id,
+                    number=0,
+                    name=i.track_name,
+                    author=i.track_author,
+                    genre=i.track_genre,
+                    cover=i.track_cover,
+                    path=i.track_path,
+                    duration=i.track_duration,
+                    datetime_add=i.track_datetime_add,
+                    can_edit=False
+                ) for i in get_random_music
+            ]
+        )
+    )
 
 
 async def get_playlists_with_user_id(user_id: id) -> ResponseAllPlayList | bool:

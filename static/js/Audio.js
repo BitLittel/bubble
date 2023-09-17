@@ -2,9 +2,7 @@
  * Created by BitLittel on 22.10.2022.
  **/
 
-// todo: переписать моменты: теперь нет гифки On_play , добавить svg pause, shuffle and loop
-
-const theAudio = new Audio(), //document.getElementById('testAudio'),
+const theAudio = new Audio(),
 	container_music_list_dom = document.getElementById('musics'),
 	img_cover = document.getElementById('img_cover'),
 	song_name = document.getElementById('song_name'),
@@ -94,7 +92,7 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 
 	div_music.appendChild(div_functions);
 		div_functions.className = 'functions';
-		div_functions.style.display = (!can_edit) ? 'none' : 'block';
+		div_functions.style.display = (!can_edit) ? 'none' : 'flex';
 
 		div_functions.appendChild(img_add_to_playlist);
 			img_add_to_playlist.src = '/static/img/add_to_playlist.svg';
@@ -157,9 +155,7 @@ function initMainPlayer(index, track_path, track_name, track_author, track_cover
 
 // вот в этот инит мы передадим response data
 function InitMusic(objects_musics) {
-	// current_track_number = objects_musics.current_track_number;
 	max_track_number = objects_musics.last_track_number;
-	// console.log(objects_musics.track_list, objects_musics.track_list.length);
 	container_music_list_dom.innerHTML = "";
 	for (let i = 0; i < objects_musics.track_list.length; i++) {
 		container_music_list_dom.appendChild(
@@ -195,16 +191,11 @@ function Play(index) {
 	next_track_dom_element = getMusicOnIndex(index);
 
     if (current_index_track === index) {
-		cur_track_dom_element.children[2].style.display = theAudio.paused ? 'block' : 'none';
         cur_track_dom_element.style.background = '#0000003d';
     } else {
-		cur_track_dom_element.children[2].style.display = 'none';
         cur_track_dom_element.style.background = '';
-
-		next_track_dom_element.children[2].style.display = 'block';
         next_track_dom_element.style.background = '#0000003d';
         theAudio.src = next_track_dom_element.getAttribute('data-track-src');
-
 		cur_track_dom_element = next_track_dom_element
 		current_index_track = index;
     }
@@ -222,8 +213,7 @@ function Play(index) {
       	}]
 	});
 
-	theAudio.textContent = next_track_dom_element.getAttribute('data-track-author') + '-' + next_track_dom_element.getAttribute('data-track-author');
-    play.src = theAudio.paused ? '../static/img/play.png' : '../static/img/pause.png';
+    play.src = theAudio.paused ? '/static/img/play.svg' : '/static/img/pause.svg';
     img_cover.src = next_track_dom_element.getAttribute('data-track-cover');
     song_name.innerText = next_track_dom_element.getAttribute('data-track-name');
     song_author.innerText = next_track_dom_element.getAttribute('data-track-author');
@@ -314,18 +304,18 @@ time_line.addEventListener('click', function () {changeProgress();});
 
 loop.onclick = function () {
     on_loop = !on_loop;
-    loop.src = on_loop ? '../static/img/loop_active.png' : '../static/img/loop.png';
+	loop.style.filter = on_loop ? 'contrast(1)' : 'contrast(0.5)';
 };
 
 shuffle.onclick = function () {
 	if (on_shuffle) {
 		on_shuffle = false;
-		shuffle.src = '../static/img/shuffle.png';
+		shuffle.style.filter = 'contrast(0.5)';
 		generateDefaultIndexArrayTrack();
 		current_index_track = last_index_track;
 	} else {
 		on_shuffle = true;
-		shuffle.src = '../static/img/shuffle_active.png';
+		shuffle.style.filter = 'contrast(1)';
 		generateShuffledIndexArrayTrack();
 		last_index_track = current_index_track;
 	}

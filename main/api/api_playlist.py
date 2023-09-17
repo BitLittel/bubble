@@ -1,7 +1,7 @@
 from main import main
 from fastapi import Depends
 from main.schemas.playlist import ResponseAllPlayList, PlayListWithMusic
-from main.utils.playlist import get_playlists_with_user_id, get_playlist_by_id
+from main.utils.playlist import get_playlists_with_user_id, get_playlist_by_id, get_un_auth_playlist
 from main.schemas.user import UserRegular
 from main.utils.user import get_current_user
 
@@ -15,9 +15,12 @@ async def api_get_all_playlist(user: UserRegular = Depends(get_current_user)):
 @main.get("/api/playlist/{id_playlist}", response_model=PlayListWithMusic)
 async def api_get_playlist_with_id(id_playlist: int, user: UserRegular = Depends(get_current_user)):
     # todo: добавить атрибуты для сортировки треков, по дате, но номеру трека, по длительности, по алфавиту
-    get_playlist = await get_playlist_by_id(id_playlist, user.id)
-    return get_playlist
+    return await get_playlist_by_id(id_playlist, user.id)
 
+
+@main.get("/api/un_auth_playlist", response_model=PlayListWithMusic)
+async def api_get_un_auth_playlist():
+    return await get_un_auth_playlist()
 
 # append default playlist id in liked_playlist array
 # await query_execute(

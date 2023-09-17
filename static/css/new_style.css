@@ -84,8 +84,8 @@
         right: 5.5vh !important;
         top: auto;
     }
-    .login_block, .notification_block {
-        margin-top: 44%;
+    .login_block, .notification_block, .wrap_pop_up_content {
+        margin-top: 44% !important;
     }
     .login_pic {
         display: none !important;
@@ -94,12 +94,27 @@
         width: 100% !important;
     }
     .pop_up {
-        height: 100vh !important;
+        min-height: 100vh !important;
         padding: 5% !important;
         border-radius: 0 !important;
         margin: 0 !important;
     }
+    .annotation {
+        font-size: 13px !important;
+    }
 }
+
+.annotation {
+    text-align: center;
+    padding: 2%;
+    font-size: 20px;
+}
+
+.header_pop_up {
+    text-align: center;
+    font-size: 2rem;
+}
+
 input[type="range"] {
     -webkit-appearance: none;
     height: 3px;
@@ -108,7 +123,6 @@ input[type="range"] {
     border-radius: 4px;
     background-repeat: no-repeat;
 }
-
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -119,17 +133,6 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
     transition: background .3s ease-in-out;
 }
-
-/*input[type="range"]::-webkit-slider-thumb {*/
-/*  	-webkit-appearance: none;*/
-/*  	height: 20px;*/
-/*  	width: 20px;*/
-/*	!*border: 2px solid;*!*/
-/*  	background: #000000;*/
-/*	!*box-shadow: -2px -2px 0 #4FB8FF inset;*!*/
-/*  	cursor: pointer;*/
-/*  	transition: background .3s ease-in-out;*/
-/*}*/
 
 *::-webkit-scrollbar {
   	width: 8px;
@@ -148,10 +151,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 *::-webkit-scrollbar-thumb {
-  	/*background-color: #406ff3;*/
     background: linear-gradient(180deg, #00c6fb, #005bea);
   	border-radius: 4px;
-	/*border: 1px solid;*/
 	position: absolute;
 }
 
@@ -200,6 +201,29 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 13%;
 }
 
+.flex_center {
+    display: flex;
+    justify-content: center;
+}
+
+#list_uploaded_music {
+    padding: 4%;
+    box-shadow: 0 0 10px rgba(0,0,0,.2) inset;
+    border-radius: 20px;
+    margin-top: 2%;
+    background: #fffae7;
+}
+
+.block_upload_music {
+    display: flex;
+    margin-bottom: .5%;
+    align-items: center;
+}
+
+.block_upload_music > img {
+    box-shadow: 0 0 3px rgba(0,0,0,.4);
+}
+
 .elements_menu > div > div {
     margin-right: 12%;
 }
@@ -209,7 +233,6 @@ input[type="range"]::-webkit-slider-thumb {
     top: 0;
     left: 88px;
     width: calc(100vw - 6rem);
-    /*max-width: 94vw;*/
     padding: 1%;
 }
 
@@ -275,7 +298,11 @@ input[type="range"]::-webkit-slider-thumb {
     margin: 1% 0 7% 0;
 }
 
-.main_player_controls > img:hover, .main_player_function > img:hover {
+.main_player_function > img:hover {
+    filter: contrast(1);
+}
+
+.main_player_controls > img:hover {
     filter: contrast(0.5);
 }
 
@@ -359,7 +386,6 @@ input[type="range"]::-webkit-slider-thumb {
 
 .main_player_cover_and_title {
     display: flex;
-    /*width: 11.5vw;*/
     align-items: center;
     justify-content: space-between;
 }
@@ -371,6 +397,10 @@ input[type="range"]::-webkit-slider-thumb {
 .main_player_controls > img, .main_player_function > img {
     width: 32px;
     cursor: pointer;
+}
+
+.main_player_function > img {
+    filter: contrast(0.5);
 }
 
 .main_player_controls {
@@ -385,14 +415,12 @@ input[type="range"]::-webkit-slider-thumb {
 
 .main_player > .music_title {
     width: 15vw;
-    /*margin: 0 2% 0 2%;*/
     font-size: 14px;
 }
 
 .main_player_volume {
     display: flex;
     cursor: pointer;
-    /*margin: 0 4% 0 3%;*/
 }
 
 .main_player_time > div > span {
@@ -406,7 +434,6 @@ input[type="range"]::-webkit-slider-thumb {
 .main_player_timeline {
     width: 40vw;
     cursor: pointer;
-    /*margin-right: 3%;*/
 }
 
 .main_player_full_time_line {
@@ -417,7 +444,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .main_player_cur_time_line {
-    width: 0%;
+    width: 0;
     background: #000;
     height: 3px;
     border-radius: 2px;
@@ -507,7 +534,7 @@ input[type="range"]::-webkit-slider-thumb {
     border: 1.7px solid #2400FF;
 }
 
-.login_form_inputs > button {
+.default_button {
     padding: 1%;
     margin-top: 4%;
     border: none;
@@ -519,7 +546,7 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
 }
 
-.login_form_inputs > button:hover {
+.default_button:hover {
     background: linear-gradient(91deg, #1C00CB 0%, #2400FF 100%);
 }
 

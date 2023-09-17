@@ -36,12 +36,11 @@ window.onload = function () {
                 AuthContent();
             },
             function (data) {
-                console.log(data)
+                unAuthContent();
             }
         );
-    } else {
-        unAuthContent()
     }
+    setVolumeFromCookie();
 };
 
 function changeNavBar() {
@@ -50,10 +49,14 @@ function changeNavBar() {
         message_link = document.getElementById('message_link'),
         profile_link = document.getElementById('profile_link'),
         profile_avatar = document.getElementById('profile_avatar'),
-        user_login = document.getElementById('profile_login');
+        user_login = document.getElementById('profile_login'),
+        activiti_link = document.getElementById('activiti_link'),
+        question_link = document.getElementById('question_link');
     friend_link.style.display = 'block'
     upload_link.style.display = 'block';
     message_link.style.display = 'block';
+    activiti_link.style.display = 'block';
+    question_link.style.display = 'block';
     profile_link.onclick = function(){createPopUp('profile');};
     profile_avatar.className = 'profile';
     user_login.innerText = user_data.username;
@@ -83,8 +86,6 @@ function generatePlayLists(playlists) {
         if (i === 0) {
             getMusicFromPlayList(playlists[i].id);
         }
-        // todo: получение треков для неавторезированных пользователей.
-        //if (playlists[i].name === 'Вся моя музыка') {getMusicFromPlayList(playlists[i].id);}
     }
 }
 
@@ -130,8 +131,23 @@ function AuthContent() {
 }
 
 function unAuthContent() {
-    //getUnAuthMusics();
-    // todo: выводить 20 рандомных треков, Будет доступен поиск иииии.... всё
+    getUnAuthMusics();
+}
+
+function getUnAuthMusics() {
+    sendRequest(
+        'GET',
+        '/api/un_auth_playlist',
+        true,
+        null,
+        function (data) {
+            console.log(data);
+            InitMusic(data.data);
+        },
+        function (data) {
+            console.log(data);
+        }
+    );
 }
 
 function getCookie(name) {
@@ -215,6 +231,47 @@ function createPopUp(type = 'profile') {
     if (type === 'profile') {
         profile_PopUp();
     }
+    if (type === 'upload') {
+        upload_PopUp();
+    }
+}
+
+function upload_PopUp(){
+    // todo: закончить upload
+    let pop_up_header = document.getElementById('pop_up_header'),
+        pop_up_body = document.getElementById('pop_up_body');
+    //pop_up_header.innerHTML = '';
+    //pop_up_body.innerHTML = '';
+    showPopUp('pop_up_upload');
+
+
+    // let span_header = document.createElement('span');
+    // pop_up_header.appendChild(span_header);
+    // span_header.innerText = 'Загрузка треков';
+    // span_header.style.fontSize = '2rem';
+    //
+    // let div_main_upload = document.createElement('div'),
+    //     p_annotation = document.createElement('p'),
+    //     input_upload = document.createElement('input'),
+    //     button_upload = document.createElement('button'),
+    //     div_list_uploaded = document.createElement('div');
+    //
+    // pop_up_body.appendChild(div_main_upload);
+    //
+    //     div_main_upload.appendChild(p_annotation);
+    //     p_annotation.innerText = 'Выберите музыку которую необходимо загрузить. После начала загрузки, пожалуйста не закрывайте текущее окно, дождитесь полного окончания';
+    //     div_main_upload.appendChild(input_upload);
+    //         input_upload.name = 'music_file';
+    //         input_upload.type = 'file';
+    //         input_upload.accept = 'audio/*';
+    //         input_upload.multiple = true;
+    //         input_upload.id = 'music_file';
+    //         input_upload.style = 'display: block; opacity: 0; position: absolute; z-index: -1; width: 0; height: 0;';
+    //     div_main_upload.appendChild(button_upload);
+    //         button_upload.onclick = function (){PrepareUpload();};
+    //         button_upload.innerText = 'Выберите файлы';
+    //     div_main_upload.appendChild(div_list_uploaded);
+    //         div_list_uploaded.id = 'list_uploaded_music';
 }
 
 function LogSign() {
