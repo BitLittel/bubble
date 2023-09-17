@@ -17,7 +17,8 @@ const theAudio = new Audio(),
 	volume = document.getElementById('volume'),
 	loop = document.getElementById('loop'),
 	shuffle = document.getElementById('shuffle'),
-	all_music = document.getElementsByClassName('music');
+	all_music = document.getElementsByClassName('music'),
+	block_time_line_hold = document.getElementById('block_time_line_hold');
 
 let max_track_number = 4,  // тут короче из ответа апи выдернуть максимальный номер трека
 	current_index_track = 0,
@@ -262,6 +263,30 @@ theAudio.addEventListener('ended', function (){
 // 	}
 // });
 
+block_time_line_hold.addEventListener('touchmove', function (event) {
+	changeProgress(event.changedTouches[0]);
+});
+
+block_time_line_hold.addEventListener('mousedown', function (event) {
+	changeProgress(event);
+
+});
+
+function handler(event_) {
+	changeProgress(event_)
+}
+
+block_time_line_hold.addEventListener('mousedown', function (event){
+	block_time_line_hold.addEventListener('mousemove', handler);
+});
+
+block_time_line_hold.addEventListener('mouseup', function (event){
+	block_time_line_hold.removeEventListener('mousemove', handler);
+});
+
+block_time_line_hold.addEventListener('mouseleave', function (event){
+	block_time_line_hold.removeEventListener('mousemove', handler);
+});
 
 theAudio.addEventListener('loadedmetadata', function(){
     all_time_track.innerHTML=(theAudio.duration/60>>0)+':'+((theAudio.duration%60>>0)<10?'0'+(theAudio.duration%60>>0):(theAudio.duration%60>>0));
@@ -291,7 +316,7 @@ function handleInputChange(e) {
 volume.addEventListener('input', handleInputChange);
 
 // вешаем обработку на тайм-лайн
-function changeProgress() {
+function changeProgress(event) {
 	const cur_time = theAudio.currentTime,
 		duration = theAudio.duration,
 		buff_ = ((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth;
@@ -300,7 +325,7 @@ function changeProgress() {
 	theAudio.currentTime = (duration*buff_)/100;
 }
 
-time_line.addEventListener('click', function () {changeProgress();});
+time_line.addEventListener('click', function (event) {changeProgress(event);});
 
 loop.onclick = function () {
     on_loop = !on_loop;

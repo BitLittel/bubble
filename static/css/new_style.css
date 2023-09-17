@@ -73,6 +73,9 @@
     .add_playlist > span {
         font-size: 8px !important;
     }
+    .add_playlist{
+        width: 130px !important;
+    }
     .block_playlist {
         width: 100px !important;
         margin-right: 3% !important;
@@ -101,6 +104,9 @@
     }
     .annotation {
         font-size: 13px !important;
+    }
+    .main_player_time {
+        width: 14% !important;
     }
 }
 
@@ -427,6 +433,10 @@ input[type="range"]::-webkit-slider-thumb {
     font-size: 14px;
 }
 
+.main_player_time {
+    width: 7%;
+}
+
 .main_player_time > div {
     display: flex;
 }
@@ -434,6 +444,9 @@ input[type="range"]::-webkit-slider-thumb {
 .main_player_timeline {
     width: 40vw;
     cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .main_player_full_time_line {
