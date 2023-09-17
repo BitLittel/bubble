@@ -237,41 +237,9 @@ function createPopUp(type = 'profile') {
 }
 
 function upload_PopUp(){
-    // todo: закончить upload
     let pop_up_header = document.getElementById('pop_up_header'),
         pop_up_body = document.getElementById('pop_up_body');
-    //pop_up_header.innerHTML = '';
-    //pop_up_body.innerHTML = '';
     showPopUp('pop_up_upload');
-
-
-    // let span_header = document.createElement('span');
-    // pop_up_header.appendChild(span_header);
-    // span_header.innerText = 'Загрузка треков';
-    // span_header.style.fontSize = '2rem';
-    //
-    // let div_main_upload = document.createElement('div'),
-    //     p_annotation = document.createElement('p'),
-    //     input_upload = document.createElement('input'),
-    //     button_upload = document.createElement('button'),
-    //     div_list_uploaded = document.createElement('div');
-    //
-    // pop_up_body.appendChild(div_main_upload);
-    //
-    //     div_main_upload.appendChild(p_annotation);
-    //     p_annotation.innerText = 'Выберите музыку которую необходимо загрузить. После начала загрузки, пожалуйста не закрывайте текущее окно, дождитесь полного окончания';
-    //     div_main_upload.appendChild(input_upload);
-    //         input_upload.name = 'music_file';
-    //         input_upload.type = 'file';
-    //         input_upload.accept = 'audio/*';
-    //         input_upload.multiple = true;
-    //         input_upload.id = 'music_file';
-    //         input_upload.style = 'display: block; opacity: 0; position: absolute; z-index: -1; width: 0; height: 0;';
-    //     div_main_upload.appendChild(button_upload);
-    //         button_upload.onclick = function (){PrepareUpload();};
-    //         button_upload.innerText = 'Выберите файлы';
-    //     div_main_upload.appendChild(div_list_uploaded);
-    //         div_list_uploaded.id = 'list_uploaded_music';
 }
 
 function LogSign() {
