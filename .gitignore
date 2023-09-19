@@ -2,6 +2,5 @@
 /venv/
 .idea
 static/all_music/*
-main/config.py
 stored_files/musics/*
 stored_files/photos/*
