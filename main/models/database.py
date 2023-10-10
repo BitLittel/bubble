@@ -161,7 +161,7 @@ async def start() -> None:
 
 async def query_execute(query_text: str, fetch_all: bool = False, type_query: str = 'read'):
     async with Session() as db:
-        print(query_text, fetch_all, type_query)
+        # print(query_text, fetch_all, type_query)
         query_object = await db.execute(text(query_text))
         if type_query == 'read':
             return query_object.fetchall() if fetch_all else query_object.fetchone()
