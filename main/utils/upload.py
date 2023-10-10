@@ -104,8 +104,8 @@ async def processed_audio(file_, user_id_):
     if name is None or author is None:
         name, author = get_data_music_default(file_.filename)
 
-    # name = escape(name)
-    # author = escape(author)
+    name = "Без название" if name in None else name
+    author = "Неизвестен" if author in None else author
 
     if len(name) > 200 or len(author) > 200:
         raise HTTPException(406, detail="Название песни не должно превышать 90 символов")

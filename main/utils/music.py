@@ -48,15 +48,15 @@ def range_requests_response(
     range_header = request.headers.get("range")
 
     headers = {
-        "content-type": content_type,
+        "Content-type": content_type,
         "Connection": "keep-alive",
         "Keep-Alive": "timeout=60",
-        "accept-ranges": "bytes",
-        "content-encoding": "identity",
-        "content-length": str(file_size),
-        "access-control-expose-headers": (
-            "content-type, accept-ranges, content-length, "
-            "content-range, content-encoding"
+        "Accept-ranges": "bytes",
+        "Content-encoding": "identity",
+        "Content-length": str(file_size),
+        "Access-control-expose-headers": (
+            "Content-type, Accept-ranges, Content-length, "
+            "Content-range, Content-encoding"
         ),
     }
     start = 0
@@ -66,8 +66,8 @@ def range_requests_response(
     if range_header is not None:
         start, end = _get_range_header(range_header, file_size)
         size = end - start + 1
-        headers["content-length"] = str(size)
-        headers["content-range"] = f"bytes {start}-{end}/{file_size}"
+        headers["Content-length"] = str(size)
+        headers["Content-range"] = f"bytes {start}-{end}/{file_size}"
         status_code = status.HTTP_206_PARTIAL_CONTENT
 
     return StreamingResponse(
