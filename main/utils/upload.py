@@ -1,4 +1,5 @@
 import os
+import hashlib
 import aiofiles
 import audioread
 from uuid import uuid4
@@ -96,16 +97,77 @@ async def get_data_music_with_tinytag(path_file_):
     return name, author, duration, genre, picture
 
 
+async def compute_sha256(path_file_):
+    hash_sha256 = hashlib.sha256()
+    with open(path_file_, 'rb') as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
+
+
+def audio_response(audio_object):
+    result = FileResponse(
+        result=True,
+        message='Лютый музон загружен',
+        data=File(
+            type='music',
+            file_data=Music(
+                id=audio_object.id,
+                number=None,
+                name=audio_object.name,
+                author=audio_object.author,
+                genre=audio_object.genre,
+                cover=f'{config.API_IMAGE}{audio_object.cover}',
+                path=f'{config.API_MUSIC}{audio_object.id}',
+                duration=audio_object.duration,
+                datetime_add=audio_object.datetime_add,
+                can_edit=True
+            )
+        )
+    )
+    return result.json()
+
+
 async def processed_audio(file_, user_id_):
     new_name_, path_file_, content_type_ = await save_file(file_, photo=False)
+
+    # check == audio
+    hash_of_file = await compute_sha256(path_file_)
+    find_collision = await query_execute(
+        query_text=f'select * from "Musics" as M where M.hashsum = \'{hash_of_file}\'',
+        fetch_all=False,
+        type_query='read'
+    )
+    if find_collision is not None:
+        find_track_in_collection = await query_execute(
+            query_text=f'select PL.id as playlist_id, C.id as collection_id '
+                       f'from "PlayLists" as PL '
+                       f'left join "Collections" as C on C.playlist_id = PL.id and C.music_id = {find_collision.id} '
+                       f'where PL.user_id = {user_id_} and PL.name = \'Вся моя музыка\'',
+            fetch_all=False,
+            type_query='read'
+        )
+        if find_track_in_collection.collection_id is None:
+            async with Session() as db:
+                await db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;'))
+                await db.execute(text(
+                    f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
+                    f'values ('
+                    f'(select coalesce(max(C.track_number), 0) from "Collections" as C '
+                    f'where C.playlist_id = {find_track_in_collection.playlist_id}) + 1, '
+                    f'\'{datetime.now()}\', {find_collision.id}, {find_track_in_collection.playlist_id});'
+                ))
+                await db.execute(text('COMMIT;'))
+        os.remove(path_file_)
+        return audio_response(find_collision)
 
     name, author, duration, genre, picture = await get_data_music_with_tinytag(path_file_)
 
     if name is None or author is None:
         name, author = get_data_music_default(file_.filename)
 
-    name = "Без название" if name in None else name
-    author = "Неизвестен" if author in None else author
+    name = "Без название" if name is None else name
+    author = "Неизвестен" if author is None else author
 
     if len(name) > 200 or len(author) > 200:
         raise HTTPException(406, detail="Название песни не должно превышать 90 символов")
@@ -129,22 +191,16 @@ async def processed_audio(file_, user_id_):
         )
         get_image = get_image.id
 
-    # await query_execute(
-    #     query_text=f'insert into "Musics" (name, author, genre, cover, filename, duration, datetime_add, user_id_add) '
-    #                f'values ($name${name}$name$, $author${author}$author$, $genre${genre}$genre$, {get_image}, '
-    #                f'\'{new_name_}\', \'{duration}\', \'{datetime.now()}\', {user_id_})',
-    #     fetch_all=False,
-    #     type_query='insert'
-    # )
     async with Session() as db:
         await db.execute(
             text(
-                f'insert into "Musics" (name, author, genre, cover, filename, duration, datetime_add, user_id_add) '
-                f'values (:name_, :author, :genre, :get_image, :new_name_, :duration, :datetime, :user_id_)'
+                f'insert into "Musics" (name, author, genre, cover, filename, duration, '
+                f'datetime_add, user_id_add, hashsum) '
+                f'values (:name_, :author, :genre, :get_image, :new_name_, :duration, :datetime, :user_id_, :hash_sum)'
             ),
             {
                 'name_': name, 'author': author, 'genre': genre, 'get_image': get_image, 'new_name_': new_name_,
-                'duration': duration, 'datetime': datetime.now(), 'user_id_': user_id_
+                'duration': duration, 'datetime': datetime.now(), 'user_id_': user_id_, 'hash_sum': hash_of_file
             }
         )
         await db.execute(text('COMMIT'))
@@ -174,26 +230,7 @@ async def processed_audio(file_, user_id_):
         ))
         await db.execute(text('COMMIT;'))
 
-    result = FileResponse(
-        result=True,
-        message='Лютый музон загружен',
-        data=File(
-            type='music',
-            file_data=Music(
-                id=get_music.id,
-                number=None,
-                name=get_music.name,
-                author=get_music.author,
-                genre=get_music.genre,
-                cover=f'{config.API_IMAGE}{get_music.cover}',
-                path=f'{config.API_MUSIC}{get_music.id}',
-                duration=get_music.duration,
-                datetime_add=get_music.datetime_add,
-                can_edit=True
-            )
-        )
-    )
-    return result.json()
+    return audio_response(get_music)
 
 
 async def processed_photo(file_, action_, music_id_, user_id_):
