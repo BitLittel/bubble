@@ -158,7 +158,7 @@ function initMainPlayer(index, track_path, track_name, track_author, track_cover
 function InitMusic(objects_musics) {
 	max_track_number = objects_musics.last_track_number;
 	container_music_list_dom.innerHTML = "";
-	for (let i = 0; i < objects_musics.track_list.length; i++) {
+	for (let i = 0; i < objects_musics.track_list.length/2; i++) {
 		container_music_list_dom.appendChild(
 			createDomTrack(
 				i,
