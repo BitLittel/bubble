@@ -264,6 +264,7 @@ input[type="range"]::-webkit-slider-thumb {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 14px;
 }
 
 .block_playlist:hover {
@@ -280,6 +281,10 @@ input[type="range"]::-webkit-slider-thumb {
     text-align: center;
     cursor: pointer;
     width: 180px;
+}
+
+.add_playlist > span {
+    font-size: 14px;
 }
 
 .rounded_add {

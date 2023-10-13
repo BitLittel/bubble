@@ -24,7 +24,6 @@ let max_track_number = 4,  // тут короче из ответа апи вы�
 	current_index_track = 0,
 	last_index_track = 0,
 	array_index_track = [],
-	current_track_number = 1,  // по дефолту всегда 1 будет
 	on_loop = false,
 	on_shuffle = false,
 	cur_track_dom_element = 0,
@@ -47,7 +46,7 @@ function setVolumeFromCookie() {
 
 function generateRandomInteger(min, max) {return Math.floor(min + Math.random()*(max - min + 1))}
 
-function createDomTrack(index_track, data_track_src, data_track_id, data_track_number, data_track_name, data_track_author, data_track_duration, data_track_cover, can_edit) {
+function createDomTrack(index_track, data_track_src, data_track_id, data_track_name, data_track_author, data_track_duration, data_track_cover, can_edit) {
 	let div_music = document.createElement('div'),
 		dic_cover_name_container = document.createElement('div'),
 		img_music_cover = document.createElement('img'),
@@ -65,7 +64,6 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 	div_music.className = "music";
 	div_music.setAttribute("data-track-src", data_track_src);
 	div_music.setAttribute("data-track-id", data_track_id);
-	div_music.setAttribute("data-track-number", data_track_number);
 	div_music.setAttribute("data-track-name", data_track_name);
 	div_music.setAttribute("data-track-author", data_track_author);
 	div_music.setAttribute("data-track-duration", data_track_duration);
@@ -76,7 +74,7 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 
 		dic_cover_name_container.appendChild(img_music_cover);
 			img_music_cover.className = 'music_cover';
-			img_music_cover.onclick = function () {Play(index_track);};
+			img_music_cover.onclick = function () {Play(index_track, true);};
 			img_music_cover.src = '/static/img/default_img.jpg';
 			img_music_cover.setAttribute('data-src', data_track_cover);
 
@@ -156,7 +154,7 @@ function initMainPlayer(index, track_path, track_name, track_author, track_cover
 
 // вот в этот инит мы передадим response data
 function InitMusic(objects_musics) {
-	max_track_number = objects_musics.last_track_number;
+	max_track_number = objects_musics.track_count;
 	container_music_list_dom.innerHTML = "";
 	for (let i = 0; i < objects_musics.track_list.length; i++) {
 		container_music_list_dom.appendChild(
@@ -164,7 +162,6 @@ function InitMusic(objects_musics) {
 				i,
 				objects_musics.track_list[i].path,
 				objects_musics.track_list[i].id,
-				objects_musics.track_list[i].number,
 				objects_musics.track_list[i].name,
 				objects_musics.track_list[i].author,
 				objects_musics.track_list[i].duration,
@@ -174,24 +171,30 @@ function InitMusic(objects_musics) {
 		);
 	}
 	generateDefaultIndexArrayTrack();
+	let current_track = objects_musics.current_track;
 	initMainPlayer(
 		0,
-		objects_musics.track_list[0].path,
-		objects_musics.track_list[0].name,
-		objects_musics.track_list[0].author,
-		objects_musics.track_list[0].cover
+		current_track.path,
+		current_track.name,
+		current_track.author,
+		current_track.cover
 	);
 }
 
 /**
  * Play - Just Play Track
  * @param {Number} index - index track on dom blockMusic
+ * @param {Boolean} real - index track on dom blockMusic
 **/
 
-function Play(index) {
-	next_track_dom_element = getMusicOnIndex(index);
+function Play(index, real = false) {
+	if (real) {
+		next_track_dom_element = all_music[index];
+	} else {
+		next_track_dom_element = getMusicOnIndex(index);
+	}
 
-    if (current_index_track === index) {
+    if (current_index_track === index && !real) {
         cur_track_dom_element.style.background = '#0000003d';
     } else {
         cur_track_dom_element.style.background = '';

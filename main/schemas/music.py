@@ -4,7 +4,6 @@ from datetime import datetime
 
 class Music(BaseModel):
     id: int
-    number: int | None
     name: str
     author: str
     genre: str | None

@@ -1,4 +1,5 @@
-let imageObserver = new IntersectionObserver((entries, imgObserver) => {
+let imageObserver = new IntersectionObserver(
+    (entries, imgObserver) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
             const lazyImage = entry.target;

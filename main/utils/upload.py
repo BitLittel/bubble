@@ -28,7 +28,6 @@ async def validate_file(file_, action_):
 
     # Проверяем content_type
     content_type = file.content_type
-    print(f'CONTENT_TYPE: {content_type}')
     if action_ in ['photo', 'cover']:
         if content_type not in config.PHOTO_FORMAT:
             raise HTTPException(406, detail="Получен не корректный формат данных")
@@ -47,7 +46,6 @@ async def save_file(file_, photo=False):
             while contents := file_.file.read(1024 * 1024):
                 await f.write(contents)
     except Exception as e:
-        print(e)
         raise HTTPException(500, detail="Произошла ошибка в обработке файла")
     finally:
         file_.file.close()
@@ -55,7 +53,6 @@ async def save_file(file_, photo=False):
     try:
         content_type = file_.content_type
     except Exception as e:
-        print(e)
         content_type = None
 
     return new_name, path_file, content_type
@@ -79,7 +76,7 @@ def calculating_human_duration(length):
     seconds = length  # calculate in seconds
     if hours == 0:
         return f'{mins // 10}{mins % 10}:{seconds // 10}{seconds % 10}'
-    return f'{hours//10}{hours%10}:{mins//10}{mins%10}:{seconds//10}{seconds%10}'
+    return f'{hours // 10}{hours % 10}:{mins // 10}{mins % 10}:{seconds // 10}{seconds % 10}'
 
 
 async def get_data_music_with_tinytag(path_file_):
@@ -88,7 +85,7 @@ async def get_data_music_with_tinytag(path_file_):
         tag = TinyTag.get(path_file_, image=True)
         name, author, duration, genre, picture = tag.title, tag.artist, tag.duration, tag.genre, tag.get_image()
     except Exception as e:
-        print(e)
+        pass
     if duration is None:
         with audioread.audio_open(path_file_) as f:
             duration = calculating_human_duration(int(f.duration))
@@ -148,16 +145,13 @@ async def processed_audio(file_, user_id_):
             type_query='read'
         )
         if find_track_in_collection.collection_id is None:
-            async with Session() as db:
-                await db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;'))
-                await db.execute(text(
-                    f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
-                    f'values ('
-                    f'(select coalesce(max(C.track_number), 0) from "Collections" as C '
-                    f'where C.playlist_id = {find_track_in_collection.playlist_id}) + 1, '
-                    f'\'{datetime.now()}\', {find_collision.id}, {find_track_in_collection.playlist_id});'
-                ))
-                await db.execute(text('COMMIT;'))
+            await query_execute(
+                query_text=f'insert into "Collections" (datetime_add, music_id, playlist_id) '
+                           f'values '
+                           f'(\'{datetime.now()}\', {find_collision.id}, {find_track_in_collection.playlist_id});',
+                fetch_all=False,
+                type_query='insert'
+            )
         os.remove(path_file_)
         return audio_response(find_collision)
 
@@ -219,16 +213,14 @@ async def processed_audio(file_, user_id_):
 
     if get_music is None:
         raise HTTPException(500, detail="Внутренняя ошибка сервера")
-    async with Session() as db:
-        await db.execute(text('BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;'))
-        await db.execute(text(
-            f'insert into "Collections" (track_number, datetime_add, music_id, playlist_id) '
-            f'values ('
-            f'(select coalesce(max(C.track_number), 0) from "Collections" as C '
-            f'where C.playlist_id = {get_default_playlist.id}) + 1, '
-            f'\'{datetime.now()}\', {get_music.id}, {get_default_playlist.id});'
-        ))
-        await db.execute(text('COMMIT;'))
+
+    await query_execute(
+        query_text=f'insert into "Collections" (datetime_add, music_id, playlist_id) '
+                   f'values '
+                   f'(\'{datetime.now()}\', {get_music.id}, {get_default_playlist.id});',
+        fetch_all=False,
+        type_query='insert'
+    )
 
     return audio_response(get_music)
 

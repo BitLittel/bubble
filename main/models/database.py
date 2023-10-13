@@ -110,7 +110,6 @@ class Actions(Base):
 class Collections(Base):
     __tablename__ = 'Collections'
     id = Column(BigInteger, primary_key=True)
-    track_number = Column(BigInteger, nullable=False)
     datetime_add = Column(DateTime, nullable=False, default=func.now())
     # Foreign Key
     music_id = Column(BigInteger, ForeignKey(Musics.id), nullable=False)

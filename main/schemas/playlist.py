@@ -15,8 +15,8 @@ class PlayList(BaseModel):
 class PlayListAndMusic(BaseModel):
     playlist: PlayList
     track_list: list[Music] | list
-    current_track_number: int
-    last_track_number: int
+    current_track: Music
+    track_count: int
 
 
 class PlayListWithMusic(DefaultResponse):
