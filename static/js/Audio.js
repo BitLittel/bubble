@@ -258,27 +258,27 @@ function Play(index, real = false) {
 		current_track_list_object_ = next_track_list_object_;
 		current_index_track = index;
     }
-    play.onclick = function(){Play(current_index_track);};
+
+	play.onclick = function(){Play(current_index_track, real);};
+
     if (theAudio.paused) {theAudio.play();} else {theAudio.pause();}
 
     play.src = theAudio.paused ? '/static/img/play.svg' : '/static/img/pause.svg';
 
-	if (!real) {
-		navigator.mediaSession.metadata = new MediaMetadata({
-			title: next_track_list_object_.name,
-			artist: next_track_list_object_.author,
-			album: 'Bubble',
-			artwork: [{
-				src: next_track_list_object_.cover,
-				sizes: "300x300",
-				type: "image/jpeg",
-			}]
-		});
+	navigator.mediaSession.metadata = new MediaMetadata({
+		title: next_track_list_object_.name,
+		artist: next_track_list_object_.author,
+		album: 'Bubble',
+		artwork: [{
+			src: next_track_list_object_.cover,
+			sizes: "300x300",
+			type: "image/jpeg",
+		}]
+	});
 
-		img_cover.src = next_track_list_object_.cover
-		song_name.innerText = next_track_list_object_.name
-		song_author.innerText = next_track_list_object_.author
-	}
+	img_cover.src = next_track_list_object_.cover
+	song_name.innerText = next_track_list_object_.name
+	song_author.innerText = next_track_list_object_.author
 }
 
 function ChangeTrack(forward=true) {
