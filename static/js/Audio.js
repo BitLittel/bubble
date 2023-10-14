@@ -261,21 +261,24 @@ function Play(index, real = false) {
     play.onclick = function(){Play(current_index_track);};
     if (theAudio.paused) {theAudio.play();} else {theAudio.pause();}
 
-	navigator.mediaSession.metadata = new MediaMetadata({
-		title: next_track_list_object_.name,
-		artist: next_track_list_object_.author,
-		album: 'Bubble',
-		artwork: [{
-			src: next_track_list_object_.cover,
-			sizes: "300x300",
-			type: "image/jpeg",
-      	}]
-	});
-
     play.src = theAudio.paused ? '/static/img/play.svg' : '/static/img/pause.svg';
-	img_cover.src = next_track_list_object_.cover
-	song_name.innerText = next_track_list_object_.name
-	song_author.innerText = next_track_list_object_.author
+
+	if (!real) {
+		navigator.mediaSession.metadata = new MediaMetadata({
+			title: next_track_list_object_.name,
+			artist: next_track_list_object_.author,
+			album: 'Bubble',
+			artwork: [{
+				src: next_track_list_object_.cover,
+				sizes: "300x300",
+				type: "image/jpeg",
+			}]
+		});
+
+		img_cover.src = next_track_list_object_.cover
+		song_name.innerText = next_track_list_object_.name
+		song_author.innerText = next_track_list_object_.author
+	}
 }
 
 function ChangeTrack(forward=true) {
