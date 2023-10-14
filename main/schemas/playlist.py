@@ -14,8 +14,8 @@ class PlayList(BaseModel):
 
 class PlayListAndMusic(BaseModel):
     playlist: PlayList
-    track_list: list[Music] | list
-    current_track: Music
+    track_list: dict[int, Music]
+    current_track: dict[int, Music]
     track_count: int
 
 

@@ -1,33 +1,30 @@
 let user_is_auth = false;
 
-window.onload = function () {
-    const urlParams = new URLSearchParams(window.location.search),
-        myParam = urlParams.get('token');
 
-    if (myParam !== undefined && myParam !== null) {
-        sendRequest(
-            'POST',
-            '/activate/'+myParam,
-            true,
-            null,
-            function (data) {
-                console.log(data);
-                setDataCurrentUser(data.data.username, data.data.avatar);
-                user_is_auth = true;
-                getAllUserData();
-            },
-            function (data) {
-                console.log(data);
-            }
-        );
-    }
+const urlParams = new URLSearchParams(window.location.search),
+    myParam = urlParams.get('token');
 
-    if (!user_is_auth) {
-        get_current_user();
-    }
+if (myParam !== undefined && myParam !== null) {
+    sendRequest(
+        'POST',
+        '/activate/'+myParam,
+        true,
+        null,
+        function (data) {
+            console.log(data);
+            setDataCurrentUser(data.data.username, data.data.avatar);
+            user_is_auth = true;
+            getAllUserData();
+        },
+        function (data) {
+            console.log(data);
+        }
+    );
+}
 
-    //lazy();
-};
+if (!user_is_auth) {
+    get_current_user();
+}
 
 function getAllUserData() {
     setVolumeFromCookie();

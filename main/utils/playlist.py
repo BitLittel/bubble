@@ -25,17 +25,19 @@ async def get_un_auth_playlist() -> PlayListWithMusic:
         message="Успех",
         data=PlayListAndMusic(
             track_count=20,
-            current_track=Music(
-                id=get_random_music[0].track_id,
-                name=get_random_music[0].track_name,
-                author=get_random_music[0].track_author,
-                genre=get_random_music[0].track_genre,
-                cover=get_random_music[0].track_cover,
-                path=get_random_music[0].track_path,
-                duration=get_random_music[0].track_duration,
-                datetime_add=get_random_music[0].track_datetime_add,
-                can_edit=False
-            ),
+            current_track={
+                0: Music(
+                    id=get_random_music[0].track_id,
+                    name=get_random_music[0].track_name,
+                    author=get_random_music[0].track_author,
+                    genre=get_random_music[0].track_genre,
+                    cover=get_random_music[0].track_cover,
+                    path=get_random_music[0].track_path,
+                    duration=get_random_music[0].track_duration,
+                    datetime_add=get_random_music[0].track_datetime_add,
+                    can_edit=False
+                )
+            },
             playlist=PlayList(
                 id=0,
                 name='UnAuthPlayList',
@@ -43,20 +45,19 @@ async def get_un_auth_playlist() -> PlayListWithMusic:
                 datetime_add=datetime.datetime.now(),
                 can_edit=False
             ),
-            track_list=[
-                Music(
-                    id=i.track_id,
-                    number=0,
-                    name=i.track_name,
-                    author=i.track_author,
-                    genre=i.track_genre,
-                    cover=i.track_cover,
-                    path=i.track_path,
-                    duration=i.track_duration,
-                    datetime_add=i.track_datetime_add,
+            track_list={
+                i: Music(
+                    id=get_random_music[i].track_id,
+                    name=get_random_music[i].track_name,
+                    author=get_random_music[i].track_author,
+                    genre=get_random_music[i].track_genre,
+                    cover=get_random_music[i].track_cover,
+                    path=get_random_music[i].track_path,
+                    duration=get_random_music[i].track_duration,
+                    datetime_add=get_random_music[i].track_datetime_add,
                     can_edit=False
-                ) for i in get_random_music
-            ]
+                ) for i in range(len(get_random_music))
+            }
         )
     )
 
@@ -135,18 +136,19 @@ async def get_playlist_by_id(id_playlist: int, user_id: int) -> PlayListWithMusi
             track_count=playlist.track_count,
             # todo: задел на будущее, в current_track можно передавать
             #  трек на котором остановился и типо на всех устройствах типо синхрониться
-            current_track=Music(
-                id=musics_from_playlist[0].track_id,
-                name=musics_from_playlist[0].track_name,
-                author=musics_from_playlist[0].track_author,
-                genre=musics_from_playlist[0].track_genre,
-                cover=musics_from_playlist[0].track_cover,
-                path=musics_from_playlist[0].track_path,
-                duration=musics_from_playlist[0].track_duration,
-                datetime_add=musics_from_playlist[0].track_datetime_add,
-                can_edit=musics_from_playlist[0].user_id_add == user_id
-            ),
-
+            current_track={
+                0: Music(
+                    id=musics_from_playlist[0].track_id,
+                    name=musics_from_playlist[0].track_name,
+                    author=musics_from_playlist[0].track_author,
+                    genre=musics_from_playlist[0].track_genre,
+                    cover=musics_from_playlist[0].track_cover,
+                    path=musics_from_playlist[0].track_path,
+                    duration=musics_from_playlist[0].track_duration,
+                    datetime_add=musics_from_playlist[0].track_datetime_add,
+                    can_edit=musics_from_playlist[0].user_id_add == user_id
+                )
+            },
             playlist=PlayList(
                 id=playlist.id,
                 name=playlist.name,
@@ -154,19 +156,19 @@ async def get_playlist_by_id(id_playlist: int, user_id: int) -> PlayListWithMusi
                 datetime_add=playlist.datetime_add,
                 can_edit=playlist.user_id == user_id
             ),
-            track_list=[
-                Music(
-                    id=i.track_id,
-                    name=i.track_name,
-                    author=i.track_author,
-                    genre=i.track_genre,
-                    cover=i.track_cover,
-                    path=i.track_path,
-                    duration=i.track_duration,
-                    datetime_add=i.track_datetime_add,
-                    can_edit=i.user_id_add == user_id
-                ) for i in musics_from_playlist
-            ]
+            track_list={
+                i: Music(
+                    id=musics_from_playlist[i].track_id,
+                    name=musics_from_playlist[i].track_name,
+                    author=musics_from_playlist[i].track_author,
+                    genre=musics_from_playlist[i].track_genre,
+                    cover=musics_from_playlist[i].track_cover,
+                    path=musics_from_playlist[i].track_path,
+                    duration=musics_from_playlist[i].track_duration,
+                    datetime_add=musics_from_playlist[i].track_datetime_add,
+                    can_edit=musics_from_playlist[i].user_id_add == user_id
+                ) for i in range(len(musics_from_playlist))
+            }
         )
     )
 

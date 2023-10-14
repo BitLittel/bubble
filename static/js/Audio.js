@@ -27,7 +27,9 @@ let max_track_number = 4,  // тут короче из ответа апи вы�
 	on_loop = false,
 	on_shuffle = false,
 	cur_track_dom_element = 0,
-	next_track_dom_element = 0;
+	next_track_dom_element = 0,
+	start_ = 0, end_ = 50, step_ = 50, track_list_ = [],
+	next_track_list_object_ = {}, current_track_list_object_ = {};
 
 function get_slowly_volume(value) {
 	return (0.01*(Math.pow(value, 2))/100).toFixed(5)
@@ -68,6 +70,10 @@ function createDomTrack(index_track, data_track_src, data_track_id, data_track_n
 	div_music.setAttribute("data-track-author", data_track_author);
 	div_music.setAttribute("data-track-duration", data_track_duration);
 	div_music.setAttribute("data-track-cover", data_track_cover);
+
+	if (index_track === current_index_track) {
+		div_music.style.background = '#0000003d';
+	}
 
 	div_music.appendChild(dic_cover_name_container);
 		dic_cover_name_container.className = 'cover_name_container';
@@ -142,43 +148,79 @@ function generateShuffledIndexArrayTrack(){
 	}
 }
 
-function initMainPlayer(index, track_path, track_name, track_author, track_cover) {
-	theAudio.src = track_path;
+function initMainPlayer(object_first_track) {
+	let index_key_ = Number(Object.keys(object_first_track));
+
+	theAudio.src = object_first_track[index_key_].path;
 	theAudio.load();
-	play.onclick = function(){Play(index);};
-	song_name.innerText = track_name;
-	song_author.innerText = track_author;
-	img_cover.src = track_cover;
-	cur_track_dom_element = getMusicOnIndex(index);
+	play.onclick = function(){Play(index_key_);};
+	song_name.innerText = object_first_track[index_key_].name;
+	song_author.innerText = object_first_track[index_key_].author;
+	img_cover.src = object_first_track[index_key_].cover;
+	cur_track_dom_element = getMusicOnIndex(index_key_);
+	current_track_list_object_ = track_list_[index_key_];
+}
+
+window.addEventListener('scroll', throttle(checkPosition, 250))
+window.addEventListener('resize', throttle(checkPosition, 250))
+
+function throttle(callee, timeout) {
+	let timer = null
+
+	return function perform(...args) {
+	if (timer) return
+
+	timer = setTimeout(() => {
+			callee(...args)
+
+			clearTimeout(timer)
+			timer = null
+		}, timeout)
+	}
+}
+
+function checkPosition() {
+	const height = document.getElementById('musics').offsetHeight;
+	const screenHeight = window.innerHeight;
+	const scrolled = window.scrollY;
+	const threshold = height - screenHeight / 4;
+	const position = scrolled + screenHeight;
+
+	if (position >= threshold) {
+		addNewTrack();
+	}
+}
+
+
+
+function addNewTrack() {
+	for (let i = start_; i <= end_ && i < max_track_number; i++) {
+		container_music_list_dom.appendChild(
+			createDomTrack(
+				i,
+				track_list_[i].path,
+				track_list_[i].id,
+				track_list_[i].name,
+				track_list_[i].author,
+				track_list_[i].duration,
+				track_list_[i].cover,
+				track_list_[i].can_edit
+			)
+		);
+	}
+	start_ = end_+1;
+	end_ += step_;
 }
 
 // вот в этот инит мы передадим response data
 function InitMusic(objects_musics) {
 	max_track_number = objects_musics.track_count;
 	container_music_list_dom.innerHTML = "";
-	for (let i = 0; i < objects_musics.track_list.length; i++) {
-		container_music_list_dom.appendChild(
-			createDomTrack(
-				i,
-				objects_musics.track_list[i].path,
-				objects_musics.track_list[i].id,
-				objects_musics.track_list[i].name,
-				objects_musics.track_list[i].author,
-				objects_musics.track_list[i].duration,
-				objects_musics.track_list[i].cover,
-				objects_musics.track_list[i].can_edit
-			)
-		);
-	}
+	track_list_ = objects_musics.track_list;
+	addNewTrack();
 	generateDefaultIndexArrayTrack();
 	let current_track = objects_musics.current_track;
-	initMainPlayer(
-		0,
-		current_track.path,
-		current_track.name,
-		current_track.author,
-		current_track.cover
-	);
+	initMainPlayer(current_track);
 }
 
 /**
@@ -188,39 +230,52 @@ function InitMusic(objects_musics) {
 **/
 
 function Play(index, real = false) {
+
 	if (real) {
 		next_track_dom_element = all_music[index];
+		next_track_list_object_ = track_list_[index];
 	} else {
 		next_track_dom_element = getMusicOnIndex(index);
+		next_track_list_object_ = track_list_[array_index_track[index]];
 	}
 
     if (current_index_track === index && !real) {
-        cur_track_dom_element.style.background = '#0000003d';
+		if (cur_track_dom_element !== undefined) {
+			cur_track_dom_element.style.background = '#0000003d';
+		}
     } else {
-        cur_track_dom_element.style.background = '';
-        next_track_dom_element.style.background = '#0000003d';
-        theAudio.src = next_track_dom_element.getAttribute('data-track-src');
-		cur_track_dom_element = next_track_dom_element
+		if (cur_track_dom_element !== undefined) {
+			cur_track_dom_element.style.background = '';
+		}
+		if (next_track_dom_element !== undefined) {
+			next_track_dom_element.style.background = '#0000003d';
+		}
+		theAudio.src = next_track_list_object_.path;
+
+		if (next_track_dom_element !== undefined) {
+			cur_track_dom_element = next_track_dom_element;
+		}
+		current_track_list_object_ = next_track_list_object_;
 		current_index_track = index;
     }
     play.onclick = function(){Play(current_index_track);};
     if (theAudio.paused) {theAudio.play();} else {theAudio.pause();}
 
 	navigator.mediaSession.metadata = new MediaMetadata({
-		title: next_track_dom_element.getAttribute('data-track-name'),
-		artist: next_track_dom_element.getAttribute('data-track-author'),
+		title: next_track_list_object_.name,
+		artist: next_track_list_object_.author,
 		album: 'Bubble',
 		artwork: [{
-			src: next_track_dom_element.getAttribute('data-track-cover'),
+			src: next_track_list_object_.cover,
 			sizes: "300x300",
 			type: "image/jpeg",
       	}]
 	});
 
     play.src = theAudio.paused ? '/static/img/play.svg' : '/static/img/pause.svg';
-    img_cover.src = next_track_dom_element.getAttribute('data-track-cover');
-    song_name.innerText = next_track_dom_element.getAttribute('data-track-name');
-    song_author.innerText = next_track_dom_element.getAttribute('data-track-author');
+	img_cover.src = next_track_list_object_.cover
+	song_name.innerText = next_track_list_object_.name
+	song_author.innerText = next_track_list_object_.author
 }
 
 function ChangeTrack(forward=true) {
