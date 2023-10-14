@@ -230,7 +230,7 @@ function InitMusic(objects_musics) {
 **/
 
 function Play(index, real = false) {
-
+	console.log(index, current_index_track);
 	if (real) {
 		next_track_dom_element = all_music[index];
 		next_track_list_object_ = track_list_[index];
@@ -239,7 +239,7 @@ function Play(index, real = false) {
 		next_track_list_object_ = track_list_[array_index_track[index]];
 	}
 
-    if (current_index_track === index && !real) {
+    if (current_index_track === index) {
 		if (cur_track_dom_element !== undefined) {
 			cur_track_dom_element.style.background = '#0000003d';
 		}
@@ -247,9 +247,11 @@ function Play(index, real = false) {
 		if (cur_track_dom_element !== undefined) {
 			cur_track_dom_element.style.background = '';
 		}
+
 		if (next_track_dom_element !== undefined) {
 			next_track_dom_element.style.background = '#0000003d';
 		}
+
 		theAudio.src = next_track_list_object_.path;
 
 		if (next_track_dom_element !== undefined) {
