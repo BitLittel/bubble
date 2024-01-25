@@ -12,5 +12,5 @@ MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024 if os.getenv('MAX_FILE_SIZE') is None els
 PHOTO_FORMAT = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 AUDIO_FORMAT = ['audio/x-flac', 'audio/webm', 'audio/mpeg', 'audio/flac']
 MAIN_PATH = os.path.dirname(os.path.realpath(__file__))[:-5]
-MUSICS_FOLDER = os.path.join(MAIN_PATH, 'stored_files', 'musics') if os.getenv('MUSICS_FOLDER') is None else os.getenv('MUSICS_FOLDER')
-PHOTOS_FOLDER = os.path.join(MAIN_PATH, 'stored_files', 'photos') if os.getenv('PHOTOS_FOLDER') is None else os.getenv('PHOTOS_FOLDER')
+MUSICS_FOLDER = os.path.join(MAIN_PATH, 'stored_files', 'musics')
+PHOTOS_FOLDER = os.path.join(MAIN_PATH, 'stored_files', 'photos')

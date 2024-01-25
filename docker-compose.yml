@@ -39,12 +39,10 @@ services:
       - DATABASE_PORT=6543
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=root
-      - MAIN_URL = 'http://127.0.0.1:8000'
-      - API_IMAGE = f'http://127.0.0.1:8000/api/image/'
-      - API_MUSIC = f'http://127.0.0.1:8000/api/music/'
+      - MAIN_URL=http://0.0.0.0:8000
+      - API_IMAGE=http://0.0.0.0:8000/api/image/
+      - API_MUSIC=http://0.0.0.0:8000/api/music/
       - MAX_FILE_SIZE = 1073741824 # 1 * 1024 * 1024 * 1024
-      # - MUSICS_FOLDER = application_data_bubble/musics # os.path.join(MAIN_PATH, 'stored_files', 'musics')
-      # - PHOTOS_FOLDER = application_data_bubble/photos # os.path.join(MAIN_PATH, 'stored_files', 'photos')
     volumes:
       - application_data_bubble:/bubble/stored_files
     # restart - это говорим что если докер будет перезапущен, то и наше приложение будет перезагружено
