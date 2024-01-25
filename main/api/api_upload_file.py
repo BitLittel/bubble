@@ -18,4 +18,4 @@ async def work(
     if action not in ['music', 'avatar', 'cover']:
         raise HTTPException(406, detail="Получен не корректный action")
 
-    return StreamingResponse(load_and_save_file(file, action, user.id, music_id), status_code=202)
+    return StreamingResponse(content=load_and_save_file(file, action, user.id, music_id), status_code=202)

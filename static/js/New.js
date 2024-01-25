@@ -50,13 +50,13 @@ function changeNavBar() {
         profile_link = document.getElementById('profile_link'),
         profile_avatar = document.getElementById('profile_avatar'),
         user_login = document.getElementById('profile_login'),
-        activiti_link = document.getElementById('activiti_link'),
-        question_link = document.getElementById('question_link');
+        activiti_link = document.getElementById('activiti_link');
+        // question_link = document.getElementById('question_link');
     friend_link.style.display = 'block'
     upload_link.style.display = 'block';
     message_link.style.display = 'block';
     activiti_link.style.display = 'block';
-    question_link.style.display = 'block';
+    // question_link.style.display = 'block';
     profile_link.onclick = function(){createPopUp('profile');};
     profile_avatar.className = 'profile';
     user_login.innerText = user_data.username;
@@ -184,11 +184,11 @@ function closePopUp(id_pop_up = 'pop_up') {
 }
 
 function profile_PopUp() {
-    let pop_up_header = document.getElementById('pop_up_header'),
-        pop_up_body = document.getElementById('pop_up_body')
-    showPopUp('pop_up');
-    pop_up_header.innerText = 'Профиль';
-    pop_up_body.innerText = 'Тут типо тело';
+    let profile_pop_up_avatar = document.getElementById('profile_pop_up_avatar'),
+        profile_pop_up_username = document.getElementById('profile_pop_up_username');
+    showPopUp('profile_pop_up');
+    profile_pop_up_avatar.src = user_data.avatar;
+    profile_pop_up_username.innerText = user_data.username;
 }
 
 function login_PopUp() {

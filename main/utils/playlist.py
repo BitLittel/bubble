@@ -20,6 +20,23 @@ async def get_un_auth_playlist() -> PlayListWithMusic:
         fetch_all=True,
         type_query='read'
     )
+    if get_random_music == []:
+        return PlayListWithMusic(
+            result=True,
+            message="Успех",
+            data=PlayListAndMusic(
+                track_count=20,
+                current_track={},
+                playlist=PlayList(
+                    id=0,
+                    name='UnAuthPlayList',
+                    cover='/static/img/default_img.jpg',
+                    datetime_add=datetime.datetime.now(),
+                    can_edit=False
+                ),
+                track_list={}
+            )
+        )
     return PlayListWithMusic(
         result=True,
         message="Успех",
@@ -129,6 +146,23 @@ async def get_playlist_by_id(id_playlist: int, user_id: int) -> PlayListWithMusi
         fetch_all=True,
         type_query='read'
     )
+    if musics_from_playlist == []:
+        return PlayListWithMusic(
+            result=True,
+            message="Успех",
+            data=PlayListAndMusic(
+                track_count=0,
+                current_track={},
+                playlist=PlayList(
+                    id=playlist.id,
+                    name=playlist.name,
+                    cover=playlist.cover,
+                    datetime_add=playlist.datetime_add,
+                    can_edit=playlist.user_id == user_id
+                ),
+                track_list={}
+            )
+        )
     return PlayListWithMusic(
         result=True,
         message="Успех",

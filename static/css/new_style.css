@@ -19,6 +19,7 @@
     }
     .cover_playlist {
         height: 100px !important;
+        margin-bottom: 4% !important;
     }
     .playlists {
         height: 140px !important;
@@ -29,7 +30,7 @@
         height: 100px !important;
     }
     .title_add_playlist {
-        padding: 25.5% !important;
+        /*padding: 25.5% !important;*/
         font-size: 83px !important;
     }
     .functions {
@@ -37,14 +38,14 @@
         width: 0 !important;
     }
     .musics {
-        margin: 1% 0 26% 0 !important;
+        /*margin: 0 0 26% 0 !important;*/
     }
     .music {
         border-radius: 8px !important;
-        padding: .5% !important;
+        padding: 1% !important;
     }
     .music_cover {
-        height: 32px !important;
+        height: 35px !important;
         border-radius: 8px !important;
     }
     .music_title {
@@ -52,6 +53,7 @@
     }
     .music_timing {
         font-size: 12px !important;
+        width: 3rem !important;
     }
     .main_player_controls > img, .main_player_function > img {
         width: 20px !important;
@@ -71,10 +73,10 @@
         width: 10vw !important;
     }
     .add_playlist > span {
-        font-size: 8px !important;
+        font-size: 11px !important;
     }
     .add_playlist{
-        width: 130px !important;
+        width: 120px !important;
     }
     .block_playlist {
         width: 100px !important;
@@ -107,6 +109,19 @@
     }
     .main_player_time {
         width: 14% !important;
+    }
+    .search_container > img {
+        margin: .6% !important;
+        width: 20px !important;
+    }
+    .search_container > input {
+        padding: .6% 8% !important;
+    }
+    .title_playlist {
+        font-size: 11px !important;
+    }
+    .search_box {
+        padding: 3% 0 !important;
     }
 }
 
@@ -178,8 +193,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 .background {
     /*background: url('/static/img/back_ground.svg') no-repeat;*/
-    /*background: url('/static/img/test_back.png') no-repeat;    */
-    background: url('/static/img/wp.jpg') no-repeat;
+    /*background: url('/static/img/test_back.png') no-repeat;*/
+    /*background: url('/static/img/wp.jpg') no-repeat;*/
+    background: url('/static/img/vlel.jpg') no-repeat;
     background-size: cover;
     height: 100%;
     width: 100%;
@@ -280,7 +296,7 @@ input[type="range"]::-webkit-slider-thumb {
 .add_playlist {
     text-align: center;
     cursor: pointer;
-    width: 180px;
+    width: 140px;
 }
 
 .add_playlist > span {
@@ -300,22 +316,22 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .title_add_playlist {
-    padding: 25.5%;
+    /*padding: 25.5%;*/
     font-size: 100px;
     color: #b3b3b3;
 }
 
 .musics {
-    margin: 1% 0 7% 0;
+    margin: 0 0 5rem 0;
 }
 
-.main_player_function > img:hover {
-    filter: contrast(1);
-}
+/*.main_player_function > img:hover {*/
+/*    filter: contrast(1);*/
+/*}*/
 
-.main_player_controls > img:hover {
-    filter: contrast(0.5);
-}
+/*.main_player_controls > img:hover {*/
+/*    filter: contrast(0.5);*/
+/*}*/
 
 .music {
     display: flex;
@@ -346,6 +362,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 .music_timing {
     margin-right: 1%;
+    width: 5rem;
 }
 
 .functions {
@@ -385,7 +402,7 @@ input[type="range"]::-webkit-slider-thumb {
     bottom: 0;
     height: 5rem;
     width: 100%;
-    background: #ffffffa6;
+    background: #98989854;
     z-index: 1;
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
@@ -410,9 +427,9 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
 }
 
-.main_player_function > img {
-    filter: contrast(0.5);
-}
+/*.main_player_function > img {*/
+/*    filter: contrast(0.5);*/
+/*}*/
 
 .main_player_controls {
     display: flex;
@@ -580,3 +597,52 @@ input[type="range"]::-webkit-slider-thumb {
 #info_reg_log > span:hover {
     color: #022e6e;
 }
+
+/* --- Search ---*/
+
+
+.search_box {
+    padding: 1% 0;
+}
+
+.search_container > img {
+    position: absolute;
+    margin: .4%;
+}
+
+.search_container > input {
+    width: 100%;
+    padding: .6% 3%;
+    border: none;
+    border-radius: 6px;
+    background: #ffffff9e;
+    font-size: 1rem;
+}
+
+.profile_pop_up_avatar_user {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.profile_pop_up_avatar {
+    width: 140px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #00000021;
+}
+
+.profile_pop_up_avatar_user > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.profile_pop_up_body {
+    padding: 2%;
+    font-size: 1.4rem;
+    text-align: center;
+    background: #0000000d;
+    border-radius: 6px;
+    box-shadow: inset 0 0 10px #0000001f;
+}
+

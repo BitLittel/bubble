@@ -13,6 +13,36 @@
 </head>
 <body>
 
+    <div class="background_pop_up" id="profile_pop_up" style="z-index: 10; display: none;">
+        <div class="pop_up">
+            <div class="close_pop_up" onclick="closePopUp('profile_pop_up');"><span>+</span></div>
+            <div class="notification_block">
+                <div class="header_pop_up profile_pop_up_header" style="font-size: 1.8rem; font-weight: 600; text-align: center; margin-bottom: 1%">
+                    <span id="profile_pop_up_header">Профиль</span>
+                </div>
+                <div class="body_pop_up profile_pop_up_body">
+                    <div class="profile_pop_up_avatar_user">
+
+                        <div>
+                            <span id="profile_pop_up_username">UserName</span>
+                            <img class="profile_pop_up_avatar" src="/static/img/default_img.jpg" id="profile_pop_up_avatar" alt="A">
+                        </div>
+
+                        <div>
+                            <div>
+                                Тут типо изменить фон
+                            </div>
+                            <div>
+                                а тут изменить тему
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="background_pop_up" id="notification_pop_up" style="z-index: 10; display: none;">
         <div class="pop_up">
             <div class="close_pop_up" onclick="closePopUp('notification_pop_up');"><span>+</span></div>
@@ -92,12 +122,12 @@
                     <span id="profile_login">Вход/Регистрация</span>
                 </a>
             </li>
-            <li class="navbar__item">
-                <a href="#" class="navbar__link">
-                    <img src="/static/img/search.svg" alt="S">
-                    <span>Поиск❌</span>
-                </a>
-            </li>
+<!--            <li class="navbar__item">-->
+<!--                <a href="#" class="navbar__link">-->
+<!--                    <img src="/static/img/search.svg" alt="S">-->
+<!--                    <span>Поиск❌</span>-->
+<!--                </a>-->
+<!--            </li>-->
 
             <li class="navbar__item" id="friend_link" style="display: none;">
                 <a href="#" class="navbar__link">
@@ -123,12 +153,12 @@
                     <span>Активности❌</span>
                 </a>
             </li>
-            <li class="navbar__item" id="question_link" style="display: none;">
-                <a href="#" class="navbar__link">
-                    <img src="/static/img/question.svg" alt="Q">
-                    <span>Что это?❌</span>
-                </a>
-            </li>
+<!--            <li class="navbar__item" id="question_link" style="display: none;">-->
+<!--                <a href="#" class="navbar__link">-->
+<!--                    <img src="/static/img/question.svg" alt="Q">-->
+<!--                    <span>Что это?❌</span>-->
+<!--                </a>-->
+<!--            </li>-->
         </ul>
     </nav>
 
@@ -143,7 +173,12 @@
                 <span>Создать плейлист</span>
             </div>
         </div>
-
+        <div class="search_box">
+            <div class="search_container">
+                <img src="/static/img/search.svg" alt="S">
+                <input type="search" id="search" placeholder="Поиск..." />
+            </div>
+        </div>
         <div class="musics" id="musics">
             <div class="music">
                 <span>Треков нет, сори)</span>

@@ -41,7 +41,6 @@ def _get_range_header(range_header: str, file_size: int) -> tuple[int, int]:
 def range_requests_response(
     request: Request, file_name: str, content_type: str
 ):
-    """Returns StreamingResponse using Range Requests of a given file"""
     file_path = os.path.join(config.MUSICS_FOLDER, file_name)
 
     file_size = os.stat(file_path).st_size

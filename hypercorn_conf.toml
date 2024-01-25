@@ -1,5 +1,0 @@
-loglevel = 'debug'
-accesslog = 'access_log'
-errorlog = 'error_log'
-bind = 'unix:hypercorn.sock'
-workers = 5

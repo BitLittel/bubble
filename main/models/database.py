@@ -132,7 +132,7 @@ class Messages(Base):
 engine = create_async_engine(
         f'postgresql+asyncpg://{config.DATABASE_USER}'
         f':{config.DATABASE_PASSWORD}'
-        f'@{config.DATABASE_IP}'
+        f'@{config.DATABASE_IP}:{config.DATABASE_PORT}'
         f'/{config.DATABASE_NAME}',
         echo=False,
         pool_recycle=300,
@@ -146,16 +146,9 @@ engine = create_async_engine(
 Session = async_sessionmaker(engine, expire_on_commit=False)
 
 
-async def start() -> None:
-    await query_execute(query_text='CREATE EXTENSION "uuid-ossp";', fetch_all=False, type_query='insert')
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    await query_execute(
-        query_text='insert into "Images" (content_type, file_name) '
-                   'values (\'image/jpeg\', \'default_img.jpg\')',
-        fetch_all=False,
-        type_query='insert'
-    )
+# alembic init -t async main/alembic
+# alembic revision --autogenerate -m "Init Alembic"
+# alembic upgrade head
 
 
 async def query_execute(query_text: str, fetch_all: bool = False, type_query: str = 'read'):

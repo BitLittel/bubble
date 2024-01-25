@@ -38,8 +38,8 @@ function get_slowly_volume(value) {
 
 function setVolumeFromCookie() {
 	let get_volume = getCookie("volume"),
-		volume_user = 50;
-	volume_user = (get_volume === undefined) ? 50 : parseInt(get_volume);
+		volume_user = 100;
+	volume_user = (get_volume === undefined) ? 100 : parseInt(get_volume);
 	document.cookie = "volume="+volume_user+";max-age=2629743;SameSite=Strict";
 	volume.value = volume_user;
     volume.style.backgroundSize = volume_user+'% 100%';
@@ -216,6 +216,8 @@ function addNewTrack() {
 function InitMusic(objects_musics) {
 	max_track_number = objects_musics.track_count;
 	container_music_list_dom.innerHTML = "";
+	start_ = 0;
+	end_ = 50;
 	track_list_ = objects_musics.track_list;
 	addNewTrack();
 	generateDefaultIndexArrayTrack();
@@ -230,7 +232,6 @@ function InitMusic(objects_musics) {
 **/
 
 function Play(index, real = false) {
-	console.log(index, current_index_track);
 	if (real) {
 		next_track_dom_element = all_music[index];
 		next_track_list_object_ = track_list_[index];
@@ -392,18 +393,19 @@ time_line.addEventListener('click', function (event) {changeProgress(event);});
 
 loop.onclick = function () {
     on_loop = !on_loop;
-	loop.style.filter = on_loop ? 'contrast(1)' : 'contrast(0.5)';
+	// loop.style.filter = on_loop ? 'contrast(1)' : 'contrast(0.5)';
+	loop.src = on_loop ? '/static/img/repeat_active.svg' : '/static/img/repeat.svg';
 };
 
 shuffle.onclick = function () {
 	if (on_shuffle) {
 		on_shuffle = false;
-		shuffle.style.filter = 'contrast(0.5)';
+		shuffle.src = '/static/img/shuffle.svg'
 		generateDefaultIndexArrayTrack();
 		current_index_track = last_index_track;
 	} else {
 		on_shuffle = true;
-		shuffle.style.filter = 'contrast(1)';
+		shuffle.src = '/static/img/shuffle_active.svg'
 		generateShuffledIndexArrayTrack();
 		last_index_track = current_index_track;
 	}
