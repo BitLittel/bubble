@@ -4,3 +4,5 @@
 static/all_music/*
 stored_files/musics/*
 stored_files/photos/*
+Dockerfile
+docker-compose.yml

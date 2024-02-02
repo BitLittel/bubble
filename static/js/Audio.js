@@ -358,7 +358,8 @@ theAudio.addEventListener('loadedmetadata', function(){
 
 theAudio.addEventListener('timeupdate', function(){
     current_time_track.innerHTML=(theAudio.currentTime/60>>0)+':'+((theAudio.currentTime%60>>0)<10?'0'+(theAudio.currentTime%60>>0):(theAudio.currentTime%60>>0));
-    in_line.style.width=(theAudio.currentTime*100)/theAudio.duration+'%';
+    // in_line.style.width=(theAudio.currentTime*100)/theAudio.duration+'%';
+	in_line.style.transform='scaleX('+((theAudio.currentTime)/theAudio.duration)+')';
 });
 
 // вешаем на полосу громкости эвенты, на изменение громкости и сохранение звука в куки
@@ -383,10 +384,12 @@ volume.addEventListener('input', handleInputChange);
 function changeProgress(event) {
 	const cur_time = theAudio.currentTime,
 		duration = theAudio.duration,
-		buff_ = ((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth;
+		buff_ = ((event.clientX-time_line.getBoundingClientRect().x))/time_line.clientWidth;
+		// buff_ = ((event.clientX-time_line.getBoundingClientRect().x)*100)/time_line.clientWidth;
 	current_time_track.innerHTML=(cur_time/60>>0)+':'+((cur_time%60>>0)<10?'0'+(cur_time%60>>0):(cur_time%60>>0));
-	in_line.style.width=buff_+'%';
-	theAudio.currentTime = (duration*buff_)/100;
+	//in_line.style.width=buff_+'%';
+	in_line.style.transform='scaleX('+buff_+')';
+	theAudio.currentTime = duration*buff_;
 }
 
 time_line.addEventListener('click', function (event) {changeProgress(event);});
