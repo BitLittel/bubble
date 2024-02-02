@@ -485,6 +485,7 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 2px;
     overflow: hidden;
     transform-origin: 0;
+    transition: all .3s linear;
 }
 
 .background_pop_up {
